@@ -1,0 +1,19 @@
+
+2011-06-30
+
+		* R/fit.mpt.R: now starting value parameter works
+		* Small bug removed when fitting one row from a data.frame (now, does not set multiFit to TRUE)
+
+2011-06-29
+
+		* R/fit.mpt.R: fixed crashing when hessian of aggregated data was ill defined
+
+2011-06-28
+
+		* R/fit.mpt.R: added starting.values parameter.
+		* R/fit.mpt.Rd: added description for the starting.values parameter.
+		* R/fit.mpt.R: internal changes: replaced length.tree with n.params.
+
+2011-06-14
+
+		* R/bmpt.fia.R: if theta is a scalar, it now is a matrix.

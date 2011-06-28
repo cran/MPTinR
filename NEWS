@@ -1,0 +1,72 @@
+					**************************
+					** MPTinR VERSION 0.6.4 **
+					**************************
+					
+					Changes in MPTinR Version 0.6.5
+					Released June 2011
+
+	Significant User Visible Changes
+	
+	o 
+	
+	New Features / Bugfixes
+	
+	o	added a parameter to specify the starting values for the fitting routine (in fit.mpt)
+
+
+					**************************
+					** MPTinR VERSION 0.6.4 **
+					**************************
+					
+					Changes in MPTinR Version 0.6.4
+					Released June 2011
+
+	Significant User Visible Changes
+	
+	o 
+	
+	New Features / Bugfixes
+	
+	o	added URL to DESCRIPTION file.
+
+	o	corrected more problems in bmpt.fia when using small models that
+		were related to differences in matrix functionality of Matlab
+		and R (the problem is R's default of '[', drop = TRUE).
+
+
+
+
+					**************************
+					** MPTinR VERSION 0.6.3 **
+					**************************
+					
+					Changes in MPTinR Version 0.6.3
+					Released April 2011
+
+	Significant User Visible Changes
+	
+	o	get.mpt.fia modified such that bmpt.fia is only called as often as
+		there are differences in the hank.join parameters (i.e., only if
+		the ratio between the trees differ, not the ns). As a consequence,
+		CFIA is calculated as part of get.mpt.fia. Furthermore, CIs of CFIA
+		are not returned by get.mpt.fia.
+
+	o	fit.mpt adjusted to use the optimization of get.mpt.fia (see above)
+		for multi-individual fit. That is, fit.mpt now calls get.mpt.fia
+		only once (previous were two calls, one for for individual data,
+		one for aggregated data).
+	
+	o	objective function in fit.mpt vectorized (previous was using
+		for-loop). Obtained speed up: ~40%.
+
+	New Features / Bugfixes
+	
+	o	bmpt.fia fixed to deal with models without restricted parameters
+		(was necessary as we did not use en empty matrix correctly)
+
+	o	Corrected a bug that lead to a wrong labeling of restricted
+		parameters in the mean parameter table for multi-individual fit
+		when using sort.param = TRUE.
+
+	o	Corrected a bug in the R implementation of bmpt.fia, when only one
+		parameter was fixed.
