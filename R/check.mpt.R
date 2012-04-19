@@ -16,6 +16,8 @@ check.mpt <- function(model.filename, restrictions.filename = NULL, model.type =
 	n.trees.orig <- length(model)
 	orig.model <- list(n.params = l.orig.params, parameters = orig.params)
 	parameters <- orig.model
+	n.model.categories <- sum(vapply(model, length, 0))
+	n.model.df <- n.model.categories - n.trees.orig
 	if(!is.null(restrictions.filename)) {
 		restrictions <- .read.MPT.restrictions(restrictions.filename)
 		model <- .apply.MPT.restrictions(model, restrictions)
@@ -25,6 +27,6 @@ check.mpt <- function(model.filename, restrictions.filename = NULL, model.type =
 		parameters <- list(orig.model = orig.model, restr.model = restr.model)
 		warning("Inequality restricted parameters are (temporarily) exchanged with dummy parameters called hankX.")
 	}
-	c(probabilities.eq.1 = prob.corr, n.trees = n.trees.orig, parameters)
+	c(probabilities.eq.1 = prob.corr, n.trees = n.trees.orig, n.model.categories = n.model.categories, n.independent.categories = n.model.df, parameters)
 	
 }

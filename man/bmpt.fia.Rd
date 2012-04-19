@@ -62,7 +62,7 @@ It should be noted that `lnconst' can be computed analytically free of Monte Car
 A sequence of inequalities \code{theta_1 < theta_2 < ... < theta_k} reduces the parameter space to its \code{1/k!}, so in this case \code{lnconst} should be \code{-ln * (k!)}. In general, any combination of inequality constraints specifies a union of subsets of the parameter space, each satisfying some sequence of inequalities. For example, the subspace defined by \code{theta_1 < theta_2} and \code{theta_3 < theta_2} is a union of two subspaces, one satisfying \code{theta_1 < theta_3 < theta_2} and the other \code{theta_3 < theta_1 < theta_2}, so the proportion is given by \code{2 * (1/3!) = 1/3}.
 
 A coding example:\cr
-Suppose that for model 1HTM-5c of source monitoring, the sample sizes of source A, source B and new items are 300, 300 and 400, respectively and the inequality constraint of \code{d_1 < d_2} is imposed. In this case, the six input arguments should be specified as follows:\cr
+Suppose that for model 1HTM-5c of source monitoring [see Wu et al., 2010a] , the sample sizes of source A, source B and new items are 300, 300 and 400, respectively and the inequality constraint of \code{d_1 < d_2} is imposed. In this case, the six input arguments should be specified as follows:\cr
 s = 'ppppCpCCppCCCppCpCCppCCCppCCC';\cr
 parameters = c(-.6,-.5,1,2,5,4,5,1,3,5,4,5,4,5); [adapted for R]\cr
 ineq0 = matrix(c(2,3), 1,2); [adapted for R]\cr
@@ -70,7 +70,7 @@ category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9); [adapted for R]\cr
 N = 1000;
 
 Another coding example:\cr
-For the pairclustering model in Batchelder and Riefer (1999, Figure 1), suppose in a pairclustering experiment there are 300 pairs of words and 100 singletons, the six input arguments should be specified as follows:\cr
+For the pair-clustering model in Batchelder and Riefer (1999, Figure 1), suppose in a pair-clustering experiment there are 300 pairs of words and 100 singletons, the six input arguments should be specified as follows:\cr
 s = 'pppCCppCCpCCpCC';
 parameters = c(-.75,1,2,3,3,3,3); [adapted for R]\cr
 ineq0 = NULL;  [adapted for R]\cr
@@ -116,7 +116,9 @@ The R version of the code is considerably slower than the Matlab version of this
 # The result should be something like: CFIA = 12.61... or 12.62..., CI = 12.61... - 12.62....
 # Executing this comand can take a while.
 
-bmpt.fia(s = "ppppCpCCppCCCppCpCCppCCCppCCC", parameters = c(-0.5, -0.5, 3, 2, 5, 1, 5, 4, 2, 5, 1, 5, 1, 5), category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9), N = 1000, ineq0 = matrix(c(4,3),1,2))
+bmpt.fia(s = "ppppCpCCppCCCppCpCCppCCCppCCC", 
+	parameters = c(-0.5, -0.5, 3, 2, 5, 1, 5, 4, 2, 5, 1, 5, 1, 5), 
+	category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9), N = 1000, ineq0 = matrix(c(4,3),1,2))
 
 }
   }

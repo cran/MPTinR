@@ -6,18 +6,22 @@
 Fit Multinomial Processing Tree Models
 }
 \description{
-The package provides a user-friendly way to fit multinomial processing tree (MPT) models. MPT models are measurement models for cognitive processes with which you can estimate unobservable cognitive  events and/or processes (see Riefer & Batchelder, 1988). MPT models can be used if observations fall into one and only one of a finite set of categories (i.e., if data is categorical). The advantages of MPTinR over competing packages or programs for fitting MPT models are: (1) MPTinR is an R package and therefore integrates smoothly with an R-workflow. (2) MPTinR allows an easy and intuitive way to specify the model in a file that even allows comments (via #). (3) Model restrictions can also easily be specified in a file. (4) MPTinR provides different outputs and analyses for individual datasets (i.e., a \code{vector}) and datasets consisting of multiple individuals (i.e., a \code{matrix} or \code{data.frame}). In the latter case, results are automatically provided for the individual datasets as well as mean and aggregated results. (5) For multiple individuals or multiple fitting runs the package allows one to use multiple cores (or CPUs) via the snowfall package by simply specifying the number of available cores (requires snowfall >= 1.84).
+MPTinR provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can specified in external files or within an R script in an intuitive syntax. The 'classical' .EQN file format for model files is also supported. Besides MPTs, MPTinR can fit a wide variety of other cognitive models such as SDT models (see fit.model). MPTinR supports multicore fitting using the snowfall package.
 }
 \details{
 \tabular{ll}{
 Package: \tab MPTinR\cr
 Type: \tab Package\cr
-Version: \tab 0.5.2\cr
-Date: \tab 2011-03-07\cr
+Version: \tab 0.8.10\cr
+Date: \tab 2012-04-19\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
-To fit MPT Models use \code{fit.mpt}
+To fit MPT Models use \code{\link{fit.mpt}}, to fit other models use \code{\link{fit.model}} or \code{\link{fit.mptinr}} (which is called by the other two functions).
+
+For model selection use \code{\link{select.mpt}}.
+
+A helper function for writing model files is \code{\link{check.mpt}}
 }
 \author{
 Henrik Singmann (for bug reports and feature requests): \email{henrik.singmann@psychologie.uni-freiburg.de}\cr

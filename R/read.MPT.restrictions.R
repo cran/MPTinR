@@ -9,20 +9,27 @@
 .read.MPT.restrictions <- function(filename) {
 	min.restriction <- c(0, 0.001) 
 	max.restriction <- 0.99999
-	whole <- readLines(filename)
-	model <- vector("list", length(whole))
-	c2 <- 1
-	for (c1 in 1:length(whole)) {
-		if (!(grepl("^[[:space:]]*$", whole[c1]))) {
-			if (grepl("#", whole[c1])) next
-			model[[c2]] <- whole[c1]
-			fin <- c2
-			c2 <- c2 + 1
+	if (!is.list(filename)) {
+		whole <- readLines(filename)
+		model <- vector("list", length(whole))
+		c2 <- 1
+		for (c1 in 1:length(whole)) {
+			if (!(grepl("^[[:space:]]*$", whole[c1]))) {
+				if (grepl("#", whole[c1])) next
+				model[[c2]] <- whole[c1]
+				fin <- c2
+				c2 <- c2 + 1
+			}
 		}
+		if(!exists("fin")) stop("Restrictions file seems to be empty!")
+		tmp.restrictions <- model[1:fin]
+	} else {
+		if (length(filename) == 0) stop("Restrictions list seems to be empty!")
+		tmp.restrictions <- filename
 	}
-	if(!exists("fin")) stop("Restrictions file seems to be empty!")
+	
 	restrictions <- list()
-	tmp.restrictions <- model[1:fin]
+	
    
 	if (sum(grepl("[>/\\+\\*\\!-]", unlist(tmp.restrictions)))) stop("Error getting Restrictions: Non supported operators (>, +, -, *, /, !) found in restriction file.")
 	restrictions.split <- sapply(tmp.restrictions,strsplit, split = "")

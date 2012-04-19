@@ -1,5 +1,91 @@
 					**************************
-					** MPTinR VERSION 0.6.4 **
+					** MPTinR VERSION 0.8.x **
+					**************************
+					
+					Changes in MPTinR Version 0.8.x
+					Released February 2012
+
+	Significant User Visible Changes and new Features
+	
+	o	fit.mpt and fit.model (see version 0.7.0) are now just wrappers around 
+		the new function fit.mptinr. They produce the appropirate objective, gradient,
+		hessian, and prediction function to fit the model.
+		
+	o	fit.model contains an example of how to fit a SDT. see ?fit.model. 
+		Dont forget to set lower.bound and upper.bound when fitting non-MPT models.
+	
+	o	fit.mptinr is a new function that takes an arbitrary objective function and 
+		possibly a gradient, hessian and prediction function to fit categorical
+		data (see examples in ?fit.model).
+	
+	o	fitting for MPT and similar models is done using a gradient function,
+		which significantly improves fitting speed. In the rare cases where fitting 
+		fails using the gradient a numerical gradient is still used (with warning).
+		
+	o	The Hessian Matrix for MPTs and similar models is now symbolically 
+		derived yielding an exact Hessian matrix (before it was numerically estimated 
+		leading to incorrect Hessians whean paramaters were exactly at the boundary).
+		
+	o	fitting is now based on nlminb instead of optim's L-BFGS-B
+		(using L-BFGS-B is available in fit.mpt.old)
+	
+	o	models and restrictions can now be specified using textConnections instead of 
+		only external files. See examples in ?fit.mpt and especially ?fit.model. 
+		restrictions can be specified as a list of characters.
+	
+	o	added make.mdt, a function to make .mdt data files which can be read by multiTree 
+		or HMMTree.
+		
+	o	new argument show.messages added to the fitting function (default = TRUE). If 
+		FALSE the time messeages around the fitting algorithm are suppressed. 
+		
+	o	expanded check.mpt functionality (now gives number of categories and 
+		number of independent categories)
+	
+	o	all fitting functions have the argument fit.aggregated to indicate whether or not
+		the aggregated data (for multiple datasets) should be fitted. Default is TRUE
+	
+	o	summary.llks was renamed to fitting.runs
+	
+	o	model.info now gives the rank of the Fisher Matrix (instead of the rank of the Hessian Matrix).
+	
+	Bugfixes
+	
+	o	resolved small bug when fitting using multicore = "individual"
+	
+	o	no more warning message if CIs cannot be computed.
+	
+	o	select.mpt now compares aggregated FIA for output = "full"
+	
+	o	select.mpt now rounds information criteria before determining number of 
+		best fits
+	
+	o	no more warnings by cell counts below 5 (seems unprincipled)
+		
+	o	fixed bug when resttricted parameters were not in the original model
+		(now throws a warning, thanks to Alex)
+
+		
+					**************************
+					** MPTinR VERSION 0.7.0 **
+					**************************
+					
+					Changes in MPTinR Version 0.7.0
+					Released January 2012
+
+	Significant User Visible Changes
+	
+	o	now contains fit.model() a copy of fit.mpt() with arguments for lower and upper bounds
+		for the parameters. You should be able to fit a lot more models with this function.
+		(fit.model() is slightly slower than fit.mpt() for MPTs)
+	
+	New Features / Bugfixes
+	
+	o	MPTinR should now allow easy model files with all types of operators (not only + - *) 
+		and even R functions (e.g., pnorm, ...) via the function fit.model()
+
+					**************************
+					** MPTinR VERSION 0.6.5 **
 					**************************
 					
 					Changes in MPTinR Version 0.6.5

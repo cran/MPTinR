@@ -11,12 +11,13 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 			multiFit <- TRUE
 	} else stop("data is neither vector, nor matrix, nor data.frame!")
 	
-	if(!is.null(restrictions.filename)) {
-		restrictions <- .read.MPT.restrictions(restrictions.filename)
-	}
-	
 	model <- .get.mpt.model(model.filename, model.type)
 	n.data <- dim(data)[1]
+	
+	if(!is.null(restrictions.filename)) {
+		restrictions <- .check.restrictions(restrictions.filename, model)
+	}
+	
 	
 	if (sum(sapply(model, length)) != length(data[1,])) stop(paste("Size of data does not correspond to size of model (i.e., model needs ", sum(sapply(model, length)), " datapoints, data gives ", length(data[1,]), " datapoints).", sep = ""))
 	

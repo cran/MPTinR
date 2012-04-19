@@ -27,13 +27,13 @@ A character vector specifying the name of the file where the MATLAB code is save
 Number of Monte Carlo samples to be used by the procedure of Wu, Myung, and Batchelder (2010). Default is 200.000.
 }
   \item{model.type}{
-Character vector specifying whether the model file is formatted in the easy way (\code{"easy"}; i.e., each line represents all branches corresponding to a response categories) or the traditional EQN syntax (\code{"eqn"} or \code{"eqn2"}). See Details in \code{\link{fit.mpt}}.
+Character vector specifying whether the model file is formatted in the \code{easy} format (\code{"easy"}; i.e., each line represents all branches corresponding to a response categories) or the traditional EQN syntax (\code{"eqn"} or \code{"eqn2"}). See Details in \code{\link{fit.mpt}}.
 }
 }
 \details{
 This function uses \code{\link{make.mpt.cf}} to create the representation in the L-BMPT. Therefore, it is necessary that the representation of the model via equations in the model file exactly maps on the structure of the binary tree (see \code{\link{make.mpt.cf}} for more details).
 
-Whereas \code{\link{fit.mpt}} can reparametrize MPT models for fitting inequality constraints, Wu, Myung, and Batchelder (2010) have used another method to deal with these issues that is also adopted here. Our function does not report a reparametrized version of the MPT model that satisfies the ineqaulity contraints, but modifies the appropriate argument in the call to the function by Wu et al (2010).
+Whereas \code{\link{fit.mpt}} can reparameterize MPT models for fitting inequality constraints, Wu, Myung, and Batchelder (2010) have used another method to deal with these issues that is also adopted here. Our function does not report a reparameterized version of the MPT model that satisfies the inequality contraints, but modifies the appropriate argument in the call to the function by Wu et al (2010).
 
 Note that MATLAB needs the statistics toolbox to run the script by Wu, Myung, and Batchelder (2010).
 }
@@ -64,7 +64,8 @@ See also \code{\link{get.mpt.fia}} which takes the same arguments but will then 
 
 \examples{
 \dontrun{
-# This example produces the code for the first example of how to use the function by Wu, Myung & Batchelder (2010, pp. 280):
+# This example produces the code for the first example of how to use the 
+# function by Wu, Myung & Batchelder (2010, pp. 280):
 # Value should be around 12.61 and 12.62
 
 model.1htm <- system.file("extdata", "wmb.ex1.model", package = "MPTinR")

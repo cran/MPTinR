@@ -5,7 +5,7 @@
 Convenient function to get FIA for MPT
 }
 \description{
-This function is a comprehensive wrapper for the R-port of Wu, Myung, and Batchelder's (2010) BMPTFIA \code{\link{bmpt.fia}}. It takes data, a model file, and (optionally) a restrictions file, computes the context free representation of this file and then feeds this into \code{\link{bmpt.fia}} which returns the FIA.
+\code{get.mpt.fia} is a comfortable wrapper for the R-port of Wu, Myung, and Batchelder's (2010) BMPTFIA \code{\link{bmpt.fia}}. It takes data, a model file, and (optionally) a restrictions file, computes the context-free representation of this file and then feeds this into \code{\link{bmpt.fia}} which returns the FIA.
 }
 \usage{
 get.mpt.fia(data, model.filename, restrictions.filename = NULL, Sample = 2e+05, model.type = c("easy", "eqn", "eqn2"), round.digit = 6)
@@ -30,7 +30,7 @@ Same as in \code{\link{fit.mpt}}
 scalar numeric indicating to which decimal the ratios between ns in trees should be rounded (for minimizing computations with differing ns, see Details)}
 }
 \details{
-This function is called from \code{link{fit.mpt}} to obtain the FIA, but can also be called independently.
+This function is called from \code{\link{fit.mpt}} to obtain the FIA, but can also be called independently.
 
 It performs the following steps:\cr
 1.) Equality restrictions (if present) are applied to the model.\cr
@@ -60,7 +60,7 @@ Henrik Singmann
 
 \seealso{
 calls \code{\link{bmpt.fia}}\cr
-is called by \code{\link{fit.mpt}}, the main function of MPTinR
+is called by \code{\link{fit.mpt}}, the main function for fitting MPT models
 }
 \examples{
 \dontrun{

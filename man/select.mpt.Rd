@@ -4,7 +4,7 @@
 Model Selection with MPTinR
 }
 \description{
-This function performs model selection for results produced by MPTinR's \code{\link{fit.mpt}}. It takes multiple results from \code{\link{fit.mpt}} as a list and returns a \code{data.frame} comparing the models using various model selection criteria (e.g., FIA and AIC and BIC weights). For model selection of multi-individual fits \code{select.mpt} will additionally count how often each model provided the best fit.
+This function performs model selection for results produced by MPTinR's \code{\link{fit.mpt}}. It takes multiple results from \code{\link{fit.mpt}} as a list and returns a \code{data.frame} comparing the models using various model selection criteria (e.g., FIA) and AIC and BIC weights. For model selection of multi-dataset fits \code{select.mpt} will additionally count how often each model provided the best fit.
 }
 \usage{
 select.mpt(mpt.results, output = c("standard", "full"), round.digit = 6)
@@ -18,7 +18,7 @@ A \code{list} containing results from \code{\link{fit.mpt}}.
 \code{"standard"} or \code{"full"}. If \code{"full"} additionally returns original FIA, AIC, and BIC values, and, for multi-indivdual fits, compares the model-selection criteria for the aggregated data.
 }
   \item{round.digit}{
-Integer specifying to which decimal place the results should be rounded. Default is 6.
+Integer specifying to which decimal place the results should be rounded. Default is 6. Is also used for rounding FIA, AIC, and BIC values before counting the best fitting values per individual datasets.
 }
 }
 \details{
@@ -28,7 +28,7 @@ The outputs follows the same principle for all information criteria. The lowest 
 
 For AIC and BIC, AIC and BIC weights are reported as \code{wAIC} and \code{wBIC} (Wagenmakers & Farrell, 2004).
 
-For multi-individual fit, \code{select.mpt} will additionally return how often each model provided the best fit (e.g., \code{FIA.best}). Furthermore, if \code{output} is \code{"standard"}, only results for the summed information criteria are returned (indicated by the postfix \code{.sum}). To obtain model selection results for the aggregated data (indicated by postfix \code{.aggregated}), \code{output} needs to be set to \code{"full"}.
+For multi-individual fit, \code{select.mpt} will additionally return how often each model provided the best fit (e.g., \code{FIA.best}). Values are rounded before determining which is the best fitting model. Note that there can be ties so that two models provide the best fit. Furthermore, if \code{output} is \code{"standard"}, only results for the summed information criteria are returned (indicated by the postfix \code{.sum}). To obtain model selection results for the aggregated data (indicated by postfix \code{.aggregated}), \code{output} needs to be set to \code{"full"}.
 
 select.mpt will check if the data of the results retruned from \code{fit.mpt} are equal. (If they are not equal model selection can not be done.)
 
@@ -48,7 +48,7 @@ Henrik Singmann
 }
 
 \references{
-Gruenwald, P.D. (2000). Model selection based on mnimum description length. \emph{Journal of Mathematical Psychology}, 44, 133-152.
+Gruenwald, P.D. (2000). Model selection based on minimum description length. \emph{Journal of Mathematical Psychology}, 44, 133-152.
 
 Wagenmakers, E.J. & Farrell, S. (2004). AIC model selection using Akaike weights. \emph{Psychonomic Bulletin & Review}, 11, 192-196.
 }
@@ -58,7 +58,8 @@ Wagenmakers, E.J. & Farrell, S. (2004). AIC model selection using Akaike weights
 }
 \examples{
 
-# This example compares the three versions of the model in Riefer and Batchelder (1988, Figure 2)
+# This example compares the three versions of the model in 
+# Riefer and Batchelder (1988, Figure 2)
 
 data(rb.fig2.data)
 model2 <- system.file("extdata", "rb.fig2.model", package = "MPTinR")
@@ -66,11 +67,11 @@ model2r.r.eq <- system.file("extdata", "rb.fig2.r.equal", package = "MPTinR")
 model2r.c.eq <- system.file("extdata", "rb.fig2.c.equal", package = "MPTinR")
 
 # The full (i.e., unconstrained) model
-ref.model <- fit.mpt(rb.fig2.data, model2, n.optim = 10)
+ref.model <- fit.mpt(rb.fig2.data, model2)
 # All r equal
-r.equal <- fit.mpt(rb.fig2.data, model2, model2r.r.eq, n.optim = 10)
+r.equal <- fit.mpt(rb.fig2.data, model2, model2r.r.eq)
 # All c equal
-c.equal <- fit.mpt(rb.fig2.data, model2, model2r.c.eq, n.optim = 10)
+c.equal <- fit.mpt(rb.fig2.data, model2, model2r.c.eq)
 
 select.mpt(list(reference = ref.model, r.equal = r.equal, c.equal = c.equal))
 

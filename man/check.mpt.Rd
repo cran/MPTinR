@@ -5,7 +5,7 @@
 Check construction of MPT models.
 }
 \description{
-A helper function which can aid in the process of constructing a MPT model file for MPTinR. It will check if the probabilities of all trees sum to 1 (if so, a tree is well constructed). If probabilities do not sum to 1, \code{check.mpt} will return for which trees. Furthermore, it will return the number of parameters and their names (helpful in spotting typos). Finally, you can also pass restrictions as an argument and will receive the number and names of the parameters after restrictions are applied.
+A helper function which can aid in the process of constructing a MPT model file for MPTinR. It will check if the probabilities in each trees sum to 1 (if so, a tree is well constructed). If probabilities do not sum to 1, \code{check.mpt} will return for which trees. Furthermore, it will return the number of parameters and their names (helpful in spotting typos), the number of categories and the number of dfs the model provides. Finally, you can also pass restrictions as an argument and will receive the number and names of the parameters after restrictions are applied.
 }
 \usage{
 check.mpt(model.filename, restrictions.filename = NULL, model.type = c("easy", "eqn"))
@@ -18,7 +18,7 @@ A character \code{vector} specifying the location and name of the model file.
 \code{NULL} or a character \code{vector} specifying the location and name of the restrictions file. Default is \code{NULL} which corresponds to no restrictions.
 }
   \item{model.type}{
-Character vector specyfying whether the model file is formatted in the easy way ("easy"; i.e., each line represents all branches corresponding to a response category) or the traditional EQN syntax ("eqn"; see e.g., Stahl & Klauer, 2007). If the model filename ends with ".eqn" or ".EQN" the model is automatically treated as an EQN file.
+Character vector specyfying whether the model file is formatted in the \emph{easy} format (\code{"easy"}; i.e., each line represents all branches corresponding to a response category) or the traditional EQN syntax (\code{"eqn"}; see e.g., Stahl & Klauer, 2007). If the model filename ends with ".eqn" or ".EQN" the model is automatically treated as an EQN file.
 }
 }
 \details{
@@ -28,12 +28,14 @@ In case of inequality restrictions, the original parameters which are inequality
 }
 \value{
 A list with 
-\item{probabilites.eq.1}{A logical value indicating whether or not the probabilites of all trees sum to 1. If FALSE, a warning is shown indicating which trees do not sum to 1.}
+\item{probabilites.eq.1}{A logical value indicating whether or not the probabilites in each tree sum to 1. If \code{FALSE}, a warning is shown indicating in which trees the probabilities do not sum to 1.}
 \item{n.trees}{Number of trees in the model.}
+\item{n.model.categories}{Total number of categories expected in a dataset for that model.}
+\item{n.independent.categories}{Number of independent response categories (i.e., independent data points) the model provides (i.e., \code{n.model.categories - n.trees}). The number of parameteres can not be higher than this value for a model to be identifiable.}
 \item{n.params}{Number of parameters in the model.}
 \item{parameters}{Names of parameters in the model.}
 
-If restrictions are present, the latter two items are displayed for the unrestricted model (\code{orig.model}) as well as for the restricted model (\code{restr.model}).
+If restrictions are present, the \code{n.params} and \code{paramaters} are displayed for the unrestricted model (\code{orig.model}) as well as for the restricted model (\code{restr.model}).
 
 }
 \seealso{

@@ -3,10 +3,17 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 	if(!is.list(mpt.results)) stop("mpt.results need to be a list.")
 	if(length(mpt.results)< 2) stop("length(mpt.results) needs to be >= 2.") 
 	n.models <- length(mpt.results)
+	class.data <- vapply(mpt.results, function(x) class(x[["data"]][["observed"]]), "")
+	if (!all(class.data == class.data[1])) stop("observed data from results differ (i.e., some seem to be individual data others not)")
 	observed.data <- lapply(mpt.results, function(x) return(x[["data"]][["observed"]]))
 	equal.data <- sapply(observed.data, function(x) identical(observed.data[[1]],x))
 	if(!all(equal.data)) stop("observed data for the models differ.")
-	n.data <- dim(observed.data[[1]])[1]
+	if (is.matrix(observed.data[[1]])) {
+		n.data <- dim(observed.data[[1]])[1]
+	} else {
+		if (is.list(observed.data[[1]])) n.data <- dim(observed.data[[1]][[1]])[1]
+		else stop("problem with data object of mpt.results")
+	}
 	if (!is.null(names(mpt.results))) m.names <- names(mpt.results)
 	else m.names <- 1:n.models
 	
@@ -46,7 +53,7 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 			FIA.aggregated <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["aggregated"]])))) x[["information.criteria"]][["aggregated"]][["FIA"]] else NA}, 0)
 			delta.FIA.aggregated <- FIA.aggregated - min(FIA.aggregated, na.rm = TRUE)
 			FIAs <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["individual"]])))) x[["information.criteria"]][["individual"]][["FIA"]] else rep(NA, n.data)}, rep(0, n.data))
-			FIA.best <- rowSums(apply(FIAs, 1, function(x) x == min(x, na.rm = TRUE)))
+			FIA.best <- rowSums(apply(FIAs, 1, function(x) round(x, round.digit) == min(round(x, round.digit), na.rm = TRUE)))
 		}
 		AIC.sum <- sapply(mpt.results, function(x) x[["information.criteria"]][["sum"]][["AIC"]])
 		BIC.sum <- sapply(mpt.results, function(x) x[["information.criteria"]][["sum"]][["BIC"]])
@@ -65,13 +72,13 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 		denom.wBIC.aggregated <- sum(exp(-0.5*(delta.BIC.aggregated)))
 		wBIC.aggregated <- sapply(delta.BIC.aggregated, function(x) exp(-0.5*(x))/denom.wBIC.aggregated)
 		AICs <- sapply(mpt.results, function(x) x[["information.criteria"]][["individual"]][["AIC"]])
-		AIC.best <- rowSums(apply(AICs, 1, function(x) x == min(x)))
+		AIC.best <- rowSums(apply(AICs, 1, function(x) round(x, round.digit) == min(round(x, round.digit))))
 		BICs <- sapply(mpt.results, function(x) x[["information.criteria"]][["individual"]][["BIC"]])
-		BIC.best <- rowSums(apply(BICs, 1, function(x) x == min(x)))
+		BIC.best <- rowSums(apply(BICs, 1, function(x) round(x, round.digit) == min(round(x, round.digit))))
 		df.out <- data.frame(model = m.names, n.parameters)
 		if (any(c.fia)) {
 			df.out <- cbind(df.out, delta.FIA.sum, FIA.best)
-			if (output[1] != "standard") df.out <- cbind(df.out, FIA.sum)
+			if (output[1] != "standard") df.out <- cbind(df.out, FIA.sum, delta.FIA.aggregated, FIA.aggregated)
 		}
 		if (output[1] == "standard") {
 			df.out <- cbind(df.out, delta.AIC.sum, wAIC.sum, AIC.best, delta.BIC.sum, wBIC.sum, BIC.best)   

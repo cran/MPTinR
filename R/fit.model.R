@@ -1,13 +1,22 @@
-
-fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list()){
+   
+fit.model <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list(), use.gradient = TRUE, use.hessian = FALSE){
 	
 	llk.model <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env){
-		
+		if (length(upper.bound) == 1) {
+			Q[Q > upper.bound] <- upper.bound
+		} else {
+			Q[Q > upper.bound] <- upper.bound[Q > upper.bound]
+		}
+		if (length(lower.bound) == 1) {
+			Q[Q < lower.bound] <- lower.bound
+		} else {
+			Q[Q < lower.bound] <- lower.bound[Q < lower.bound]
+		}
 		#tmpllk.env <- new.env()
 		for (i in seq_len(n.params))  assign(param.names[i],Q[i], envir = tmp.env)
 		
 		model.eval <- vapply(unlist.model, eval, envir = tmp.env, 0)
-		if (any(model.eval < 0, na.rm = TRUE)) stop(paste("Model not constructed well. Line ", which(model.eval < 0), " produces probabilities < 0!", sep = ""))
+		if (any(model.eval < 0)) stop(paste("Model not constructed well. Line ", which(model.eval < 0), " produces probabilities < 0!", sep = ""))
 		llk <- data * log(model.eval)
 		llk[data == 0] <- 0
 		llk <- sum(llk)
@@ -23,7 +32,16 @@ fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim 
 	}
 	
 	llk.gradient.funct <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env){
-		
+		if (length(upper.bound) == 1) {
+			Q[Q > upper.bound] <- upper.bound
+		} else {
+			Q[Q > upper.bound] <- upper.bound[Q > upper.bound]
+		}
+		if (length(lower.bound) == 1) {
+			Q[Q < lower.bound] <- lower.bound
+		} else {
+			Q[Q < lower.bound] <- lower.bound[Q < lower.bound]
+		}
 		#tmpllk.env <- new.env()
 		for (i in 1:n.params)  assign(param.names[i],Q[i], envir = tmp.env)
 		
@@ -34,7 +52,16 @@ fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim 
 	}
 
 	llk.hessian.funct <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env){
-		
+		if (length(upper.bound) == 1) {
+			Q[Q > upper.bound] <- upper.bound
+		} else {
+			Q[Q > upper.bound] <- upper.bound[Q > upper.bound]
+		}
+		if (length(lower.bound) == 1) {
+			Q[Q < lower.bound] <- lower.bound
+		} else {
+			Q[Q < lower.bound] <- lower.bound[Q < lower.bound]
+		}
 		#tmpllk.env <- new.env()
 		for (i in 1:n.params)  assign(param.names[i],Q[i], envir = tmp.env)
 		
@@ -123,6 +150,7 @@ fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim 
 	}
 	
 	# call the workhorse:	
-	fit.mptinr(data = data, objective = llk.model, param.names = param.names, categories.per.type = categories.per.type, gradient = llk.gradient.funct, use.gradient = TRUE, hessian = llk.hessian.funct, use.hessian = TRUE, prediction = model.predictions, n.optim = n.optim, fia.df = if(!is.null(fia)) fia.df, ci = ci, starting.values = starting.values, lower.bound = 0, upper.bound = 1, output = output, orig.params = orig.params, fit.aggregated = fit.aggregated, sort.param = sort.param, show.messages = show.messages, use.restrictions = use.restrictions, restrictions = restrictions, multicore = multicore, sfInit = sfInit, nCPU = nCPU, control = control, unlist.model = unlist(tree), llk.gradient = llk.gradient, llk.hessian = llk.hessian)
+	fit.mptinr(data = data, objective = llk.model, param.names = param.names, categories.per.type = categories.per.type, gradient = llk.gradient.funct, use.gradient = use.gradient, hessian = llk.hessian.funct, use.hessian = use.hessian, prediction = model.predictions, n.optim = n.optim, fia.df = if(!is.null(fia)) fia.df, ci = ci, starting.values = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, output = output, orig.params = orig.params, fit.aggregated = fit.aggregated, sort.param = sort.param, show.messages = show.messages, use.restrictions = use.restrictions, restrictions = restrictions, multicore = multicore, sfInit = sfInit, nCPU = nCPU, control = control, unlist.model = unlist(tree), llk.gradient = llk.gradient, llk.hessian = llk.hessian)
 	
 }
+
