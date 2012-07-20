@@ -1,8 +1,8 @@
 Package: MPTinR
 Type: Package
 Title: Analyze Multinomial Processing Tree Models
-Version: 0.8.10
-Date: 2012-04-19
+Version: 0.9.4
+Date: 2012-07-20
 Author: Henrik Singmann and David Kellen
 Maintainer: Henrik Singmann
         <henrik.singmann@psychologie.uni-freiburg.de>
@@ -19,14 +19,17 @@ Description: MPTinR provides a user-friendly way for the analysis of
         'classical' .EQN file format for model files is also supported.
         Besides MPTs, MPTinR can fit a wide variety of other cognitive
         models such as SDT models (see fit.model). MPTinR supports
-        multicore fitting using the snowfall package.
+        multicore fitting using the snowfall package. MPTinR can
+        generate data generating from a model for e.g., parametric
+        bootstrap.
 URL: http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr
 License: GPL (>= 2)
 Depends: R (>= 2.11.0), numDeriv
 Suggests: snowfall (>= 1.84)
 LazyLoad: yes
+ByteCompile: yes
 Repository: CRAN
 Repository/R-Forge/Project: mptinr
-Repository/R-Forge/Revision: 56
-Packaged: 2012-04-19 10:17:04 UTC; rforge
-Date/Publication: 2012-04-19 13:41:53
+Repository/R-Forge/Revision: 74
+Packaged: 2012-07-20 22:20:26 UTC; rforge
+Date/Publication: 2012-07-23 05:28:15

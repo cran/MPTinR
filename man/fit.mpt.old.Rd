@@ -71,7 +71,7 @@ Scalar. Only relevant if \code{multicore} is not \code{"none"} and \code{sfInit}
 There is a new version of this function using \code{\link{nlminb}} and the analytically derived gradient and hessian. See \code{\link{fit.mpt}}. We recommend using the new version \code{\link{fit.mpt}}, only use this version if you are sure on what to do.
 
 The model file is either of the easy format (see \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr}) or the "classical" EQN format (see below).\cr
-In the easy format (the default) the model file contains all trees of the model. Trees are separated by at least one empty line. Lines that contain a hash (#) \emph{at any position} will be skipped. Each line in each tree corresponds to all branches of this tree (concatenated by a +) that correspond to one of the possible response categories. The position of each line must correspond to the position of this response category in the data object (for multi-individudal fit to the respective column).
+In the easy format (the default) the model file contains all trees of the model. Trees are separated by at least one empty line. Everything to the right of a hash (#) is ignored (this behavior is new since version 0.9.2). Lines starting with a # are treated as empty. Each line in each tree corresponds to all branches of this tree (concatenated by a +) that correspond to one of the possible response categories. The position of each line must correspond to the position of this response category in the data object (for multi-individual fit to the respective column).
 
 The difference between both types of EQN format (\code{"eqn"} or\code{"eqn2"}) is the way the first line of the model file is treated. If \code{model.file} is set to \code{"eqn"}, \code{MPTinR} will ignore the first line of the model file and will read the rest of the file (as does multiTree; Moshagen, 2010). If \code{model.file} is set to \code{"eqn2"} MPTinR will only read as many lines as indicated in the first line of the EQN model file (as does e.g., HMMTree; Stahl & Klauer, 2007). As default \code{fit.mpt} expects the easy format, but if the filename ends with .eqn or .EQN and \code{model.type} is \code{"easy"}, \code{model.type} is set to \code{"eqn"}\cr
 For the EQN format consult one of the corresponding papers (see e.g., Moshagen, 2010; Stahl & Klauer, 2007). The positions in the data object (number of column for multi-individual fit) must correspond to the category number in the EQN file.\cr
@@ -88,7 +88,7 @@ Examples of restrictions are (the following could all appear in one restrictions
 \code{D4 = D3}\cr
 \code{B1 = B3 = 0.3333}\cr
 \code{X4 = X5 = D3}\cr
-Lines in a restrictions file containing a hash (#) \emph{at any position} will be skipped/ignored.
+Restrictions file may contain comments (i.e., everything to the right of a # will be ignored; new behavior since version 0.9.2)
 
 For equality restrictions, the equality restricted parameters are simply exchanged with their restrictions before the fitting.\cr
 For inequality restricted parameters, the model is reparametrized so that only the rightmost parameter of an inequality restriction remains the original parameter. Each instance of the other parameters in this restriction is replaced by the product of the rightmost parameter and dummy parameters (see Knapp & Batchelder, 2004). This procedure (which is equivalent to method A desribed in Knapp & Batchelder, 2004) leads to an equivalent model (although the binary MPT structure is not apparent in the resulting equations).\cr

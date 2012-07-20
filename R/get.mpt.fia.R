@@ -11,6 +11,14 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 			multiFit <- TRUE
 	} else stop("data is neither vector, nor matrix, nor data.frame!")
 	
+	# is model a connection and needs to be reused?
+	class.model <- class(model.filename)
+	if ("connection" %in% class.model) {
+		tmp.model <- readLines(model.filename)
+		model.filename <- textConnection(tmp.model)
+	}
+	
+	
 	model <- .get.mpt.model(model.filename, model.type)
 	n.data <- dim(data)[1]
 	
@@ -19,12 +27,16 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 	}
 	
 	
+	
 	if (sum(sapply(model, length)) != length(data[1,])) stop(paste("Size of data does not correspond to size of model (i.e., model needs ", sum(sapply(model, length)), " datapoints, data gives ", length(data[1,]), " datapoints).", sep = ""))
 	
 	df.n <- apply(data, 1, .DF.N.get, tree = model)
 	
 	n_items <- sapply(df.n, function (x) sum(x[[2]]))
 	
+	if ("connection" %in% class.model) {
+		model.filename <- textConnection(tmp.model)
+	}
 	mpt.string <- make.mpt.cf(model.filename, model.type)
 	
 	is.category <- grepl("^[[:digit:]]+$", mpt.string)

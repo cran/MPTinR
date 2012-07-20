@@ -82,7 +82,7 @@ list containing control arguments passed on to \code{\link{nlminb}}. See there.
 }
 \details{
 The model file is either of the easy format (see \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr}) or the "classical" EQN format (see below).\cr
-In the easy format (the default) the model file contains all trees of the model. Trees are separated by at least one empty line. Lines that contain a hash (#) \emph{at any position} will be skipped. Each line in each tree corresponds to all branches of this tree (concatenated by a +) that correspond to one of the possible response categories. The position of each line must correspond to the position of this response category in the data object (for multi-individual fit to the respective column).
+In the easy format (the default) the model file contains all trees of the model. Trees are separated by at least one empty line. Everything to the right of a hash (#) is ignored (this behavior is new since version 0.9.2). Lines starting with a # are treated as empty. Each line in each tree corresponds to all branches of this tree (concatenated by a +) that correspond to one of the possible response categories. The position of each line must correspond to the position of this response category in the data object (for multi-individual fit to the respective column).
 
 The difference between both types of EQN format (\code{"eqn"} or\code{"eqn2"}) is the way the first line of the model file is treated. If \code{model.file} is set to \code{"eqn"}, \code{MPTinR} will ignore the first line of the model file and will read the rest of the file (as does multiTree; Moshagen, 2010). If \code{model.file} is set to \code{"eqn2"} MPTinR will only read as many lines as indicated in the first line of the EQN model file (as does e.g., HMMTree; Stahl & Klauer, 2007). As default \code{fit.mpt} expects the easy format, but if the filename ends with .eqn or .EQN and \code{model.type} is \code{"easy"}, \code{model.type} is set to \code{"eqn"}\cr
 For the EQN format consult one of the corresponding papers (see e.g., Moshagen, 2010; Stahl & Klauer, 2007). The positions in the data object (number of column for multi-individual fit) must correspond to the category number in the EQN file.\cr
@@ -99,8 +99,9 @@ Examples of restrictions are (the following could all appear in one restrictions
 \code{D4 = D3}\cr
 \code{B1 = B3 = 0.3333}\cr
 \code{X4 = X5 = D3}\cr
-Lines in a restrictions file containing a hash (#) \emph{at any position} will be skipped/ignored.\cr
-The same restrictions as a \code{list} would be \code{list("D1 < D2 < D3", "D4 = D3", "B1 = B3 = 0.3333", "X4 = X5 = D3")} (simply use this \code{list} as the \code{restrictions.filename} argument).
+Restrictions file may contain comments (i.e., everything to the right of a # will be ignored; new behavior since version 0.9.2)
+
+Restrictions can also be specified in line as a list. The same restrictions as the one above as a \code{list} would be \code{list("D1 < D2 < D3", "D4 = D3", "B1 = B3 = 0.3333", "X4 = X5 = D3")} (simply use this \code{list} as the \code{restrictions.filename} argument).
 
 For equality restrictions, the equality restricted parameters are simply exchanged with their restrictions before the fitting.\cr
 For inequality restricted parameters, the model is reparameterized so that only the rightmost parameter of an inequality restriction remains the original parameter. Each instance of the other parameters in this restriction is replaced by the product of the rightmost parameter and dummy parameters (see Knapp & Batchelder, 2004). This procedure (which is equivalent to method A described in Knapp & Batchelder, 2004) leads to an equivalent model (although the binary MPT structure is not apparent in the resulting equations).\cr

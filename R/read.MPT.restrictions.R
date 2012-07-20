@@ -12,10 +12,10 @@
 	if (!is.list(filename)) {
 		whole <- readLines(filename)
 		model <- vector("list", length(whole))
+		whole <- gsub("#.*", "", whole)
 		c2 <- 1
 		for (c1 in 1:length(whole)) {
 			if (!(grepl("^[[:space:]]*$", whole[c1]))) {
-				if (grepl("#", whole[c1])) next
 				model[[c2]] <- whole[c1]
 				fin <- c2
 				c2 <- c2 + 1

@@ -6,14 +6,14 @@
 Fit Multinomial Processing Tree Models
 }
 \description{
-MPTinR provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can specified in external files or within an R script in an intuitive syntax. The 'classical' .EQN file format for model files is also supported. Besides MPTs, MPTinR can fit a wide variety of other cognitive models such as SDT models (see fit.model). MPTinR supports multicore fitting using the snowfall package.
+MPTinR provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can specified in external files or within an R script in an intuitive syntax. The 'classical' .EQN file format for model files is also supported. Besides MPTs, MPTinR can fit a wide variety of other cognitive models such as SDT models (see fit.model). MPTinR supports multicore fitting using the snowfall package. MPTinR can generate data generating from a model for e.g., parametric bootstrap.
 }
 \details{
 \tabular{ll}{
 Package: \tab MPTinR\cr
 Type: \tab Package\cr
-Version: \tab 0.8.10\cr
-Date: \tab 2012-04-19\cr
+Version: \tab 0.9.4\cr
+Date: \tab 2012-07-20\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

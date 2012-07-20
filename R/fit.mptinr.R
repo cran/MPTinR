@@ -269,9 +269,11 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	if (is.null(fia.df)) fia <- NULL
 	else {
 		fia <- TRUE
-		fia.df.tmp <- fia.df
-		fia.df <- fia.df.tmp[[1]]
-		fia.agg.tmp <- fia.df.tmp[[2]]
+		if (multiFit) {
+			fia.df.tmp <- fia.df
+			fia.df <- fia.df.tmp[[1]]
+			fia.agg.tmp <- fia.df.tmp[[2]]
+		}
 	}
 	
 	#n_items <- n.items.per.type(categories.per.type, data)
@@ -282,6 +284,10 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	
 	data.smaller.5 <- t(apply(data, 1, function(x) x < 5))
 	# if (any(data.smaller.5)) warning(paste("Categories have n < 5! Do NOT trust these CIs. Dataset:", paste((1:n.data)[apply(data.smaller.5, 1, any)], collapse = " "), sep = ""))
+	
+	# check if there is a gradient or hessian function:
+	if (is.null(gradient)) use.gradient <- FALSE
+	if (is.null(hessian)) use.hessian <- FALSE
 	
 	tmpllk.env <- new.env()
 	#attach(tmpllk.env)

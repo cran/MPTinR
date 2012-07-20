@@ -1,9 +1,34 @@
 					**************************
+					** MPTinR VERSION 0.9.x **
+					**************************
+					
+					Changes in MPTinR Version 0.9.x
+					Released July - ... 2012
+
+	Significant User Visible Changes and new Features
+	
+	o	added functions gen.data, sample.data and gen.predictions
+		for bootstrapping, generating data and predictions.
+	
+	o	coments in model and restrictions files are now treated as in R:
+		Everything to the right of a # is ignored and NOT the whole line!
+	
+	o	MPTinR is now byte compiled.
+	
+	o	make.mdt can now handle a matrix or data.frames building a big mdt file.
+	
+	Bugfixes
+	
+	o	fixed bug when obtaining fia from textConnection also for fit.model()
+	
+	
+
+					**************************
 					** MPTinR VERSION 0.8.x **
 					**************************
 					
 					Changes in MPTinR Version 0.8.x
-					Released February 2012
+					Released February - May 2012
 
 	Significant User Visible Changes and new Features
 	

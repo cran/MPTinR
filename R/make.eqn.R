@@ -7,8 +7,25 @@ make.eqn <- function(model.filename, eqn.filename) {
 }
 
 make.mdt <- function(data, mdt.filename, index, prefix = "dataset") {
-	if (!is.vector(data)) stop("data needs to be a vector")
-	df <- data.frame(seq_len(length(data)), data)
-	colnames(df) <- c(prefix, index)
-	write.table(df, file = mdt.filename, row.names = FALSE, quote = FALSE)
+	my.con <- file(mdt.filename, open = "w")
+	if (is.vector(data)) { 
+		df <- data.frame(seq_len(length(data)), data)
+		colnames(df) <- c(prefix, index)
+		write.table(df, file = my.con, row.names = FALSE, quote = FALSE)
+		writeLines("===", con = my.con)
+	}
+	if (is.matrix(data) | is.data.frame(data)) {
+		for (c in seq_len(nrow(data))) {
+			df <- data.frame(seq_len(length(data[c,])), data[c,])
+			colnames(df) <- c(prefix, c)
+			if (c == 1) {
+				suppressWarnings(write.table(df, file = my.con, row.names = FALSE, quote = FALSE))
+				writeLines("===", con = my.con)
+			} else {
+				suppressWarnings(write.table(df, file = my.con, row.names = FALSE, quote = FALSE, append = TRUE))
+				writeLines("===", con = my.con)
+			}
+		}
+	}
+	close(my.con)
 }

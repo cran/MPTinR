@@ -19,9 +19,9 @@ A character \code{vector} specifying the location and name of the model file in 
   \item{eqn.filename}{
 A character vector specifying the location and name of the target .eqn file.
 }
-  \item{data}{A vector containing an individual data set to write to a .mdt file}
+  \item{data}{A vector, matrix or data.frame containing an individual data set to write to a .mdt file}
   \item{mdt.filename}{character vector specifying name and location of mdt file to be written.}
-  \item{index}{index or second word written to the header of the mdt file.}
+  \item{index}{index or second word written to the header of the mdt file. Ignored if \code{data} is a matrix or data.frame. }
   \item{prefix}{first word or prefix written to the mdt file. Default is \code{dataset}}
   
 }
@@ -31,6 +31,8 @@ eqn and mdt files are the usual files used for programs to fit MPTs. You can use
 For more info on the different formats see: \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr/modelfile}
 
 Note that these function do not add the endings .eqn or .mdt to the filename.
+
+Since the MPTinR 0.9.4 \code{make.mdt} writes a single mdt file from a matrix or data.frame separating the participants via \code{===}.
 }
 \value{
 Nothing

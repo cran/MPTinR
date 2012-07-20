@@ -1,3 +1,35 @@
+2012-07-20
+		* make.mdt can now handle a matrix or data.frame, updated .Rd file
+		* reactivated examples for the gen.data examples (gen.data.Rd)
+		* make.mdt now makes mdt files that HMMTree can handle
+
+2012-07-18
+		* disabled examples for the gen.data examples (gen.data.Rd)
+
+2012-07-16
+		* added sample.data function for nonparametric bootstrap
+		* added data argument to gen.data. Now, either data or 
+		  n.per.item.type need to be non-null (but not both).
+
+2012-07-10
+		* now comments in model and restrictions files are treated like 
+		  in normal R (i.e., only everything after # is ignored).
+		  Changed: .read.MPT.model() and .read.MPT.restrictions()
+
+2012-07-09
+		* added functions gen.predictions and gen.data
+		* MPTinR is now byte compiled.
+		
+2012-05-08
+		* resolved bug when obtaining FIA for individual data sets
+
+2012-05-02
+		* resolved bug when obtaining FIA from model specified via textConnection.
+		
+2012-04-26
+		* fit.mptinr now checks if there is a gradient/hessian function and 
+		  sets use.gradient/use.hessian FALSE otherwise.
+
 2012-04-18
 		* copy editing on documentation.
 		* select.mpt(): renamed n.model.df to n.independent.categories

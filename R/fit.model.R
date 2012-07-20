@@ -76,6 +76,18 @@ fit.model <- function(data, model.filename, restrictions.filename = NULL, n.opti
 	## objective, gradient, hessian above, preparation below ##
 	###########################################################
 	
+	# check if model or restrictions are connections and if it is needed later again:
+	class.model <- class(model.filename)
+	if (!is.null(fia) & ("connection" %in% class.model)) {
+		tmp.model <- readLines(model.filename)
+		model.filename <- textConnection(tmp.model)
+	}
+	class.restr <- class(restrictions.filename)
+	if (!is.null(restrictions.filename) & !is.null(fia) & ("connection" %in% class.restr)) {
+		tmp.restr <- readLines(restrictions.filename)
+		restrictions.filename <- textConnection(tmp.restr)
+	}
+	
 	
 	tree <- .get.mpt.model(model.filename, model.type)
 	if(is.null(data)) stop("Model seems to be constructed well (i.e., all probabilities sum to 1), but data is NULL.")
@@ -98,13 +110,6 @@ fit.model <- function(data, model.filename, restrictions.filename = NULL, n.opti
 	
 	orig.params <- NULL
 	use.restrictions <- FALSE
-	
-	# check if restrictions is connection and if it is needed later again:
-	class.restr <- class(restrictions.filename)
-	if (!is.null(restrictions.filename) & !is.null(fia) & ("connection" %in% class.restr)) {
-		tmp.restr <- readLines(restrictions.filename)
-		restrictions.filename <- textConnection(tmp.restr)
-	}
 		
 	if (!is.null(restrictions.filename)) {
 		orig.params <- .find.MPT.params(tree)
@@ -121,6 +126,9 @@ fit.model <- function(data, model.filename, restrictions.filename = NULL, n.opti
 	}
 	
 	# check if restrictions is connection and needed again then construct anew here:
+	if (!is.null(fia) & ("connection" %in% class.model)) {
+		model.filename <- textConnection(tmp.model)
+	}
 	if (!is.null(restrictions.filename) & !is.null(fia) & ("connection" %in% class.restr)) {
 		restrictions.filename <- textConnection(tmp.restr)
 	}

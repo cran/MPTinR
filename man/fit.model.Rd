@@ -108,7 +108,7 @@ The restrictions file may contain (sequential) equality (i.e., =) and inequality
 
 For equality restrictions, the equality restricted parameters are simply exchanged with their restrictions (i.e., another parameter or a number) before the fitting.
 
-Lines in a restrictions file or model containing a hash (#) \emph{at any position} will be skipped/ignored.
+Restrictions or model files can contain comments (i.e., everything to the right of a # will be ignored; new behavior since version 0.9.2)
 
 Both models and restrictions can be specified as \code{\link{textConnection}}s instead of as external files (see examples). Note that textConnections get "consumed" so you may need to specify them each time you fit a model using a connection (see \code{Examples} for how to avoid this).
 
