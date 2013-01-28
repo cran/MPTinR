@@ -7,7 +7,7 @@ Model Selection with MPTinR
 This function performs model selection for results produced by MPTinR's \code{\link{fit.mpt}}. It takes multiple results from \code{\link{fit.mpt}} as a list and returns a \code{data.frame} comparing the models using various model selection criteria (e.g., FIA) and AIC and BIC weights. For model selection of multi-dataset fits \code{select.mpt} will additionally count how often each model provided the best fit.
 }
 \usage{
-select.mpt(mpt.results, output = c("standard", "full"), round.digit = 6)
+select.mpt(mpt.results, output = c("standard", "full"), round.digit = 6, dataset)
 }
 
 \arguments{
@@ -19,6 +19,9 @@ A \code{list} containing results from \code{\link{fit.mpt}}.
 }
   \item{round.digit}{
 Integer specifying to which decimal place the results should be rounded. Default is 6. Is also used for rounding FIA, AIC, and BIC values before counting the best fitting values per individual datasets.
+}
+  \item{dataset}{
+Integer vector specifying whether or not to restrict the individual comparison top certain dataset(s). Aggregated results will not be displayed if this argument is present. 
 }
 }
 \details{
@@ -39,12 +42,19 @@ Note that the values in the returned \code{data.frame} are rounded to the \code{
 A \code{data.frame} containing the model selection values:\cr
 \code{model}: Name or number of model (names are taken from \code{mpt.results}).\cr
 \code{n.parameters}: Number of parameters for each model.\cr
+\code{G.Squared}: G.Squared values of the model (from summed fits for multiple datasets).\cr
+\code{df}: df values of the model (from summed fits for multiple datasets).\cr
+\code{p.value}: p values of the model (from summed fits for multiple datasets).\cr 
 For the information criteria (i.e., FIA, AIC, BIC) \code{X}, \code{delta.X}, \code{X.best}, \code{X}, \code{wX} represent: The difference from the reference model, how often each model provided the best fit (only for multi-individual fit), the absolute value, the weights (only AIC and BIC).\cr
 For multi-indivudal fit the postfix indicates whether the results refer to the summed information criteria from individual fit \code{.sum} or the information criteria from the aggregated data \code{.aggregated}.
 }
 
 \author{
 Henrik Singmann
+}
+
+\note{
+If any of the models is fitted with \code{fit.aggregated = FALSE} no aggregated results are presented.
 }
 
 \references{
@@ -74,5 +84,31 @@ r.equal <- fit.mpt(rb.fig2.data, model2, model2r.r.eq)
 c.equal <- fit.mpt(rb.fig2.data, model2, model2r.c.eq)
 
 select.mpt(list(reference = ref.model, r.equal = r.equal, c.equal = c.equal))
+
+
+
+\dontrun{
+
+# Example from Broder & Schutz (2009)
+
+data(d.broeder, package = "MPTinR")
+m.2htm <- system.file("extdata", "5points.2htm.model", package = "MPTinR")
+r.2htm <- system.file("extdata", "broeder.2htm.restr", package = "MPTinR")
+r.1htm <- system.file("extdata", "broeder.1htm.restr", package = "MPTinR")
+
+br.2htm.fia <- fit.mpt(d.broeder, m.2htm, fia = 50000, fit.aggregated = FALSE)
+br.2htm.res.fia <- fit.mpt(d.broeder, m.2htm, r.2htm, fia = 50000, fit.aggregated = FALSE)
+br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 50000, fit.aggregated = FALSE)
+
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia))
+# This table shows, that the n is to small to correctly compute FIA for the 1htm model (as the penalty is bigger than for the 2htm)
+
+# using the new dataset argument
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia), dataset = 4)
+
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia), dataset = 1:10)
+
+}
+
 
 }

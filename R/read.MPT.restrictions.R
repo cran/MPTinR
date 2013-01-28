@@ -46,6 +46,7 @@
 	for (c.restr in 1:length(tmp.restrictions)) {
 		usedParamsList <- sapply(restrictions, function(x) return(x[1]))
 		usedParams <- c(sapply(restrictions, function(x) return(x[1])), alsoUsed)
+        #browser()
 		if (c.inequality[c.restr] > 1) {
 			if (prevEquality) stop("Error getting Restrictions: Inequality after Equality.")
 			tmpStr <- strsplit(tmp.restrictions[[c.restr]], "[\t <]")[[1]]
@@ -102,7 +103,8 @@
 				alsoUsed <- c(alsoUsed, tmpStr[pos.ref])
 				for (ci in 1:(pos.ref-1)) {
 					if (tmpStr[pos.ref] %in% usedParamsList) {
-						tmpRestr[[ci]] <- c(tmpStr[ci], restrictions[[match(tmpStr[pos.ref], usedParams)]][2], "=")
+                        if (restrictions[[match(tmpStr[pos.ref], usedParams)]][3] == "<") tmpRestr[[ci]] <- c(tmpStr[ci], restrictions[[match(tmpStr[pos.ref], usedParams)]][2], "<", restrictions[[match(tmpStr[pos.ref], usedParams)]][4])
+						else tmpRestr[[ci]] <- c(tmpStr[ci], restrictions[[match(tmpStr[pos.ref], usedParams)]][2], "=")
 					}
 					else {
 						tmpRestr[[ci]] <- c(tmpStr[ci], tmpStr[pos.ref], "=")

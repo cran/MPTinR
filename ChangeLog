@@ -1,3 +1,27 @@
+2013-02-02
+        * aggrgeated G^2 only if output == "full"
+
+2013-01-27
+        * added CITATION file
+        * added aggregated G^2 when output = "full" (select.mpt)
+
+2012-09-14
+		* resolved bug when using inequality and crossed equality
+          restrictions (see bugs/resrictionsbug.order.R)
+
+2012-09-03
+		* select.mpt now shows g.square, df, and p
+		* select.mpt has argument dataset
+		
+2012-08-30
+		* added function plot.prediction.
+		* added FIA.penalty to output with FIA.
+		* removed bug when select.mpt from models with fit
+		  fit.aggregated = FALSE
+
+2012-07-24
+		* make.mdt now uses dimnames(data)[[1]] as index (with warning).
+
 2012-07-20
 		* make.mdt can now handle a matrix or data.frame, updated .Rd file
 		* reactivated examples for the gen.data examples (gen.data.Rd)

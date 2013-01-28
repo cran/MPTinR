@@ -1,9 +1,46 @@
 					**************************
+					** MPTinR VERSION 1.0.x **
+					**************************
+					Changes in MPTinR Version 1.0.x
+					Released January 2013
+
+	Significant User Visible Changes and new Features
+	
+	o	added function plot.prediction for plotting obersved versus 
+		predicted data.
+	
+	o	added fia.penalty to information criteria output and to select.mpt.
+	
+	o	added G.Square, df, and p to output of select.mpt
+	
+	o	argument dataset added to select.mpt. Allows to select only certain 
+		datasets for the comparison (argument may be of length > 1).
+    
+    o   added CITATION file (as our Behavior Research Methods paper finally 
+        came out)
+	
+	Bugfixes
+	
+	o	select.mpt works now if some some models (with multiple datasets)
+		were fitted with fit.aggregated = FALSE.
+        
+    o   select.mpt returns the aggregated GoF (G^2, df, p) when output = "full"
+      
+    o   You can now pose an order restriction on variables that may also
+        be restricted to be equal to others. E.g., the following restriction
+        is allowed list("G2 < G3 < G5", "G1 = G2", "G4 = G5") and produces
+        the desired results, see r-forge/MPTinR/bugs/restrictionsbug.order.R 
+        Note that in this case G1 would be marked as inequality restricted
+        instead of equality restricted (which is not the case for G4).
+
+
+
+					**************************
 					** MPTinR VERSION 0.9.x **
 					**************************
 					
 					Changes in MPTinR Version 0.9.x
-					Released July - ... 2012
+					Released July 2012
 
 	Significant User Visible Changes and new Features
 	

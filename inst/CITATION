@@ -1,0 +1,17 @@
+citHeader("To cite MPTinR in publications use:")
+
+citEntry(entry = "Article",
+  title = "{MPTinR:} Analysis of multinomial processing tree models in R",
+  author = personList(as.person("Henrik Singmann"), 
+                        as.person("David Kellen")),
+  journal = "Behavior Research Methods",
+  year = "in press",
+  doi = "10.3758/s13428-012-0259-0",
+  url = "http://link.springer.com/article/10.3758/s13428-012-0259-0",
+
+  textVersion =
+  paste("Henrik Singmann & David Kellen (in press).",
+        "MPTinR: Analysis of Multinomial Processing Tree models in R.",
+        "Behavior Research Methods.",
+        "doi:10.3758/s13428-012-0259-0")
+)

@@ -81,7 +81,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		
 		if (!is.null(fia)) {
 			FIA <- (G.Squared/2) + fia[,1]
-			ic <- data.frame(FIA, AIC, BIC)
+			ic <- data.frame(FIA, AIC, BIC, FIA.penalty = fia[,1])
 		} else ic <- data.frame(AIC, BIC)
 		rownames(ic) <- NULL
 		ic
