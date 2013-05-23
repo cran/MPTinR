@@ -1,5 +1,5 @@
 
-fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list()){
+fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2, control = list()){
 	
 	llk.model <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env){
 		
@@ -123,12 +123,12 @@ fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim 
 	if (!is.null(fia)) {
 		if (multiFit) {
 			data.new <- rbind(data, apply(data,2,sum))
-			fia.tmp <- get.mpt.fia(data.new, model.filename, restrictions.filename, fia, model.type)
+			fia.tmp <- get.mpt.fia(data.new, model.filename, restrictions.filename, fia, model.type, multicore = if (multicore[1] != "none") TRUE else FALSE)
 			fia.df <- fia.tmp[-dim(fia.tmp)[1],]
 			fia.agg.tmp <- fia.tmp[dim(fia.tmp)[1],]
 			fia.df <- list(fia.df, fia.agg.tmp)
 		} else {
-			fia.df <- get.mpt.fia(data, model.filename, restrictions.filename, fia, model.type)
+			fia.df <- get.mpt.fia(data, model.filename, restrictions.filename, fia, model.type, multicore = if (multicore[1] != "none") TRUE else FALSE)
 		}
 	}
 	

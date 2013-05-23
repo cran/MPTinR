@@ -1,6 +1,6 @@
 
 
-get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Sample = 200000, model.type = c("easy", "eqn", "eqn2"), round.digit = 6){
+get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Sample = 200000, model.type = c("easy", "eqn", "eqn2"), round.digit = 6, multicore = FALSE, split = NULL){
 	
 	if(is.vector(data)) {
 		data <- array(data, dim = c(1, length(data)))
@@ -137,7 +137,7 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 	fia.result <- vector('list', n.fit)
 	
 	for (counter in 1:n.fit) {
-		fia.result[[counter]] <- bmpt.fia(s, parameters[[m.fit[counter]]], category, n_items[m.fit[counter]], ineq, Sample)
+		fia.result[[counter]] <- bmpt.fia(s, parameters[[m.fit[counter]]], category, n_items[m.fit[counter]], ineq, Sample, multicore = multicore, split = split)
 	}
 	
 	n.params <- length(unique(parameters[[1]][parameters[[1]] > 0]))

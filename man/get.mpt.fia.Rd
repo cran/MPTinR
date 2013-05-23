@@ -8,7 +8,9 @@ Convenient function to get FIA for MPT
 \code{get.mpt.fia} is a comfortable wrapper for the R-port of Wu, Myung, and Batchelder's (2010) BMPTFIA \code{\link{bmpt.fia}}. It takes data, a model file, and (optionally) a restrictions file, computes the context-free representation of this file and then feeds this into \code{\link{bmpt.fia}} which returns the FIA.
 }
 \usage{
-get.mpt.fia(data, model.filename, restrictions.filename = NULL, Sample = 2e+05, model.type = c("easy", "eqn", "eqn2"), round.digit = 6)
+get.mpt.fia(data, model.filename, restrictions.filename = NULL, Sample = 2e+05, 
+	model.type = c("easy", "eqn", "eqn2"), round.digit = 6, 
+	multicore = FALSE, split = NULL)
 }
 \arguments{
   \item{data}{
@@ -27,7 +29,14 @@ The number of random samples to be drawn in the Monte Carlo algorithm. Default i
 Same as in \code{\link{fit.mpt}}
 }
   \item{round.digit}{
-scalar numeric indicating to which decimal the ratios between ns in trees should be rounded (for minimizing computations with differing ns, see Details)}
+scalar numeric indicating to which decimal the ratios between ns in trees should be rounded (for minimizing computations with differing ns, see Details)
+}
+  \item{multicore}{
+Same as in \code{\link{bmpt.fia}}
+}
+  \item{split}{
+Same as in \code{\link{bmpt.fia}}
+}
 }
 \details{
 This function is called from \code{\link{fit.mpt}} to obtain the FIA, but can also be called independently.

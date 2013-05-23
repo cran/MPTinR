@@ -13,8 +13,8 @@ absolute = TRUE,
 spacing = 2, 
 axis.labels = NULL, 
 ylim, model.type = c("easy", "eqn", "eqn2"), 
-args.plot = list(), args.rect = list(), args.box = list(), args.points = list(), args.labels = list(),
-numbers = c("individual", "continuous"), 
+args.plot = list(), args.rect = list(), args.box = list(), args.points = list(), 
+args.labels = list(), numbers = c("individual", "continuous"), 
 pos.numbers = c("plot", "axis"), args.numbers = list(), args.abline = list(), abline)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -120,12 +120,18 @@ br.2htm <- fit.mpt(d.broeder, m.2htm)
 # graphical parameters
 par(mfrow = c(2,2))
 prediction.plot(br.2htm, m.2htm, 4)
-prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), numbers = NULL, args.points = list(pch = 16, cex = 1.5))
-prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), args.plot = list(main = "Dataset 4 - A"), abline = TRUE, numbers = "continuous")
-prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), args.plot = list(main = "Dataset 4 - B"), pos.numbers = "axis", abline = TRUE, args.numbers = list(mgp = c(3, 0.2, 0), cex.axis = 0.35), args.points = list(pch = 4, cex = 1.5))
+prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), numbers = NULL, 
+	args.points = list(pch = 16, cex = 1.5))
+prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), args.plot = list(main = "Dataset 4 - A"),
+	abline = TRUE, numbers = "continuous")
+prediction.plot(br.2htm, m.2htm, 4, ylim = c(-4, 4), args.plot = list(main = "Dataset 4 - B"),
+	pos.numbers = "axis", abline = TRUE, 
+	args.numbers = list(mgp = c(3, 0.2, 0), cex.axis = 0.35),
+	args.points = list(pch = 4, cex = 1.5))
 dev.off()
 
-prediction.plot(br.2htm, m.2htm, "aggregated", axis.labels = unlist(lapply(c(10, 25, 50, 75, 90), paste, c("o.o", "o.n"), sep = "")))
+prediction.plot(br.2htm, m.2htm, "aggregated", axis.labels = unlist(lapply(c(10, 25, 50, 75, 90),
+	paste, c("o.o", "o.n"), sep = "")))
 
 # fit the SDT
 br.sdt <- fit.model(d.broeder, m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
@@ -133,15 +139,25 @@ br.sdt <- fit.model(d.broeder, m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1), upper
 axis.labels <- unlist(lapply(c(10, 25, 50, 75, 90), paste, c("o.o", "o.n"), sep = ""))
 # compare predictions for aggregated data:
 par(mfrow = c(2,2))
-prediction.plot(br.2htm, m.2htm, "aggregated", ylim = c(-30, 30), args.plot = list(main = "MPT model - absolute"), axis.labels = axis.labels)
-prediction.plot(br.sdt, m.2htm, "aggregated", ylim = c(-30, 30), args.plot = list(main = "SDT model - absolute"), axis.labels = axis.labels)
-prediction.plot(br.2htm, m.2htm, "aggregated", ylim = c(-60, 60), args.plot = list(main = "MPT model - G.squared"), absolute = FALSE, axis.labels = axis.labels, pos.numbers = "axis", args.points = list(pch = 8, cex = 1))
-prediction.plot(br.sdt, m.2htm, "aggregated", ylim = c(-60, 60), args.plot = list(main = "SDT model - G.squared"), absolute = FALSE, axis.labels = axis.labels, pos.numbers = "axis", args.points = list(pch = 8, cex = 1))
+prediction.plot(br.2htm, m.2htm, "aggregated", ylim = c(-30, 30), 
+	args.plot = list(main = "MPT model - absolute"), axis.labels = axis.labels)
+prediction.plot(br.sdt, m.2htm, "aggregated", ylim = c(-30, 30),
+	args.plot = list(main = "SDT model - absolute"), axis.labels = axis.labels)
+prediction.plot(br.2htm, m.2htm, "aggregated", ylim = c(-60, 60), 
+	args.plot = list(main = "MPT model - G.squared"), absolute = FALSE, 
+	axis.labels = axis.labels, pos.numbers = "axis", args.points = list(pch = 8, cex = 1))
+prediction.plot(br.sdt, m.2htm, "aggregated", ylim = c(-60, 60),
+	args.plot = list(main = "SDT model - G.squared"), absolute = FALSE, 
+	axis.labels = axis.labels, pos.numbers = "axis", args.points = list(pch = 8, cex = 1))
 
 # comparing absoulte and G-sqaured plot with zero counts in cell 2:
 par(mfrow = c(2,2))
-prediction.plot(br.2htm, m.2htm, 2, ylim = c(-1, 1), args.plot = list(main = "MPT model - absolute"))
-prediction.plot(br.sdt, m.2htm, 2, ylim = c(-1, 1), args.plot = list(main = "SDT model - absolute"))
-prediction.plot(br.2htm, m.2htm, 2, ylim = c(-2, 2), args.plot = list(main = "MPT model - G.squared"), absolute = FALSE)
-prediction.plot(br.sdt, m.2htm, 2, ylim = c(-2, 2), args.plot = list(main = "SDT model - G.squared"), absolute = FALSE)
+prediction.plot(br.2htm, m.2htm, 2, ylim = c(-1, 1),
+	args.plot = list(main = "MPT model - absolute"))
+prediction.plot(br.sdt, m.2htm, 2, ylim = c(-1, 1),
+	args.plot = list(main = "SDT model - absolute"))
+prediction.plot(br.2htm, m.2htm, 2, ylim = c(-2, 2),
+	args.plot = list(main = "MPT model - G.squared"), absolute = FALSE)
+prediction.plot(br.sdt, m.2htm, 2, ylim = c(-2, 2),
+	args.plot = list(main = "SDT model - G.squared"), absolute = FALSE)
 }

@@ -83,6 +83,7 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 		G.Squared.sum <- vapply(mpt.results, function(x) x[["goodness.of.fit"]][["sum"]][1,"G.Squared"], 0)
 		df.sum <- vapply(mpt.results, function(x) x[["goodness.of.fit"]][["sum"]][1,"df"], 0)
 		p.sum <- vapply(mpt.results, function(x) x[["goodness.of.fit"]][["sum"]][1,"p.value"], 0)
+        p.smaller.05 <- vapply(mpt.results, function(x) sum(x[["goodness.of.fit"]][["individual"]][,"p.value"] < .05), 0)
 		if (any(c.fia)) {
 			FIA.sum <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["sum"]])))) x[["information.criteria"]][["sum"]][["FIA"]] else NA}, 0)
 			FIA.penalty.sum <- vapply(mpt.results, function(x) {if (any(grepl("^FIA.penalty$", colnames(x[["information.criteria"]][["sum"]])))) x[["information.criteria"]][["sum"]][["FIA.penalty"]] else NA}, 0)
@@ -120,7 +121,7 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 		AIC.best <- rowSums(apply(AICs, 1, function(x) round(x, round.digit) == min(round(x, round.digit))))
 		BICs <- sapply(mpt.results, function(x) x[["information.criteria"]][["individual"]][["BIC"]])
 		BIC.best <- rowSums(apply(BICs, 1, function(x) round(x, round.digit) == min(round(x, round.digit))))
-		df.out <- data.frame(model = m.names, n.parameters, G.Squared.sum, df.sum, p.sum)
+		df.out <- data.frame(model = m.names, n.parameters, G.Squared.sum, df.sum, p.sum, p.smaller.05)
         if (c.aggregated & (output[1] != "standard")) {
             df.out <- cbind(df.out, G.Squared.aggregated, df.aggregated, p.aggregated)
         }

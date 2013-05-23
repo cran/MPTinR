@@ -94,17 +94,22 @@ m.sdt <- system.file("extdata", "broeder.sdt.model", package = "MPTinR")
 br.2htm <- fit.mpt(colSums(d.broeder), m.2htm)
 
 # fit the SDT model
-br.sdt <- fit.model(colSums(d.broeder), m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
+br.sdt <- fit.model(colSums(d.broeder), m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1),
+	upper.bound = Inf)
 
-# get one random dataset using the paramater values obtained (i.e., parametric bootstrap) and the data argument.
+# get one random dataset using the paramater values obtained (i.e., parametric bootstrap) 
+# and the data argument.
 gen.data(br.2htm[["parameters"]][,1], 1, m.2htm, data = colSums(d.broeder))
 
 gen.data(br.sdt[["parameters"]][,1], 1, m.sdt, data = colSums(d.broeder))
 
-# get one random dataset using the paramater values obtained (i.e., parametric bootstrap) and the n.per.item.type argument.
-gen.data(br.2htm[["parameters"]][,1], 1, m.2htm, n.per.item.type = c(240, 2160, 600, 1800, 1200, 1200, 1800, 600, 2160, 240))
+# get one random dataset using the paramater values obtained (i.e., parametric bootstrap) 
+# and the n.per.item.type argument.
+gen.data(br.2htm[["parameters"]][,1], 1, m.2htm, 
+	n.per.item.type = c(240, 2160, 600, 1800, 1200, 1200, 1800, 600, 2160, 240))
 
-gen.data(br.sdt[["parameters"]][,1], 1, m.sdt, n.per.item.type = c(240, 2160, 600, 1800, 1200, 1200, 1800, 600, 2160, 240))
+gen.data(br.sdt[["parameters"]][,1], 1, m.sdt, 
+	n.per.item.type = c(240, 2160, 600, 1800, 1200, 1200, 1800, 600, 2160, 240))
 
 # sample one random dataset from the original data:
 sample.data(colSums(d.broeder), 1, model.filename = m.2htm)

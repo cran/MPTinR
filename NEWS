@@ -1,4 +1,39 @@
 					**************************
+					** MPTinR VERSION 1.1.x **
+					**************************
+					Changes in MPTinR Version 1.1.x
+					Released May 2013
+
+	Significant User Visible Changes and new Features
+	
+    o   Calculation of FIA uses RcppEigen for dramatic speed
+        improvements (thanks to Christian Mueller).
+	
+	o	FIA calculation can also be parallelized, see bmpt.fia 
+		(but even in fit.mpt or fit.model, if multicore is not "none",
+		or in get.mpt.fia)
+    
+	o	documentation now says that extra brackets will distort FIA 
+        calculation (Thanks to Joachim Vandekerckhove and 
+        EJ Wagenmakers)
+        
+    o   added possibility to specify individual bounds for 
+        random starting values (via two element list).
+    
+    o   multicore fitting now uses load balancing.
+    
+    o   select.mpt shows how often p < .05 when results consists
+        of multiple data sets. (p.smaller.05)
+	
+	Bugfixes
+	
+	o	Added note that LLKs do not include factorial constant of the
+        multinomial PMF.
+        
+    o   (hopefully) repaired bug in make.mdt() with matrix/data.frame
+
+        
+					**************************
 					** MPTinR VERSION 1.0.x **
 					**************************
 					Changes in MPTinR Version 1.0.x

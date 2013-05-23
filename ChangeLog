@@ -1,3 +1,41 @@
+2013-05-17
+        * sfLibrary now called with only.character = TRUE 
+		  (removes R CMD check NOTE).
+
+2013-05-22
+        * fixed line lengths in .Rd files
+
+2013-05-17
+        * updated documentation of fit.mpt (added 
+          warning for possibly inconsistent FIA penalties)
+
+2013-05-11
+        * removed bug in make.mdt with data.frames
+        
+2013-05-09
+        * added n.smaller.05 column to select.mpt
+        * added note about factorial constant (fit.mpt, fit.model)
+
+2013-05-07
+        * multicore fitting now uses load balancing (fit.mptinr)
+
+2013-04-01
+        * FIA calculation can now use multicore (in bmpt.fia)
+		* multicore FIA also available via get.mpt.fia, fit.mpt, 
+		  and fit.model.
+		
+2013-02-24
+        * FIA calculation uses RcppEigen (thanks to 
+          Christian Mueller)
+
+2013-02-15
+        * added feature to specify lower and upper bound
+          for starting values (must be two element list, 
+          first is lower, second is upper).
+
+2013-02-10
+        * modifed documentation for FIA (extra brackets warning).
+        
 2013-02-02
         * aggrgeated G^2 only if output == "full"
 

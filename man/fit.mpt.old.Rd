@@ -259,7 +259,7 @@ model2r.c.eq <- system.file("extdata", "rb.fig2.c.equal", package = "MPTinR")
 # We fit the models with, as well as without, applied inequality restrictions (see Details)
 # that is, for some models (.ineq) we impose: G1 < G2 < G3 < G4 < G5 
 # As will be apparent, the inequality restrictions do not hold for all individuals.
-# Finally, we compute the FIA for all models, taking inequalities into account when they are imposed.
+# Finally, we compute the FIA for all models, taking inequalities into account.
 # Note: The following examples will take some time (> 1 hour).
 
 data(d.broeder)
@@ -293,8 +293,8 @@ br.1htm.ineq <- fit.mpt(d.broeder, m.2htm, ir.1htm)
 round(br.2htm.res[["parameters"]][["individual"]][,"estimates",] -
 		br.2htm.res.ineq[["parameters"]][["individual"]][,"estimates",],2)
 
-# These results show that we cannot compute inequality constraints for the non inequality imposed models.
-# (It would look differently if we excluded critical cases, 
+# These results show that we cannot compute inequality constraints for the non inequality
+#  imposed models (It would look differently if we excluded critical cases, 
 # i.e., 2, 6, 7, 10, 18, 21, 25, 29, 32, 34, 35, 37, 38)
 # Therefore, we get the FIA for the models as computed above 
 # WARNING: The following part will take a long time!

@@ -5,10 +5,11 @@
 Compute FIA for MPTs
 }
 \description{
-R-port of the function to compute FIA for MPT models by Wu, Myung, and Batchelder (2010a, 2010b). This function is essentially an exact copy of the original Matlab code to R. The only thing we changed is the order of input arguments to be more R-like.
+R-port of the function to compute FIA for MPT models by Wu, Myung, and Batchelder (2010a, 2010b). This function is essentially a copy of the original Matlab code to R (with significant parts moved to C++ and allowing for multicore functionality). Also, the order of input arguments is more R-like.
 }
 \usage{
-bmpt.fia(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05)
+bmpt.fia(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, 
+        multicore = FALSE, split = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,6 +31,13 @@ see Details
   \item{Sample}{
 see Details
 }
+  \item{multicore}{
+logical. Should fitting be distributed across several cores? Requires \pkg{snowfall} and initialized cluster. See also below.
+}
+  \item{split}{
+\code{NULL} (the default) or integer specifying in how many separate calls to the C++ workhorse the integrant should be calculated. See below.
+}
+
 }
 \details{
 The following is the original description by Wu, Myung, & Batchelder (2010a) for their Matlab function. All changes to the original document are in squared brackets []:
@@ -79,6 +87,9 @@ N = 400;
 
 [For more examples, see Examples]
 
+Since MPTinR version 1.1.3 the Monte Carlo integration is performed in C++ using \pkg{RcppEigen}. With the default arguments, one instance of the C++ workhorse is called. To call multiple instances of the C++ workhorse, you can use the \code{split} argument (which can be useful to replicate results obtained with \code{multicore = TRUE} as described below). Note, that each time before calling the C++ code, the seed is set (the set of random seeds are generated before calling the function for the first time).
+
+Multicore functionality is achieved via \pkg{snowfall} which needs to be loaded and a cluster initalized via \code{\link[snowfall]{sfInit}} when setting \code{multicore = TRUE}. When \code{split = NULL} (the default), the \code{Samples} will be evenly distributed on the different cores (using \code{\link[snowfall]{sfClusterSplit}}), so that only one instance of the underlying C++ workhorse is called on each core. Setting \code{split} to non-\code{NULL} will produce as many instances (distributed across cores). Note that in order to obtain comparable results (as snowfall uses load balancing), the random seed is set (at each core) before calling each instance of the C++ workhorse. This allows to replicate results obtained via multicore in a non-multicore environment when seting \code{split} appropriately (and \code{set.seed} beforehands).
 }
 \value{
 [A named vector:]
@@ -101,7 +112,7 @@ Wu, H., Myung, J.I., & Batchelder, W.H. (2010a). Minimum description length mode
 Wu, H., Myung, J.I., & Batchelder, W.H. (2010b). On the minimum description length complexity of multinomial processing trees. \emph{Journal of Mathematical Psychology}, 54, 291-303.
 }
 \author{
-The original Matlab code was written by Hao Wu, Jay I. Myung, and William H. Batchelder. This code was ported to R by Henrik Singmann and David Kellen
+The original Matlab code was written by Hao Wu, Jay I. Myung, and William H. Batchelder.\cr This code was ported to R by Henrik Singmann and David Kellen. RcppEigen was added by Henrik Singmann and Christian Mueller. Multicore functionality was added by Henrik Singmann.
 }
 \note{
 The R version of the code is considerably slower than the Matlab version of this code.

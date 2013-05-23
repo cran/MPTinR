@@ -45,6 +45,7 @@ A \code{data.frame} containing the model selection values:\cr
 \code{G.Squared}: G.Squared values of the model (from summed fits for multiple datasets).\cr
 \code{df}: df values of the model (from summed fits for multiple datasets).\cr
 \code{p.value}: p values of the model (from summed fits for multiple datasets).\cr 
+\code{p.smaller.05}: How many of the individual data sets have p < .05 (for multiple datasets only).\cr 
 For the information criteria (i.e., FIA, AIC, BIC) \code{X}, \code{delta.X}, \code{X.best}, \code{X}, \code{wX} represent: The difference from the reference model, how often each model provided the best fit (only for multi-individual fit), the absolute value, the weights (only AIC and BIC).\cr
 For multi-indivudal fit the postfix indicates whether the results refer to the summed information criteria from individual fit \code{.sum} or the information criteria from the aggregated data \code{.aggregated}.
 }
@@ -101,12 +102,15 @@ br.2htm.res.fia <- fit.mpt(d.broeder, m.2htm, r.2htm, fia = 50000, fit.aggregate
 br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 50000, fit.aggregated = FALSE)
 
 select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia))
-# This table shows, that the n is to small to correctly compute FIA for the 1htm model (as the penalty is bigger than for the 2htm)
+# This table shows, that the n is to small to correctly compute FIA for 
+# the 1htm model (as the penalty is bigger than for the 2htm)
 
 # using the new dataset argument
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia), dataset = 4)
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
+	dataset = 4)
 
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia), dataset = 1:10)
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
+	dataset = 1:10)
 
 }
 

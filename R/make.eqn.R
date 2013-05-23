@@ -17,7 +17,7 @@ make.mdt <- function(data, mdt.filename, index, prefix = "dataset") {
 	if (is.matrix(data) | is.data.frame(data)) {
 		if (!is.null(dimnames(data))) warning("Uses dimnames(data)[[1]] as index.")
 		for (c in seq_len(nrow(data))) {
-			df <- data.frame(seq_len(length(data[c,])), data[c,])
+			df <- data.frame(seq_len(length(data[c,])), unlist(data[c,]))
 			if (!is.null(dimnames(data))) colnames(df) <- c(prefix, dimnames(data)[[1]][c])
 			else colnames(df) <- c(prefix, c)
 			if (c == 1) {

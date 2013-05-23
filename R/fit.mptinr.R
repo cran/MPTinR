@@ -29,12 +29,22 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	optim.tree <- function(data, objective, gradient, use.gradient, hessian, use.hessian, tmp.env, param.names, n.params, n.optim, start.params, lower.bound, upper.bound, control, ...)  {
 		wrapper.nlminb <- function(x, data, objective, gradient, use.gradient, hessian, use.hessian, tmp.env, param.names, n.params, n.optim, start.params, lower.bound, upper.bound, control, ...) {
 			if (is.null(start.params)) start.params <- c(0.1, 0.9)
+            if (is.list(start.params)) {
+                lbound <- start.params[[1]]
+                if (length(lbound) == 1) lbound <- rep(lbound, n.params)
+                ubound <- start.params[[2]]
+                if (length(ubound) == 1) ubound <- rep(ubound, n.params)
+                start.params <- vector("numeric", n.params)
+                for (c in 1:n.params) {
+                start.params[c] <- runif(1, lbound[c], ubound[c])
+                }                
+            }
 			if (length(start.params) == 2) start.params <- runif(n.params, start.params[1], start.params[2])
 			nlminb(start.params, objective = objective, gradient = if(use.gradient) gradient, hessian = if(use.hessian) hessian, tmp.env = tmp.env, lower = lower.bound, upper = upper.bound, control = control, data = data, param.names = param.names, n.params = n.params, lower.bound = lower.bound, upper.bound = upper.bound,  ...)
 		}
 		for (d in seq_along(data)) assign(paste("hank.data.", d, sep = ""), data[d], envir = tmp.env)
 		if (multicore[1] == "n.optim") {
-			out <- sfLapply(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
+			out <- sfClusterApplyLB(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		} else out <- lapply(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		return(out)
 	}
@@ -46,7 +56,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		llks <- array(NA, dim=c(n.data, n.optim))
 		
 		if (multicore[1] == "individual" & length(data.new) > 1) {
-			 optim.runs <- sfLapply(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
+			 optim.runs <- sfClusterApplyLB(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		} else optim.runs <- lapply(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		
 		for (c.outer in 1:n.data) {

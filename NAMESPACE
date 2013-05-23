@@ -1,3 +1,4 @@
 exportPattern("^[^\\.]")
+useDynLib(MPTinR)
 
 importFrom("numDeriv", hessian)

@@ -1,5 +1,10 @@
 
-bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05) {
+.oneSample <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq) {
+  set.seed(seed[index])
+  .Call("determinant", Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], PACKAGE = "MPTinR")
+}
+
+bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, multicore = FALSE, split = NULL) {
 
 	t0 <- Sys.time()
 	print(paste("Computing FIA: Iteration begins at ", t0, sep = ""))
@@ -119,7 +124,7 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05) {
 			Ineq[i, pos==ineq0[i,1]] <- -1  ####### erased transpose operator from originial code
 			Ineq[i, pos==ineq0[i,2]] <- 1  ####### erased transpose operator from original code
 		}
-	}
+	} else Ineq <- matrix(0, 1, 1)
 
 	###
 
@@ -133,47 +138,39 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05) {
 		pattern[i, category==i] <- 1
 	}
 
-	sample <- 1
-	integral <- 0
-	vr <- 0
-	count <- 0
-	while (sample <= Sample) {
-		theta <- rbeta(S, 0.5, 0.5)
-		if (is.vector(theta) & length(theta) == 1) theta <- as.matrix(theta)
-		count <- count +1
-		if (!is.null(ineq0)) ineqeff <- (theta%*%(t(Ineq))<0)
-		else ineqeff <- FALSE
-		if (any(ineqeff) | any(theta == 0 | theta == 1)) next
-		############
-		# calculate the integrant, which is part of the Fisher information
-		Theta <- matrix(1, M, 1) %*% theta
-		p <- apply(Theta^A,1,prod)*apply((1-Theta)^B,1,prod)*c
-		#if (dim(p)[2] == 1) V <- pattern%*%diag(p[,1], dim(p)[1], dim(p)[1])
-		#else V <- pattern%*%diag(p)
-		V <- pattern%*%diag(p)
-		pc <- rowSums(V)
-		delta0 <- V %*% (A-(A+B) %*% diag(theta))
-		D = 1/pc
-		D[is.infinite(D)] <- 0
-		I <- t(delta0) %*% diag(D) %*% delta0 %*% solve(diag(theta*(1-theta))) *pi*pi
-		
-		detI <- abs(det(I))
-		integral <- integral + sqrt(detI)
-		vr <- vr + detI
-		sample <- sample + 1
-		if (floor(sample/10000) == sample/10000) {
-			message(paste("Samples:", sample), "\r", appendLF=FALSE)
-			flush.console()
-		}
-	}
-
-	integral <- integral/Sample
+  storage.mode(A) <- "integer"
+  storage.mode(B) <- "integer"
+	storage.mode(Sample) <- "integer"
+  if (!is.null(split)) {
+    subsamples <- rep(ceiling(Sample/split), split)
+    seeds <- runif(split) * 10e7
+  } else {
+    if (multicore) {
+      subsamples <- vapply(sfClusterSplit(1:Sample), length, 0)
+      seeds <- runif(length(subsamples)) * 10e7
+    } else {
+      subsamples <- Sample
+      seeds <- runif(1) * 10e7
+    }
+  }
+  #browser()
+  if (isTRUE(multicore)) {
+    sfLibrary("MPTinR", character.only = TRUE)
+    tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples)  
+  } else 
+    tmp.dat <- lapply(1:length(seeds), .oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples) 
+  #browser()
+  count <- sum(vapply(tmp.dat, "[", 0, i = 1))
+  integral <- sum(vapply(tmp.dat, "[", 0, i = 3))
+  vr <- sum(vapply(tmp.dat, "[", 0, i = 2))
+	#sum(sapply(tmp.dat[2,], function(x) isTRUE(all.equal(x, 0))))
+	# if (detI != 0) sample <- sample + 1	
+  integral <- integral/Sample
 	vr <- vr/Sample
 	vr1 <- abs(vr-integral^2)/Sample
 	lnInt <- log(integral)
 	d1 <- sqrt(vr1)/integral*qnorm(.975)
 	CI1 <- c(lnInt-d1, lnInt+d1)
-
 	const <- Sample/count
 	lnconst <- log(const)
 	d2 <- sqrt((1-const)/Sample)* qnorm(.975)
@@ -181,10 +178,8 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05) {
 	CFIA <- lnInt + lnconst+S/2*log(N/2/pi)
 	d <- sqrt(d2^2 + d1^2)
 	CI = c(CFIA-d, CFIA+d)
-
 	out <- c(CFIA, CI, lnInt, CI1, lnconst, CI2)
 	names(out) <- c("CFIA", "CI.l", "CI.u", "lnInt", "CI.lnint.l", "CI.lnint.u", "lnconst", "CI.lnconst.l", "CI.lnconst.u")
-	
 	t1 <- Sys.time()
 	print(paste("Computing FIA: Iteration stopped at ", t1, sep = ""))
 	print(t1-t0)

@@ -7,7 +7,8 @@ Provides MATLAB command to get FIA
 This function needs data and a model files and outputs the exact command needed to obtain the minimum description length measure for MPT models using the procedure by Wu, Myung, and Batchelder (2010) for MATLAB. It can be considered an extended wrapper for \code{\link{make.mpt.cf}}.
 }
 \usage{
-prepare.mpt.fia(data, model.filename, restrictions.filename = NULL, outfile = "clipboard", Sample = 2e+05, model.type = c("easy", "eqn", "eqn2"))
+prepare.mpt.fia(data, model.filename, restrictions.filename = NULL,
+	outfile = "clipboard", Sample = 2e+05, model.type = c("easy", "eqn", "eqn2"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

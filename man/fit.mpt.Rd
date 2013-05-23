@@ -22,7 +22,7 @@ fit.mpt(
 	sort.param = TRUE,
 	show.messages = TRUE,
 	model.type = c("easy", "eqn", "eqn2"),
-	multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2,
+	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
 	control = list()
 )
 }
@@ -47,7 +47,7 @@ Number of random samples to be drawn in the Monte Carlo algorithm to estimate th
 A scalar corresponding to the size of the confidence intervals for the parameter estimates. Default is 95 which corresponds to 95\% confidence intervals.
 }
   \item{starting.values}{
-A \code{vector} or \code{NULL}. If \code{NULL} (the default), starting values for parameters are randomly drawn from a uniform distribution with the interval \code{(0.1 - 0.9)}. If \code{length(starting.values)==2}, starting values  are randomly drawn from a uniform distribution with the interval \code{starting.values[1] - starting.values[2])}. If \code{length(starting.values)} matches the number of parameters in the model, \code{starting.values} will be used as the starting values for fitting and \code{n.optim} will be set to 1. See Details.
+A \code{vector}, a \code{list}, or \code{NULL} (the default). If \code{NULL} starting values for parameters are randomly drawn from a uniform distribution with the interval \code{(0.1 - 0.9)}. See Details of \code{\link{fit.mptinr}} for the other options.
 }
   \item{output}{
 If "fia", \code{fit.mpt} will additionally return the results from \code{\link{get.mpt.fia}} (if \code{fia} not equal \code{NULL}). If "full" \code{fit.mpt} will additionally return the results from \code{\link{get.mpt.fia}} and the output of \code{\link{nlminb}} and the Hessian matrix/matrices.
@@ -68,7 +68,7 @@ Logical. If TRUE the time the fitting algorithms takes is printed to the console
 Character vector specifying whether the model file is formatted in the easy way (\code{"easy"}; i.e., each line represents all branches corresponding to a response category) or the traditional EQN syntax (\code{"eqn"} or \code{"eqn2"}; see Details and e.g., Stahl & Klauer, 2007). If \code{model.filename} ends with .eqn or .EQN, \code{model.type} is automatically set to \code{"eqn"}. Default is \code{"easy"}.
 }
   \item{multicore}{
-Character vector. If not \code{"none"}, uses \code{snowfall} for parallelization (which needs to be installed separately via \code{install.packages(snowfall)}). If \code{"individual"}, parallelizes the optimization for each individual (i.e., data needs to be a \code{matrix} or \code{data.frame}). If \code{"n.optim"}, parallelizes the \code{n.optim} optimization runs. Default is \code{"none"} which corresponds to no parallelization. Note that you need to initialize \code{snowfall} in default settings. See \code{sfInit} and Details.
+Character vector. If not \code{"none"}, uses \code{snowfall} for parallelization (which needs to be installed separately via \code{install.packages(snowfall)}). If \code{"individual"}, parallelizes the optimization for each individual (i.e., data needs to be a \code{matrix} or \code{data.frame}). If \code{"n.optim"}, parallelizes the \code{n.optim} optimization runs. If not \code{"none"} (e.g., \code{"fia"}) calculation of FIA is parallelized (if FIA is requested). Default is \code{"none"} which corresponds to no parallelization. Note that you need to initialize \code{snowfall} in default settings. See \code{sfInit} and Details.
 }
   \item{sfInit}{
 Logical. Relevant if \code{multicore} is not \code{"none"}. If \code{TRUE}, \code{fit.mpt} will initialize and close the multicore support. If \code{FALSE}, (the default) assumes that \code{sfInit()} was initialized before. See Details.
@@ -115,9 +115,11 @@ Note that when setting some parameters equal and also restricting their order, t
 
 To obtain a measure of the model's complexity beyond the number of parameters (and taking inequality restrictions into account), set \code{fia} to a (reasonably high) scalar integer (i.e., a number). Then, \code{fit.mpt} will obtain the Fisher Information Approximation (FIA), a Minimum Description Length (MDL) based measure of model complexity, using the algorithm provided by Wu, Myung, & Batchelder (2010a, 2010b) ported from Matlab to R. When performing model-selection, this measure is superior to other methods such as the Akaike Information Criterion (AIC) or Bayesian Information Criterion (BIC) which basically only take the number of parameters into account.\cr
 To get the FIA, \code{fit.mpt} performs the following steps:\cr
-1. The representation of the model as equations is transformed into the string representation of the model in the context-free language of MPT models (L-BMPT; Purdy & Batchelder, 2009). For this step to be successful it is \emph{absolutely necessary} that the equations representing the model perfectly map the tree structure of the MPT. That is, the model file is only allowed to contain parameters, their negations (e.g., \code{Dn} and \code{(1 - Dn)}) and the operators + and *, but nothing else. Simplifications of the equations will seriously distort this step. This step is achieved by \code{\link{make.mpt.cf}}.\cr
+1. The representation of the model as equations is transformed into the string representation of the model in the context-free language of MPT models (L-BMPT; Purdy & Batchelder, 2009). For this step to be successful it is \emph{absolutely necessary} that the equations representing the model perfectly map the tree structure of the MPT. That is, the model file is only allowed to contain parameters, their inverse (e.g., \code{Dn} and \code{(1 - Dn)}) and the operators + and *, but nothing else. Simplifications of the equations will seriously distort this step. Similarly, unnecessary brackets will distort the results. Brackets must only be used to indicate the inverse of a parameter (i.e. (1 - parameter)). This step is achieved by \code{\link{make.mpt.cf}}.\cr
 2. The context free representation of the model is then fed into the MCMC function computing the FIA (the port of BMPTFIA provided by Wu, Myung & Batchelder (2010a), see \code{\link{bmpt.fia}}).\cr
 (Actually, both steps are achieved by a call to \code{\link{get.mpt.fia}})
+
+Note that FIA can sometimes be non-consistent (i.e., larger FIA penalty values for restricted versions of a model than for the superordinate model; see Navarro, 2004). This may specifically happens for small ns and is for example the case for the Broder & Schutz example below. In these cases FIA cannot be used! Therefore, always check for consistency of the FIA penalty terms.
 
 Once again: If one wants to compute the FIA, it is \emph{absolutely necessary}, that the representation of the model via equations in the model file exactly maps on the structure of the binary MPT (see \code{\link{make.mpt.cf}} for more details).
 
@@ -126,13 +128,11 @@ For inequality restricted parameters, the CIs are computed using the parameter e
 
 To avoid local minima it is useful to set \code{n.optim} > 1 with random starting values (see below). If \code{n.optim} > 1, the \code{\link{summary}} of the vector containing the Log-Likelihood values returned by each run of \code{nlminb} is added to the output (to check whether local minima were present). If the model is rather big, \code{n.optim} > 1 can be slow.
 
-To set the starting values for the fitting process (e.g., to avoid local minima) one can set \code{starting.values} to a vector of length 2. Then, starting values are randomly drawn from a uniform distribution from \code{starting.values[1]} to \code{starting.values[2]}. We stringly recommend using multiple fitting runs with random starting values.\cr
-Alternatively, one can specify the starting values individually by supplying a vector with the same length as the number of parameters. Starting values must be ordered according to the alphabetical order of the parameters. Use \code{\link{check.mpt}} for a function that returns the alphabetical order of the parameters. If one specifys the starting values like that, \code{n.optim} will be set to 1 as all other values would not make any sense (the optimization routine is deterministic in that it will produce identical results with identical starting values).
 
 Multicore fitting is achieved via the \code{snowfall} package and needs to be initialized via \code{sfInit}. As initialization needs some time, you can either initialize multicore facilities yourself using \code{sfInit()} and setting the \code{sfInit} argument to \code{FALSE} (the default) or let MPTinR initialize multicore facilities by setting the \code{sfInit} argument to \code{TRUE}. The former is recommended as initializing \code{snowfall} takes some time and only needs to be done once if you run \code{fit.mpt} multiple times. If there are any problems with multicore fitting, first try to initialize \code{snowfall} outside MPTinR (e.g., \code{sfInit( parallel=TRUE, cpus=2 )}). If this does not work, the problem is not related to MPTinR but to snowfall (for support and references visit: \url{http://www.imbi.uni-freiburg.de/parallel/}).\cr
 Note that you should  \emph{close} snowfall via \code{sfStop()} after using MPTinR.
 
-The fitting/optimization is achieved via \code{\link{nlminb}}(Fox, 1997) a Newton based algorithm using the analytically derived gradient. In some cases (usually caused by a high number of zero cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
+The fitting/optimization is achieved via \code{\link{nlminb}} (Fox, 1997) a Newton based algorithm using the analytically derived gradient. In some cases (usually caused by a high number of zero cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
 
 \code{fit.mpt} is just a comfortable wrapper around the workhorse \code{\link{fit.mptinr}}. \code{fit.mpt} produces the appropriate objective function, gradient function, hessian function, and prediction function that are handed over to \code{fit.mptinr} (functions are produced by symbolical derivation, see \code{\link{D}}). A function similar to \code{fit.mpt} is \code{\link{fit.model}} which has the additional arguments \code{lower.bound} and \code{upper.bound} allowing to fit other models than just MPTs and the possibility to indicate whether or not to use the analytically derived gradient or hessian for fitting (here this is automatically handled). Note that for MPTs (where upper and lower bounds of parameters are set to 0 and 1, respectively) \code{fit.mpt} is probably faster as the objective function is slightly faster (i.e., more optimized). However, for datasets with many empty cells trying \code{\link{fit.model}} with or without gradient or hessian can be worth a try.
 
@@ -181,6 +181,8 @@ Knapp, B. R., & Batchelder, W. H. (2004). Representing parametric order constrai
 
 Moshagen, M. (2010). multiTree: A computer program for the analysis of multinomial processing tree models. \emph{Behavior Research Methods}, 42, 42-54.
 
+Navarro, D. J. (2004). A Note on the Applied Use of MDL Approximations. \emph{Neural Computation}, 16(9), 1763-1768.
+
 Purdy, B. P., & Batchelder, W. H. (2009). A context-free language for binary multinomial processing tree models. \emph{Journal of Mathematical Psychology}, 53, 547-561.
 
 Riefer, D. M., & Batchelder, W. H. (1988). Multinomial modeling and the measurement of cognitive processes. \emph{Psychological Review}, 95, 318-339.
@@ -196,6 +198,8 @@ Henrik Singmann and David Kellen with help from Karl Christoph Klauer.
 }
 \note{
 All (model or restriction) files should end with an empty line, otherwise a warning will be shown.
+
+The likelihood returned does not include the factorial constants of the multinomial probability-mass functions.
 }
 
 \examples{
@@ -239,7 +243,7 @@ fit.mpt(rb.fig1.data, textConnection(model1.txt), n.optim = 1)
 # Finally, the inferential tests reported by Riefer & Batchelder, (1988, p. 332) are executed.
 
 # get the data
-data(rb.fig2.data)
+data(rb.fig2.data, package = "MPTinR")
 
 # positions of model and restriction files:
 model2 <- system.file("extdata", "rb.fig2.model", package = "MPTinR")
@@ -290,10 +294,9 @@ all.equal(c.equal, c.equal.2)
 # We fit the models with, as well as without, applied inequality restrictions (see Details)
 # that is, for some models (.ineq) we impose: G1 < G2 < G3 < G4 < G5 
 # As will be apparent, the inequality restrictions do not hold for all individuals.
-# Finally, we compute the FIA for all models, taking inequalities into account when they are imposed.
-# Note: The following examples will take some time (> 1 hour).
+# Finally, we compute the FIA for all models, taking inequalities into account.
 
-data(d.broeder)
+data(d.broeder, package = "MPTinR")
 m.2htm <- system.file("extdata", "5points.2htm.model", package = "MPTinR")
 r.2htm <- system.file("extdata", "broeder.2htm.restr", package = "MPTinR")
 r.1htm <- system.file("extdata", "broeder.1htm.restr", package = "MPTinR")
@@ -332,7 +335,6 @@ all.equal(br.1htm.ineq, br.1htm.ineq.list)  # TRUE
 # (It would look differently if we excluded critical cases, 
 # i.e., 2, 6, 7, 10, 18, 21, 25, 29, 32, 34, 35, 37, 38)
 # Therefore, we get the FIA for the models as computed above 
-# WARNING: The following part will take a long time!
 
 br.2htm.fia <- fit.mpt(d.broeder, m.2htm, fia = 200000)
 br.2htm.ineq.fia <- fit.mpt(d.broeder, m.2htm, i.2htm, fia = 200000)
@@ -342,15 +344,21 @@ br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 200000)
 br.1htm.ineq.fia <- fit.mpt(d.broeder, m.2htm, ir.1htm, fia = 200000)
 
 # Model selection using the FIA
-(br.select <- select.mpt(list(orig.2htm = br.2htm.fia, orig.2htm.ineq = br.2htm.ineq.fia, 
-		res.2htm = br.2htm.res.fia, res.2htm.ineq = br.2htm.res.ineq.fia, 
-		orig.1htm = br.1htm.fia, orig.1htm.ineq = br.1htm.ineq.fia)))
+(br.select <- select.mpt(list(orig.2htm = br.2htm.fia, orig.2htm.ineq = br.2htm.ineq.fia,
+    res.2htm = br.2htm.res.fia, res.2htm.ineq = br.2htm.res.ineq.fia, 
+    orig.1htm = br.1htm.fia, orig.1htm.ineq = br.1htm.ineq.fia)))
 # The same results, ordered by FIA
 br.select[order(br.select[,"delta.FIA.sum"]),]
 
+# Note that FIA for individual data (.sum) is not consistent (i.e., the penalty
+# for the nested model br.1htm.ineq.fia is not really smaller than the penalty
+# for the superordinate model br.2htm.ineq.fia).
+# Hence, one should use the aggregated data for this analysis (not shown here)! 
+
 # Compare this with the model selection not using FIA:
-select.mpt(list(orig.2htm = br.2htm, orig.2htm.ineq = br.2htm.ineq, res.2htm = br.2htm.res, 
-		res.2htm.ineq = br.2htm.res.ineq, orig.1htm = br.1htm, orig.1htm.ineq = br.1htm.ineq))
+select.mpt(list(orig.2htm = br.2htm, orig.2htm.ineq = br.2htm.ineq, 
+        res.2htm = br.2htm.res, res.2htm.ineq = br.2htm.res.ineq, 
+        orig.1htm = br.1htm, orig.1htm.ineq = br.1htm.ineq))
 
 # Only use the aggregated data:
 d.broeder.agg <- colSums(d.broeder)
@@ -358,7 +366,8 @@ br.2htm.agg <- fit.mpt(d.broeder.agg, m.2htm)
 br.2htm.res.agg <- fit.mpt(d.broeder.agg, m.2htm, r.2htm)
 br.1htm.agg <- fit.mpt(d.broeder.agg, m.2htm, r.1htm)
 
-select.mpt(list(orig.2htm = br.2htm.agg, res.2htm = br.2htm.res.agg, orig.1htm = br.1htm.agg), output = "full")
+select.mpt(list(orig.2htm = br.2htm.agg, res.2htm = br.2htm.res.agg, 
+    orig.1htm = br.1htm.agg), output = "full")
 
 
 # compare speed of no multicore versus multicore for multiple datasets:
