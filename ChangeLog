@@ -1,4 +1,44 @@
-2013-05-17
+2013-11-24
+        * added check.model to gen.predictions et al.
+        
+2013-11-06
+        * removed bug when only fitting a model with only one
+          free parameter to multiple data sets (reported by 
+          Alberto Mirisola)
+        * if FIA fails fit.mpt gives a warning now (instead
+          of failing)
+        * if check.model = FALSE (fit.model) the check of 
+          whether or not the parameter are within bounds is
+          now also suppressed.
+
+2013-11-03
+        * added check.model argument to fit.model.
+
+2013-10-28
+        * check.mpt shouldn't fail if predictions are NA.
+
+2013-10-28
+        * bmpt.fia now uses the absolute of the determinant 
+          (as did the original code by Wu et al.).
+        * removed restriction of constant to within 0 and 1.
+
+2013-06-26
+        * added reasonable message when objective function failed.
+        * changed warnings to messages.
+        * now everything should work with Hessian (hopefully)
+
+2013-06-25
+        * last changes broke code, should be better now
+
+2013-06-24
+        * removed bug that Hessian function was invoked
+          even though use.hessian = FALSE.
+
+2013-05-24
+        * needs R (>= 2.14) same as RcppEigen
+        * minor correction to bmpt.fia.Rd
+
+2013-05-23
         * sfLibrary now called with only.character = TRUE 
 		  (removes R CMD check NOTE).
 

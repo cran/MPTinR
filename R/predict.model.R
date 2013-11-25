@@ -1,5 +1,5 @@
    
-gen.predictions <- function(parameter.values, model.filename, restrictions.filename = NULL, n.per.item.type = NULL, model.type = c("easy", "eqn", "eqn2"), reparam.ineq = TRUE){
+gen.predictions <- function(parameter.values, model.filename, restrictions.filename = NULL, n.per.item.type = NULL, model.type = c("easy", "eqn", "eqn2"), reparam.ineq = TRUE, check.model = TRUE){
 	
 	model.predictions <- function(Q, unlist.model, param.names, n.params, tmp.env){
 		#tmpllk.env <- new.env()
@@ -13,7 +13,7 @@ gen.predictions <- function(parameter.values, model.filename, restrictions.filen
 	
 	if (!is.null(dim(parameter.values))) stop("paramter.values needs to be a vector (i.e., is.null(dim(parameter.values)) == TRUE)!")
 	
-	tree <- .get.mpt.model(model.filename, model.type)
+	tree <- .get.mpt.model(model.filename, model.type, model.check = check.model)
 	
 	orig.params <- NULL
 	use.restrictions <- FALSE
@@ -65,7 +65,7 @@ gen.predictions <- function(parameter.values, model.filename, restrictions.filen
 	
 }
 
-gen.data <- function(parameter.values, samples, model.filename, data = NULL, n.per.item.type = NULL, restrictions.filename = NULL, model.type = c("easy", "eqn", "eqn2"), reparam.ineq = TRUE){
+gen.data <- function(parameter.values, samples, model.filename, data = NULL, n.per.item.type = NULL, restrictions.filename = NULL, model.type = c("easy", "eqn", "eqn2"), reparam.ineq = TRUE, check.model = TRUE){
 	
 	class.model <- class(model.filename)
 	if ("connection" %in% class.model) {
@@ -73,7 +73,7 @@ gen.data <- function(parameter.values, samples, model.filename, data = NULL, n.p
 		model.filename <- textConnection(tmp.model)
 	}
 
-	tree <- .get.mpt.model(model.filename, model.type)
+	tree <- .get.mpt.model(model.filename, model.type, model.check = check.model)
 	
 	if (is.null(data) & is.null(n.per.item.type)) stop("Either data or n.per.item.type needs to be non-null")
 	
@@ -128,7 +128,7 @@ gen.data <- function(parameter.values, samples, model.filename, data = NULL, n.p
 		model.filename <- textConnection(tmp.model)
 	}
 	
-	predictions <- gen.predictions(parameter.values = parameter.values, model.filename = model.filename, restrictions.filename = restrictions.filename, n.per.item.type = NULL, model.type = model.type, reparam.ineq = reparam.ineq)
+	predictions <- gen.predictions(parameter.values = parameter.values, model.filename = model.filename, restrictions.filename = restrictions.filename, n.per.item.type = NULL, model.type = model.type, reparam.ineq = reparam.ineq, check.model = check.model)
 	
 	data <- rmultinom(samples, n.per.item.type[1], predictions[1:sum(categories.per.type[1])])
 	
@@ -146,7 +146,7 @@ gen.data <- function(parameter.values, samples, model.filename, data = NULL, n.p
 }
 
 
-sample.data <- function(data, samples, model.filename = NULL, categories.per.type = NULL, model.type = c("easy", "eqn", "eqn2")){
+sample.data <- function(data, samples, model.filename = NULL, categories.per.type = NULL, model.type = c("easy", "eqn", "eqn2"), check.model = TRUE){
 		
 	if (!is.vector(data)) stop("data needs to be a vector")
 	
@@ -155,7 +155,7 @@ sample.data <- function(data, samples, model.filename = NULL, categories.per.typ
 	if (!is.null(model.filename) & !is.null(categories.per.type)) stop("Only one of mode.filename and categories.per.type can be non-null")
 	
 	if (!is.null(model.filename)) {
-		tree <- .get.mpt.model(model.filename, model.type)
+		tree <- .get.mpt.model(model.filename, model.type, model.check = check.model)
 		if (sum(sapply(tree, length)) != length(data)) stop(paste("Size of data does not correspond to size of model (i.e., model needs ", sum(sapply(tree, length)), " datapoints, data gives ", length(data), " datapoints).", sep = ""))
 		categories.per.type <- vapply(tree, length, 0)
 	}

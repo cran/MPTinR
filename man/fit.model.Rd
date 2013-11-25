@@ -26,7 +26,7 @@ fit.model(
 	model.type = c("easy", "eqn", "eqn2"),
 	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
 	control = list(),
-	use.gradient = TRUE, use.hessian = FALSE
+	use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE
 )
 }
 
@@ -93,6 +93,9 @@ logical. Whether or not the symbomlically derived function returning the gradien
 }
   \item{use.hessian}{
 logical. Whether or not the symbomlically derived function returning the Hessian matrix should be used for fitting. Default is \code{FALSE} meaning hessian function is not used.
+}
+  \item{check.model}{
+logical. Should model be chekced with random values whether or not the expected values sum to one per tree? Default is \code{TRUE}.
 }
 }
 \details{

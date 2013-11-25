@@ -105,9 +105,13 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	get.parameter.table.multi <- function(minim, param.names, n.params, n.data, use.restrictions, inv.hess.list, ci, orig.params){
 		#recover()
 		var.params <- sapply(inv.hess.list, function(x) tryCatch(diag(x), error = function(e) rep(NA, n.params)))
+    # as var.params needs to be of nrow=length(parameter.names) (which it isn't if the hessian function fails, the following prohibits termination.
+    if (is.null(dim(var.params))) var.params <- matrix(var.params, nrow = length(param.names), ncol = n.data)
 		rownames(var.params) <- param.names
 		suppressWarnings(confidence.interval <- qnorm(1-((100-ci)/2)/100)*sqrt(var.params))
-		estimates <- sapply(minim, function(x) x$par)
+		estimates <- vapply(minim, "[[", i = "par", minim[[1]]$par)
+    if (is.null(dim(estimates))) 
+      dim(estimates) <- c(1, length(estimates))
 		upper.conf <- estimates + confidence.interval
 		lower.conf <- estimates - confidence.interval
 		
@@ -129,7 +133,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			#parameter_table.tmp <- data.frame(param.names, estimates, lower.conf, upper.conf, restricted.parameter = "")
 			
 			used.rows <- param.names %in% orig.params
-			params <- 1:length(orig.params)
+      params <- 1:length(orig.params)
 			parameter.names.all <- param.names[used.rows]
 			restricted <- rep("", sum(used.rows))
 			for (c in 1:length(restrictions)) {
@@ -144,13 +148,11 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 				parameter_table.indiv.tmp <- data.frame(param.names, estimates = estimates[, counter.n], lower.conf =lower.conf[, counter.n], upper.conf = upper.conf[, counter.n], restricted.parameter = 0)
 				parameter_table <- parameter_table.indiv.tmp[parameter_table.indiv.tmp$param.names %in% orig.params,]
 				for (c in 1:length(restrictions)) {
-					if (restrictions[[c]][3] == "=" & sum(grepl("[[:alpha:]]", restrictions[[c]][2]))) {
+					if (restrictions[[c]][3] == "=" & sum(grepl("^\\.?[[:alpha:]]", restrictions[[c]][2]))) {
 						parameter_table <- rbind(parameter_table, data.frame(param.names = restrictions[[c]][1], parameter_table[parameter_table$param.names == restrictions[[c]][2], 2:4], restricted.parameter = 1))
-					}
-					if (restrictions[[c]][3] == "=" & sum(grepl("^[[:digit:]]\\.?[[:digit:]]*", restrictions[[c]][2]))) {
+					} else if (restrictions[[c]][3] == "=") {
 						parameter_table <- rbind(parameter_table, data.frame(param.names = restrictions[[c]][1], estimates = as.numeric(restrictions[[c]][2]), lower.conf = NA, upper.conf = NA, restricted.parameter = 1))
-					}
-					if (restrictions[[c]][3] == "<") {
+					} else if (restrictions[[c]][3] == "<") {
 						tmp.vars <- .find.MPT.params(parse(text = restrictions[[c]][2])[1])
 						new.param <- prod(parameter_table.indiv.tmp[parameter_table.indiv.tmp$param.names %in% tmp.vars,2])
 						var.tmp <- var.params[rownames(var.params) %in% tmp.vars, counter.n]
@@ -183,6 +185,8 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 
 	get.parameter.table.single <- function(minim, parameter.names, n.params, use.restrictions, inv.hess, ci, sort.param, orig.params){
 		var.params <- tryCatch(diag(inv.hess), error = function(e) rep(NA, n.params))
+        # as var.params needs to be of length(parameter.names) (which it isn't if the hessian function fails, the following prohibits termination.
+        if (length(var.params) < length(parameter.names)) var.params <- rep(NA, length(parameter.names))
 		names(var.params) <- parameter.names
 		confidence.interval <- tryCatch(qnorm(1-((100-ci)/2)/100)*sqrt(var.params), error = function(e) rep(NA, n.params))
 		
@@ -197,13 +201,11 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			parameter_table <- parameter_table.tmp[parameter_table.tmp$parameter.names %in% orig.params,]
 			
 			for (c in 1:length(restrictions)) {
-				if (restrictions[[c]][3] == "=" & sum(grepl("[[:alpha:]]", restrictions[[c]][2]))) {
+				if (restrictions[[c]][3] == "=" & sum(grepl("^\\.?[[:alpha:]]", restrictions[[c]][2]))) {
 					parameter_table <- rbind(parameter_table, data.frame(parameter.names = restrictions[[c]][1], parameter_table[parameter_table$parameter.names == restrictions[[c]][2], 2:4], restricted.parameter = restrictions[[c]][2]))
-				}
-				if (restrictions[[c]][3] == "=" & sum(grepl("^[[:digit:]]\\.?[[:digit:]]*", restrictions[[c]][2]))) {
+				} else if (restrictions[[c]][3] == "=") {
 					parameter_table <- rbind(parameter_table, data.frame(parameter.names = restrictions[[c]][1], estimates = as.numeric(restrictions[[c]][2]), lower.conf = NA, upper.conf = NA, restricted.parameter = restrictions[[c]][2]))
-				}
-				if (restrictions[[c]][3] == "<") {
+				} else if (restrictions[[c]][3] == "<") {
 					tmp.vars <- .find.MPT.params(parse(text = restrictions[[c]][2])[1])
 					new.param <- prod(parameter_table.tmp[parameter_table.tmp$parameter.names %in% tmp.vars,2])
 					var.tmp <- var.params[names(var.params) %in% tmp.vars]
@@ -323,11 +325,13 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	for (c.n in 1:n.data) {
 		# warning based on counts not needed, changed to nlminb (HS 26-01-2012)
 		#if (minim[[c.n]][["counts"]][1] < 10) warning(paste("Number of iterations run by the optimization routine for individual ", c.n, " is low (i.e., < 10) indicating local minima. Try n.optim >= 5.", sep = ""))
+        if (is.null(minim[[c.n]])) stop(paste0("Optimization for dataset ", c.n, " did not evaluate successfully with the given starting values.\nUse appropriate starting values."))
 		if (minim[[c.n]][["convergence"]] != 0) {
 			not.converged[c.n] <- c.n
 			mapping.fit.anew[counter.fit.anew] <- c.n
 			counter.fit.anew <- counter.fit.anew + 1
 		}
+        
 	}
 	
 	if (use.gradient & counter.fit.anew > 1) {
@@ -364,12 +368,12 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			warning(paste("Optimization routine for dataset(s) ", not.converged[not.converged != 0], " did not converge succesfully.
   Error code(s): ", sort(unique(vapply(minim, "[[", 0, i = "convergence")))[-1], ". Try use.gradient == TRUE or use output = 'full' for more information.", sep =""))
 		} else {
-			warning(paste("Optimization routine for dataset(s) ", paste(not.converged[not.converged != 0], collapse = " "), "
+			message(paste("Optimization routine for dataset(s) ", paste(not.converged[not.converged != 0], collapse = " "), "
   did not converge succesfully. Tried again with use.gradient == FALSE.", sep =""))
-			if (sum(better.approx) != 0) warning(paste("Optimization for dataset(s) ", paste(better.approx[better.approx != 0], collapse = " "), "
+			if (sum(better.approx) != 0) message(paste("Optimization for dataset(s) ", paste(better.approx[better.approx != 0], collapse = " "), "
   using numerically estimated gradients produced better results. Using those results.
   Old results saved in output == 'full' [['optim.runs']].", sep =""))
-			if (sum(better.analytic) != 0) warning(paste("Optimization for dataset(s) ", paste(better.analytic[better.analytic != 0], collapse = " "), "
+			if (sum(better.analytic) != 0) message(paste("Optimization for dataset(s) ", paste(better.analytic[better.analytic != 0], collapse = " "), "
   using numerical estimated gradients did NOT produce better results.
   Keeping original results. Use output = 'full' for more details.", sep =""))
 			if (sum(error.codes) != 0) {
@@ -388,14 +392,24 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	
 	hessian.list <- vector("list", n.data)
 	
-	if (is.null(hessian)) warning("No function for computing Hessian Matrix specified or it failed. Hessian Matrix is estimated numerically. Validity of CIs is questionable.")
+	if (is.null(hessian)) message("No function for computing Hessian Matrix specified or it failed. Hessian Matrix is estimated numerically. Validity of CIs is questionable.")
 	
 	for (c in 1:n.data) {
 		for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
-		if (!is.null(hessian)) hessian.list[[c]] <- do.call(hessian, args  = list(minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ))
-		else hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+		if (!is.null(hessian)) hessian.list[[c]] <- tryCatch(do.call(hessian, args  = list(minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... )), error = function(e) NA)
+		else {
+            message("Note: CIs are based on the numerically estimated Hessian matrix")
+            hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+        }
 	}
-	
+    if (all(vapply(hessian.list, function(x) all(is.na(x)), NA))) {
+        message("Note: CIs are based on the numerically estimated Hessian matrix")
+        for (c in 1:n.data) {
+            for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
+            hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+        }
+    }
+    
 	inv.hess.list <- lapply(hessian.list, function(x) tryCatch(solve(x), error = function(e) NA))
 	
 	goodness.of.fit <- get.goodness.of.fit(minim, data, dgf, n.params, n.data, categories.per.type = categories.per.type)
@@ -421,9 +435,9 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			res.optim.pooled <- optim.mpt(data = data.pooled, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmpllk.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, control = control, n.data = 1, ...)
 			
 			for (d in seq_along(data.pooled)) assign(paste("hank.data.", d, sep = ""), data.pooled[d], envir = tmpllk.env)
-			if (!is.null(hessian)) hessian.pooled <- do.call(hessian, args  = list(res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ))
+			if (!is.null(hessian)) hessian.pooled <- tryCatch(do.call(hessian, args  = list(res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... )), error = function(e) NA)
 			else hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
-			
+			if (all(is.na(hessian.pooled))) hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
 			inv.hessian <- tryCatch(solve(hessian.pooled), error = function(e) NA)
 			if (!is.null(fia)) fia.agg <- fia.agg.tmp
 			goodness.of.fit <- c(goodness.of.fit, aggregated = list(get.goodness.of.fit(res.optim.pooled[["minim"]], data.pooled, dgf, n.params, 1, categories.per.type = categories.per.type)))

@@ -15,18 +15,18 @@ gen.data(parameter.values, samples,
 	model.filename, 
 	data = NULL, n.per.item.type = NULL,
 	restrictions.filename = NULL, model.type = c("easy", "eqn", "eqn2"), 
-	reparam.ineq = TRUE)
+	reparam.ineq = TRUE, check.model = TRUE)
 
 sample.data(data, samples,
 	model.filename = NULL, categories.per.type = NULL,
-	model.type = c("easy", "eqn", "eqn2"))	
+	model.type = c("easy", "eqn", "eqn2"), check.model = TRUE)	
 
 gen.predictions(parameter.values, 
 	model.filename, 
 	restrictions.filename = NULL, 
 	n.per.item.type = NULL, 
 	model.type = c("easy", "eqn", "eqn2"), 
-	reparam.ineq = TRUE)
+	reparam.ineq = TRUE, check.model = TRUE)
 }
 
 
@@ -57,6 +57,9 @@ Character vector specifying whether the model file is formatted in the easy way 
 }
   \item{reparam.ineq}{
 Should inequality restrictions be applied (i.e., the model reparametrized)? Default is \code{TRUE}.
+}
+  \item{check.model}{
+logical. Should model be chekced with random values whether or not the expected values sum to one per tree? Default is \code{TRUE}.
 }
 }
 

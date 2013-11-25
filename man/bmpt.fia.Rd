@@ -115,7 +115,7 @@ Wu, H., Myung, J.I., & Batchelder, W.H. (2010b). On the minimum description leng
 The original Matlab code was written by Hao Wu, Jay I. Myung, and William H. Batchelder.\cr This code was ported to R by Henrik Singmann and David Kellen. RcppEigen was added by Henrik Singmann and Christian Mueller. Multicore functionality was added by Henrik Singmann.
 }
 \note{
-The R version of the code is considerably slower than the Matlab version of this code.
+The R version of the code should now (after moving the code to RcppEigen) be considerably faster than the Matlab version of this code.
 }
 \seealso{
 \code{\link{fit.mpt}} for the main function of MPTinR.\cr

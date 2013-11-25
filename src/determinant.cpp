@@ -2,6 +2,7 @@
 // includes from the plugin
 #include <RcppEigen.h>
 #include <Rcpp.h>
+#include <cmath>
 
 #ifndef BEGIN_RCPP
 #define BEGIN_RCPP
@@ -139,8 +140,10 @@ for (int i = 0; i < s; i++) {
   // Rcout << "ABA:\n"<<ABA<<"\n";
   delta0 = V*(A.cast<double>()-(A+B).cast<double>()*theta.asDiagonal());
   
-  I = (delta0.transpose() * D.asDiagonal() * delta0 * (theta.array()*(1 - theta.array())).matrix().asDiagonal().inverse() * M_PI * M_PI).determinant();
+  I = fabs((delta0.transpose() * D.asDiagonal() * delta0 * (theta.array()*(1 - theta.array())).matrix().asDiagonal().inverse() * M_PI * M_PI).determinant());
   // double detI = I.determinant();
+
+  //Rcout << I << "\n";
   
   out[1] += I;
   out[2] += std::sqrt(I);

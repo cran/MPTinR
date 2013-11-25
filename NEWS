@@ -1,19 +1,62 @@
-					**************************
-					** MPTinR VERSION 1.1.x **
-					**************************
-					Changes in MPTinR Version 1.1.x
-					Released May 2013
 
-	Significant User Visible Changes and new Features
-	
+                    **************************
+                    ** MPTinR VERSION 1.2.x **
+                    **************************
+                    Changes in MPTinR Version 1.2.x
+                    Released November 2013
+
+    Significant User Visible Changes and new Features
+    
+    o   Most warnings (e.g., concerning unsuccessful optimization
+        with analytic gradient) are now messages.
+    
+    o   Added error message when the objective function did not 
+        evaluate successfully with the given starting values.
+        
+    o   restrictions to constants can now be set to any value 
+        (not anymore restricted to be within 0 and 1).
+        
+    o   fit.model and gen.predictions (et al.) have argument 
+        check.model which allows to suppress the check if the 
+        expected values of a model sum to 1.
+    
+    Bugfixes
+    
+    o   Removed bug that crashed the main functions when Hessian
+        function failed to produce reasonable results. 
+    
+    o   FIA calculation could fail when determinant of Fisher matrix 
+        was below 0 as it did not take the absolute value 
+        (as does the original code by Wu et al.). This should be
+        fixed now and FIA again works for all (BMPT) models.
+    
+    o   check.mpt doesn't fail anymore if any of the predictions is 
+        NA or NaN.
+        
+    o   Removed bug that crashed MPTinR when fitting a model with a 
+        single free parameter to multiple datasets (bug reported by
+        Alberto Mirisola)
+        
+    o   fit.mpt gives a warning when FIA fails due to model not being
+        a BMPT (instead of failing).
+        
+        
+                    **************************
+                    ** MPTinR VERSION 1.1.x **
+                    **************************
+                    Changes in MPTinR Version 1.1.x
+                    Released May 2013
+
+    Significant User Visible Changes and new Features
+    
     o   Calculation of FIA uses RcppEigen for dramatic speed
         improvements (thanks to Christian Mueller).
-	
-	o	FIA calculation can also be parallelized, see bmpt.fia 
-		(but even in fit.mpt or fit.model, if multicore is not "none",
-		or in get.mpt.fia)
     
-	o	documentation now says that extra brackets will distort FIA 
+    o   FIA calculation can also be parallelized, see bmpt.fia 
+        (but even in fit.mpt or fit.model, if multicore is not "none",
+        or in get.mpt.fia)
+    
+    o   documentation now says that extra brackets will distort FIA 
         calculation (Thanks to Joachim Vandekerckhove and 
         EJ Wagenmakers)
         
@@ -24,40 +67,40 @@
     
     o   select.mpt shows how often p < .05 when results consists
         of multiple data sets. (p.smaller.05)
-	
-	Bugfixes
-	
-	o	Added note that LLKs do not include factorial constant of the
+    
+    Bugfixes
+    
+    o   Added note that LLKs do not include factorial constant of the
         multinomial PMF.
         
     o   (hopefully) repaired bug in make.mdt() with matrix/data.frame
 
         
-					**************************
-					** MPTinR VERSION 1.0.x **
-					**************************
-					Changes in MPTinR Version 1.0.x
-					Released January 2013
+                    **************************
+                    ** MPTinR VERSION 1.0.x **
+                    **************************
+                    Changes in MPTinR Version 1.0.x
+                    Released January 2013
 
-	Significant User Visible Changes and new Features
-	
-	o	added function plot.prediction for plotting obersved versus 
-		predicted data.
-	
-	o	added fia.penalty to information criteria output and to select.mpt.
-	
-	o	added G.Square, df, and p to output of select.mpt
-	
-	o	argument dataset added to select.mpt. Allows to select only certain 
-		datasets for the comparison (argument may be of length > 1).
+    Significant User Visible Changes and new Features
+    
+    o   added function plot.prediction for plotting obersved versus 
+        predicted data.
+    
+    o   added fia.penalty to information criteria output and to select.mpt.
+    
+    o   added G.Square, df, and p to output of select.mpt
+    
+    o   argument dataset added to select.mpt. Allows to select only certain 
+        datasets for the comparison (argument may be of length > 1).
     
     o   added CITATION file (as our Behavior Research Methods paper finally 
         came out)
-	
-	Bugfixes
-	
-	o	select.mpt works now if some some models (with multiple datasets)
-		were fitted with fit.aggregated = FALSE.
+    
+    Bugfixes
+    
+    o   select.mpt works now if some some models (with multiple datasets)
+        were fitted with fit.aggregated = FALSE.
         
     o   select.mpt returns the aggregated GoF (G^2, df, p) when output = "full"
       
@@ -70,186 +113,186 @@
 
 
 
-					**************************
-					** MPTinR VERSION 0.9.x **
-					**************************
-					
-					Changes in MPTinR Version 0.9.x
-					Released July 2012
+                    **************************
+                    ** MPTinR VERSION 0.9.x **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.9.x
+                    Released July 2012
 
-	Significant User Visible Changes and new Features
-	
-	o	added functions gen.data, sample.data and gen.predictions
-		for bootstrapping, generating data and predictions.
-	
-	o	coments in model and restrictions files are now treated as in R:
-		Everything to the right of a # is ignored and NOT the whole line!
-	
-	o	MPTinR is now byte compiled.
-	
-	o	make.mdt can now handle a matrix or data.frames building a big mdt file.
-	
-	Bugfixes
-	
-	o	fixed bug when obtaining fia from textConnection also for fit.model()
-	
-	
+    Significant User Visible Changes and new Features
+    
+    o   added functions gen.data, sample.data and gen.predictions
+        for bootstrapping, generating data and predictions.
+    
+    o   coments in model and restrictions files are now treated as in R:
+        Everything to the right of a # is ignored and NOT the whole line!
+    
+    o   MPTinR is now byte compiled.
+    
+    o   make.mdt can now handle a matrix or data.frames building a big mdt file.
+    
+    Bugfixes
+    
+    o   fixed bug when obtaining fia from textConnection also for fit.model()
+    
+    
 
-					**************************
-					** MPTinR VERSION 0.8.x **
-					**************************
-					
-					Changes in MPTinR Version 0.8.x
-					Released February - May 2012
+                    **************************
+                    ** MPTinR VERSION 0.8.x **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.8.x
+                    Released February - May 2012
 
-	Significant User Visible Changes and new Features
-	
-	o	fit.mpt and fit.model (see version 0.7.0) are now just wrappers around 
-		the new function fit.mptinr. They produce the appropirate objective, gradient,
-		hessian, and prediction function to fit the model.
-		
-	o	fit.model contains an example of how to fit a SDT. see ?fit.model. 
-		Dont forget to set lower.bound and upper.bound when fitting non-MPT models.
-	
-	o	fit.mptinr is a new function that takes an arbitrary objective function and 
-		possibly a gradient, hessian and prediction function to fit categorical
-		data (see examples in ?fit.model).
-	
-	o	fitting for MPT and similar models is done using a gradient function,
-		which significantly improves fitting speed. In the rare cases where fitting 
-		fails using the gradient a numerical gradient is still used (with warning).
-		
-	o	The Hessian Matrix for MPTs and similar models is now symbolically 
-		derived yielding an exact Hessian matrix (before it was numerically estimated 
-		leading to incorrect Hessians whean paramaters were exactly at the boundary).
-		
-	o	fitting is now based on nlminb instead of optim's L-BFGS-B
-		(using L-BFGS-B is available in fit.mpt.old)
-	
-	o	models and restrictions can now be specified using textConnections instead of 
-		only external files. See examples in ?fit.mpt and especially ?fit.model. 
-		restrictions can be specified as a list of characters.
-	
-	o	added make.mdt, a function to make .mdt data files which can be read by multiTree 
-		or HMMTree.
-		
-	o	new argument show.messages added to the fitting function (default = TRUE). If 
-		FALSE the time messeages around the fitting algorithm are suppressed. 
-		
-	o	expanded check.mpt functionality (now gives number of categories and 
-		number of independent categories)
-	
-	o	all fitting functions have the argument fit.aggregated to indicate whether or not
-		the aggregated data (for multiple datasets) should be fitted. Default is TRUE
-	
-	o	summary.llks was renamed to fitting.runs
-	
-	o	model.info now gives the rank of the Fisher Matrix (instead of the rank of the Hessian Matrix).
-	
-	Bugfixes
-	
-	o	resolved small bug when fitting using multicore = "individual"
-	
-	o	no more warning message if CIs cannot be computed.
-	
-	o	select.mpt now compares aggregated FIA for output = "full"
-	
-	o	select.mpt now rounds information criteria before determining number of 
-		best fits
-	
-	o	no more warnings by cell counts below 5 (seems unprincipled)
-		
-	o	fixed bug when resttricted parameters were not in the original model
-		(now throws a warning, thanks to Alex)
+    Significant User Visible Changes and new Features
+    
+    o   fit.mpt and fit.model (see version 0.7.0) are now just wrappers around 
+        the new function fit.mptinr. They produce the appropirate objective, gradient,
+        hessian, and prediction function to fit the model.
+        
+    o   fit.model contains an example of how to fit a SDT. see ?fit.model. 
+        Dont forget to set lower.bound and upper.bound when fitting non-MPT models.
+    
+    o   fit.mptinr is a new function that takes an arbitrary objective function and 
+        possibly a gradient, hessian and prediction function to fit categorical
+        data (see examples in ?fit.model).
+    
+    o   fitting for MPT and similar models is done using a gradient function,
+        which significantly improves fitting speed. In the rare cases where fitting 
+        fails using the gradient a numerical gradient is still used (with warning).
+        
+    o   The Hessian Matrix for MPTs and similar models is now symbolically 
+        derived yielding an exact Hessian matrix (before it was numerically estimated 
+        leading to incorrect Hessians whean paramaters were exactly at the boundary).
+        
+    o   fitting is now based on nlminb instead of optim's L-BFGS-B
+        (using L-BFGS-B is available in fit.mpt.old)
+    
+    o   models and restrictions can now be specified using textConnections instead of 
+        only external files. See examples in ?fit.mpt and especially ?fit.model. 
+        restrictions can be specified as a list of characters.
+    
+    o   added make.mdt, a function to make .mdt data files which can be read by multiTree 
+        or HMMTree.
+        
+    o   new argument show.messages added to the fitting function (default = TRUE). If 
+        FALSE the time messeages around the fitting algorithm are suppressed. 
+        
+    o   expanded check.mpt functionality (now gives number of categories and 
+        number of independent categories)
+    
+    o   all fitting functions have the argument fit.aggregated to indicate whether or not
+        the aggregated data (for multiple datasets) should be fitted. Default is TRUE
+    
+    o   summary.llks was renamed to fitting.runs
+    
+    o   model.info now gives the rank of the Fisher Matrix (instead of the rank of the Hessian Matrix).
+    
+    Bugfixes
+    
+    o   resolved small bug when fitting using multicore = "individual"
+    
+    o   no more warning message if CIs cannot be computed.
+    
+    o   select.mpt now compares aggregated FIA for output = "full"
+    
+    o   select.mpt now rounds information criteria before determining number of 
+        best fits
+    
+    o   no more warnings by cell counts below 5 (seems unprincipled)
+        
+    o   fixed bug when restricted parameters were not in the original model
+        (now throws a warning, thanks to Alex)
 
-		
-					**************************
-					** MPTinR VERSION 0.7.0 **
-					**************************
-					
-					Changes in MPTinR Version 0.7.0
-					Released January 2012
+        
+                    **************************
+                    ** MPTinR VERSION 0.7.0 **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.7.0
+                    Released January 2012
 
-	Significant User Visible Changes
-	
-	o	now contains fit.model() a copy of fit.mpt() with arguments for lower and upper bounds
-		for the parameters. You should be able to fit a lot more models with this function.
-		(fit.model() is slightly slower than fit.mpt() for MPTs)
-	
-	New Features / Bugfixes
-	
-	o	MPTinR should now allow easy model files with all types of operators (not only + - *) 
-		and even R functions (e.g., pnorm, ...) via the function fit.model()
+    Significant User Visible Changes
+    
+    o   now contains fit.model() a copy of fit.mpt() with arguments for lower and upper bounds
+        for the parameters. You should be able to fit a lot more models with this function.
+        (fit.model() is slightly slower than fit.mpt() for MPTs)
+    
+    New Features / Bugfixes
+    
+    o   MPTinR should now allow easy model files with all types of operators (not only + - *) 
+        and even R functions (e.g., pnorm, ...) via the function fit.model()
 
-					**************************
-					** MPTinR VERSION 0.6.5 **
-					**************************
-					
-					Changes in MPTinR Version 0.6.5
-					Released June 2011
+                    **************************
+                    ** MPTinR VERSION 0.6.5 **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.6.5
+                    Released June 2011
 
-	Significant User Visible Changes
-	
-	o 
-	
-	New Features / Bugfixes
-	
-	o	added a parameter to specify the starting values for the fitting routine (in fit.mpt)
-
-
-					**************************
-					** MPTinR VERSION 0.6.4 **
-					**************************
-					
-					Changes in MPTinR Version 0.6.4
-					Released June 2011
-
-	Significant User Visible Changes
-	
-	o 
-	
-	New Features / Bugfixes
-	
-	o	added URL to DESCRIPTION file.
-
-	o	corrected more problems in bmpt.fia when using small models that
-		were related to differences in matrix functionality of Matlab
-		and R (the problem is R's default of '[', drop = TRUE).
+    Significant User Visible Changes
+    
+    o 
+    
+    New Features / Bugfixes
+    
+    o   added a parameter to specify the starting values for the fitting routine (in fit.mpt)
 
 
+                    **************************
+                    ** MPTinR VERSION 0.6.4 **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.6.4
+                    Released June 2011
+
+    Significant User Visible Changes
+    
+    o 
+    
+    New Features / Bugfixes
+    
+    o   added URL to DESCRIPTION file.
+
+    o   corrected more problems in bmpt.fia when using small models that
+        were related to differences in matrix functionality of Matlab
+        and R (the problem is R's default of '[', drop = TRUE).
 
 
-					**************************
-					** MPTinR VERSION 0.6.3 **
-					**************************
-					
-					Changes in MPTinR Version 0.6.3
-					Released April 2011
 
-	Significant User Visible Changes
-	
-	o	get.mpt.fia modified such that bmpt.fia is only called as often as
-		there are differences in the hank.join parameters (i.e., only if
-		the ratio between the trees differ, not the ns). As a consequence,
-		CFIA is calculated as part of get.mpt.fia. Furthermore, CIs of CFIA
-		are not returned by get.mpt.fia.
 
-	o	fit.mpt adjusted to use the optimization of get.mpt.fia (see above)
-		for multi-individual fit. That is, fit.mpt now calls get.mpt.fia
-		only once (previous were two calls, one for for individual data,
-		one for aggregated data).
-	
-	o	objective function in fit.mpt vectorized (previous was using
-		for-loop). Obtained speed up: ~40%.
+                    **************************
+                    ** MPTinR VERSION 0.6.3 **
+                    **************************
+                    
+                    Changes in MPTinR Version 0.6.3
+                    Released April 2011
 
-	New Features / Bugfixes
-	
-	o	bmpt.fia fixed to deal with models without restricted parameters
-		(was necessary as we did not use en empty matrix correctly)
+    Significant User Visible Changes
+    
+    o   get.mpt.fia modified such that bmpt.fia is only called as often as
+        there are differences in the hank.join parameters (i.e., only if
+        the ratio between the trees differ, not the ns). As a consequence,
+        CFIA is calculated as part of get.mpt.fia. Furthermore, CIs of CFIA
+        are not returned by get.mpt.fia.
 
-	o	Corrected a bug that lead to a wrong labeling of restricted
-		parameters in the mean parameter table for multi-individual fit
-		when using sort.param = TRUE.
+    o   fit.mpt adjusted to use the optimization of get.mpt.fia (see above)
+        for multi-individual fit. That is, fit.mpt now calls get.mpt.fia
+        only once (previous were two calls, one for for individual data,
+        one for aggregated data).
+    
+    o   objective function in fit.mpt vectorized (previous was using
+        for-loop). Obtained speed up: ~40%.
 
-	o	Corrected a bug in the R implementation of bmpt.fia, when only one
-		parameter was fixed.
+    New Features / Bugfixes
+    
+    o   bmpt.fia fixed to deal with models without restricted parameters
+        (was necessary as we did not use en empty matrix correctly)
+
+    o   Corrected a bug that lead to a wrong labeling of restricted
+        parameters in the mean parameter table for multi-individual fit
+        when using sort.param = TRUE.
+
+    o   Corrected a bug in the R implementation of bmpt.fia, when only one
+        parameter was fixed.

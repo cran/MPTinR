@@ -7,8 +7,8 @@
 # 4. Parameters can only be restricted to certain numbers.
 
 .read.MPT.restrictions <- function(filename) {
-	min.restriction <- c(0, 0.001) 
-	max.restriction <- 0.99999
+	#min.restriction <- c(0, 0.001) 
+	#max.restriction <- 0.99999
 	if (!is.list(filename)) {
 		whole <- readLines(filename)
 		model <- vector("list", length(whole))
@@ -31,7 +31,7 @@
 	restrictions <- list()
 	
    
-	if (sum(grepl("[>/\\+\\*\\!-]", unlist(tmp.restrictions)))) stop("Error getting Restrictions: Non supported operators (>, +, -, *, /, !) found in restriction file.")
+	if (sum(grepl("[>/\\+\\*\\!]", unlist(tmp.restrictions)))) stop("Error getting Restrictions: Non supported operators (>, +, *, /, !) found in restriction file.")
 	restrictions.split <- sapply(tmp.restrictions,strsplit, split = "")
 	#if (length(tmp.restrictions) > 1) {
 		c.inequality <- vapply(lapply(restrictions.split, grepl, pattern = "<"), sum, 0)
@@ -88,13 +88,16 @@
 				tmpRestr <- vector("list", pos.ref - 1)
 				if (!(grepl("[[:alpha:]]", tmpStr[pos.ref]))) {
 					tmpStr[pos.ref] <- as.numeric(tmpStr[pos.ref])
-					if (as.numeric(tmpStr[pos.ref]) > min.restriction[1] & as.numeric(tmpStr[pos.ref]) < min.restriction[2]) {
-						warning(paste("Restriction starting with ", tmpStr[1], ": Constant is in the not allowed interval from ", min.restriction[1], " to ", min.restriction[2], " and therefore changed to ", 0, ".", sep = ""))
-						tmpStr[pos.ref] <- 0
-					}
-					if (as.numeric(tmpStr[pos.ref]) > max.restriction) {
-						warning(paste("Restriction starting with ", tmpStr[1], ": Constant is bigger than ", max.restriction, " and therefore changed to ", max.restriction, ".", sep = ""))
-						tmpStr[pos.ref] <- max.restriction
+# 					if (as.numeric(tmpStr[pos.ref]) > min.restriction[1] & as.numeric(tmpStr[pos.ref]) < min.restriction[2]) {
+# 						warning(paste("Restriction starting with ", tmpStr[1], ": Constant is in the not allowed interval from ", min.restriction[1], " to ", min.restriction[2], " and therefore changed to ", 0, ".", sep = ""))
+# 						tmpStr[pos.ref] <- 0
+# 					}
+# 					if (as.numeric(tmpStr[pos.ref]) > max.restriction) {
+# 						warning(paste("Restriction starting with ", tmpStr[1], ": Constant is bigger than ", max.restriction, " and therefore changed to ", max.restriction, ".", sep = ""))
+# 						tmpStr[pos.ref] <- max.restriction
+# 					}
+					if (as.numeric(tmpStr[pos.ref]) >= 1 | as.numeric(tmpStr[pos.ref]) <= 0) {
+					  message(paste("Restriction starting with ", tmpStr[1], ": Constant is either equal to 0 or 1 or outside the interval from 0 to 1. This may lead to problems.", sep = ""))
 					}
 				}
 				for (ci in 1:(pos.ref-1)) {
