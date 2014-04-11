@@ -133,6 +133,7 @@ dev.off()
 prediction.plot(br.2htm, m.2htm, "aggregated", axis.labels = unlist(lapply(c(10, 25, 50, 75, 90),
 	paste, c("o.o", "o.n"), sep = "")))
 
+\dontrun{
 # fit the SDT
 br.sdt <- fit.model(d.broeder, m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
 
@@ -160,4 +161,6 @@ prediction.plot(br.2htm, m.2htm, 2, ylim = c(-2, 2),
 	args.plot = list(main = "MPT model - G.squared"), absolute = FALSE)
 prediction.plot(br.sdt, m.2htm, 2, ylim = c(-2, 2),
 	args.plot = list(main = "SDT model - G.squared"), absolute = FALSE)
+}
+
 }

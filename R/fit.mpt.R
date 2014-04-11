@@ -1,5 +1,5 @@
 
-fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2, control = list()){
+fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2, control = list(), args.fia = list()){
 	
 	llk.model <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env){
 		
@@ -119,18 +119,29 @@ fit.mpt <- function(data, model.filename, restrictions.filename = NULL, n.optim 
 	llk.function <- tryCatch(.make.llk.function(tree, param.names, length.param.names), error = function(e) {warning("likelihood function cannot be build"); NULL})
 	llk.gradient <- tryCatch(.make.llk.gradient(llk.function, param.names, length.param.names), error = function(e) {message("gradient function cannot be build (probably derivation failure, see ?D"); NULL})
 	llk.hessian <- tryCatch(.make.llk.hessian(llk.function, param.names, length.param.names), error = function(e) {message("hessian function cannot be build (probably derivation failure, see ?D"); NULL})
-	
+  #browser()
 	if (!is.null(fia)) {
+    if (length(args.fia)) {
+      nms <- names(args.fia)
+      if (!is.list(args.fia) || is.null(args.fia)) stop("'args.fia' argument must be a named list")
+      if (!all(nms %in% names(formals(get.mpt.fia)))) warning(paste0("Unrecognized arguments in 'args.fia' ignored: ", paste(args.fia[!nms %in% names(formals(get.mpt.fia))], collapes = " ")))
+      args.fia <- args.fia[nms %in% names(formals(get.mpt.fia))]
+      fia.args <- c(model.filename = model.filename, restrictions.filename = if (is.list(restrictions.filename)) list(restrictions.filename) else restrictions.filename, Sample = fia, model.type = list(model.type), multicore = if (multicore[1] != "none") TRUE else FALSE, args.fia)
+    }
+    else {
+      fia.args <- list(model.filename = model.filename, restrictions.filename = restrictions.filename, Sample = fia, model.type = model.type, multicore = if (multicore[1] != "none") TRUE else FALSE)
+    }
+      args.fia <- NULL
 		if (multiFit) {
 			data.new <- rbind(data, apply(data,2,sum))
-			fia.tmp <- tryCatch(get.mpt.fia(data.new, model.filename, restrictions.filename, fia, model.type, multicore = if (multicore[1] != "none") TRUE else FALSE), error = function(e) NULL)
+			fia.tmp <- tryCatch(do.call(get.mpt.fia, args = c(data = list(data.new), fia.args)), error = function(e) NULL)
 			if (!is.null(fia.tmp)) {
 			  fia.df <- fia.tmp[-dim(fia.tmp)[1],]
 			  fia.agg.tmp <- fia.tmp[dim(fia.tmp)[1],]
 			  fia.df <- list(fia.df, fia.agg.tmp)
 			} else fia.df <- NULL
 		} else {
-			fia.df <- tryCatch(get.mpt.fia(data, model.filename, restrictions.filename, fia, model.type, multicore = if (multicore[1] != "none") TRUE else FALSE), error = function(e) NULL)
+			fia.df <- tryCatch(do.call(get.mpt.fia, args = c(data = list(data), fia.args)), error = function(e) NULL)
 		}
 		if (is.null(fia.df)) {
 		  warning("Calculation of FIA failed. Model does not seem to be a BMPT!")

@@ -26,7 +26,7 @@ fit.model(
 	model.type = c("easy", "eqn", "eqn2"),
 	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
 	control = list(),
-	use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE
+	use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE, args.fia = list()
 )
 }
 
@@ -95,7 +95,10 @@ logical. Whether or not the symbomlically derived function returning the gradien
 logical. Whether or not the symbomlically derived function returning the Hessian matrix should be used for fitting. Default is \code{FALSE} meaning hessian function is not used.
 }
   \item{check.model}{
-logical. Should model be chekced with random values whether or not the expected values sum to one per tree? Default is \code{TRUE}.
+logical. Should model be checked with random values whether or not the expected values sum to one per tree? Default is \code{TRUE}. (This also controls whether other model checks during optimization are performed. If \code{FALSE} the most permissive fitting is performed.)
+}
+  \item{args.fia}{
+named list of further arguments passed to \code{\link{get.mpt.fia}}, such as \code{mConst} to avoid numerical problems in the FIA function.
 }
 }
 \details{
@@ -162,6 +165,8 @@ The likelihood returned does not include the factorial constants of the multinom
 }
 \references{
 Broeder, A., & Schuetz, J. (2009). Recognition ROCs are curvilinear-or are they? On premature arguments against the two-high-threshold model of recognition. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 35(3), 587. doi:10.1037/a0015279
+
+Wickens, T. D. (2002). \emph{Elementary Signal Detection Theory}. Oxford; New York: Oxford University Press.
 }
 \author{
 Henrik Singmann and David Kellen.
@@ -174,6 +179,10 @@ All (model or restriction) files should end with an empty line, otherwise a warn
 
 \dontrun{
 
+#####################################
+## Fit response-bias or payoff ROC ##
+#####################################
+  
 # Example from Broder & Schutz (2009)
 # We fit the data from the 40 individuals from their Experiment 3
 # We fit three different models:
@@ -226,7 +235,7 @@ check.mpt(textConnection(m.sdt))
 
 # fit the SDT (unequal variance version)
 br.uvsdt <- fit.model(d.broeder, textConnection(m.sdt), 
-			lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
+  		lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
 
 # Is there any effect of studying the items?
 br.uvsdt.2 <- fit.model(d.broeder, textConnection(m.sdt), 
@@ -255,6 +264,49 @@ select.mpt(list(uvsdt = br.uvsdt, evsdt = br.evsdt, two.htm = br.2htm,
 
 # the restricted 2HTM "wins" for individual data (although evsdt does not perform too bad),
 # but the 2htm and restricted 2htm restricted "win" for aggregated data.
+
+
+###################################
+## Fit confidence rating ROC SDT ##
+###################################
+
+# We fit example data from Wickens (2002, Chapter 5)
+# The example data is from Table 5.1, p. 84
+# (data is entered in somewhat different order).
+
+# Note that criteria are defined as increments to 
+# the first (i.e., leftmost) criterion!
+# This is the only way to do it in MPTinR.
+
+# Data
+dat <- c(47, 65, 66, 92, 136, 294, 166, 161, 138, 128, 63, 43)
+
+# UVSDT
+m.uvsdt <- "
+pnorm(cr1, mu, sigma)
+pnorm(cr1+cr2, mu, sigma) - pnorm(cr1, mu, sigma)
+pnorm(cr3+cr2+cr1, mu, sigma) - pnorm(cr2+cr1, mu, sigma)
+pnorm(cr4+cr3+cr2+cr1, mu, sigma) - pnorm(cr3+cr2+cr1, mu, sigma)
+pnorm(cr5+cr4+cr3+cr2+cr1, mu, sigma) - pnorm(cr4+cr3+cr2+cr1, mu, sigma)
+1 - pnorm(cr5+cr4+cr3+cr2+cr1, mu, sigma)
+  
+pnorm(cr1)
+pnorm(cr2+cr1) - pnorm(cr1)
+pnorm(cr3+cr2+cr1) - pnorm(cr2+cr1)
+pnorm(cr4+cr3+cr2+cr1) - pnorm(cr3+cr2+cr1)
+pnorm(cr5+cr4+cr3+cr2+cr1) - pnorm(cr4+cr3+cr2+cr1)
+1 - pnorm(cr5+cr4+cr3+cr2+cr1)
+"
+check.mpt(textConnection(m.uvsdt))
+
+# Model fitting
+(cr_sdt <- fit.model(dat, textConnection(m.uvsdt),
+            lower.bound=c(-Inf, rep(0, 5), 0.1), upper.bound=Inf))
+
+# To obtain the criteria (which match those in Wickens (2002, p. 90)
+# obtain the cumulative sum:
+
+cumsum(cr_sdt$parameters[paste0("cr",1:5), 1, drop = FALSE])
 
 }
 

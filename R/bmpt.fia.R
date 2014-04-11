@@ -4,7 +4,12 @@
   .Call("determinant", Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], PACKAGE = "MPTinR")
 }
 
-bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, multicore = FALSE, split = NULL) {
+.oneSample_c <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq, mConst) {
+  set.seed(seed[index])
+  .Call("determinant_c", Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], mConst, PACKAGE = "MPTinR")
+}
+
+bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, multicore = FALSE, split = NULL, mConst = NULL) {
 
 	t0 <- Sys.time()
 	print(paste("Computing FIA: Iteration begins at ", t0, sep = ""))
@@ -156,13 +161,27 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, m
   #browser()
   if (isTRUE(multicore)) {
     sfLibrary("MPTinR", character.only = TRUE)
-    tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples)  
+    if (is.null(mConst)) tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples)  
+    else {
+      storage.mode(mConst) <- "integer"
+      tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample_c, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples, mConst = mConst)
+    }
   } else 
-    tmp.dat <- lapply(1:length(seeds), .oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples) 
+    if (is.null(mConst)) tmp.dat <- lapply(1:length(seeds), .oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples) 
+  else {
+    storage.mode(mConst) <- "integer"
+    tmp.dat <- lapply(1:length(seeds), .oneSample_c, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples, mConst = mConst) 
+  }
   #browser()
-  count <- sum(vapply(tmp.dat, "[", 0, i = 1))
-  integral <- sum(vapply(tmp.dat, "[", 0, i = 3))
-  vr <- sum(vapply(tmp.dat, "[", 0, i = 2))
+  #str(tmp.dat)
+	count <- sum(vapply(tmp.dat, "[", 0, i = 1))
+	if (is.null(mConst)) {
+    integral <- sum(vapply(tmp.dat, "[", 0, i = 3))
+    vr <- sum(vapply(tmp.dat, "[", 0, i = 2))
+	} else {
+	  integral <- as.brob(sum(vapply(tmp.dat, "[", 0, i = 3))) / sqrt(as.brob(mConst) ^ dim(A)[2])
+	  vr <- as.brob(sum(vapply(tmp.dat, "[", 0, i = 2))) / (as.brob(mConst) ^ dim(A)[2])
+	}
 	#sum(sapply(tmp.dat[2,], function(x) isTRUE(all.equal(x, 0))))
 	# if (detI != 0) sample <- sample + 1	
   integral <- integral/Sample
@@ -170,13 +189,13 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, m
 	vr1 <- abs(vr-integral^2)/Sample
 	lnInt <- log(integral)
 	d1 <- sqrt(vr1)/integral*qnorm(.975)
-	CI1 <- c(lnInt-d1, lnInt+d1)
+	CI1 <- c(as.numeric(lnInt-d1), as.numeric(lnInt+d1))
 	const <- Sample/count
 	lnconst <- log(const)
 	d2 <- sqrt((1-const)/Sample)* qnorm(.975)
 	CI2 <- c(lnconst-d2, lnconst+d2)
 	CFIA <- lnInt + lnconst+S/2*log(N/2/pi)
-	d <- sqrt(d2^2 + d1^2)
+	d <- as.numeric(sqrt(d2^2 + d1^2))
 	CI = c(CFIA-d, CFIA+d)
 	out <- c(CFIA, CI, lnInt, CI1, lnconst, CI2)
 	names(out) <- c("CFIA", "CI.l", "CI.u", "lnInt", "CI.lnint.l", "CI.lnint.u", "lnconst", "CI.lnconst.l", "CI.lnconst.u")

@@ -1,6 +1,6 @@
 
 
-get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Sample = 200000, model.type = c("easy", "eqn", "eqn2"), round.digit = 6, multicore = FALSE, split = NULL){
+get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Sample = 200000, model.type = c("easy", "eqn", "eqn2"), round.digit = 6, multicore = FALSE, split = NULL, mConst = NULL){
 	
 	if(is.vector(data)) {
 		data <- array(data, dim = c(1, length(data)))
@@ -37,7 +37,7 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 	if ("connection" %in% class.model) {
 		model.filename <- textConnection(tmp.model)
 	}
-	mpt.string <- make.mpt.cf(model.filename, model.type)
+	mpt.string <- make.mpt.cf(model.filename = model.filename, model.type = model.type)
 	
 	is.category <- grepl("^[[:digit:]]+$", mpt.string)
 	
@@ -137,7 +137,7 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 	fia.result <- vector('list', n.fit)
 	
 	for (counter in 1:n.fit) {
-		fia.result[[counter]] <- bmpt.fia(s, parameters[[m.fit[counter]]], category, n_items[m.fit[counter]], ineq, Sample, multicore = multicore, split = split)
+		fia.result[[counter]] <- bmpt.fia(s, parameters[[m.fit[counter]]], category, n_items[m.fit[counter]], ineq, Sample, multicore = multicore, split = split, mConst = mConst)
 	}
 	
 	n.params <- length(unique(parameters[[1]][parameters[[1]] > 0]))

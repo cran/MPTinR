@@ -1,3 +1,27 @@
+2014-01-18
+        * removed bug that fit.model stopped too often
+          when check.model was TRUE.
+
+2014-01-18
+        * removed bug in get.mpt.fia
+
+2014-01-03
+        * removed bug in lbmpt.to.mpt (captial letters)
+        * added restrictions argument to make.mpt.cf
+
+2014-01-02
+        * added function lbmpt.to.mpt
+
+2013-12-14
+        * fit.mpt and fit.model now work with args.fia
+
+2013-12-13
+        * added mConst argument to bmpt.fia for avoiding
+          numerical underflows. See: 
+          http://stackoverflow.com/q/20529407/289572
+        * added mConst or args.fia to rel functions.
+        * package Brobdingnag now Imported for same issue.
+
 2013-11-24
         * added check.model to gen.predictions et al.
         

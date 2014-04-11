@@ -140,10 +140,12 @@ for (int i = 0; i < s; i++) {
   // Rcout << "ABA:\n"<<ABA<<"\n";
   delta0 = V*(A.cast<double>()-(A+B).cast<double>()*theta.asDiagonal());
   
+  //Rcout << "delta0:\n" << delta0 << "\n";
+  
   I = fabs((delta0.transpose() * D.asDiagonal() * delta0 * (theta.array()*(1 - theta.array())).matrix().asDiagonal().inverse() * M_PI * M_PI).determinant());
   // double detI = I.determinant();
 
-  //Rcout << I << "\n";
+  // Rcout << "log(i): " << II << "\tI: " << I << "\n";
   
   out[1] += I;
   out[2] += std::sqrt(I);

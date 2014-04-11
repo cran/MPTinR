@@ -23,7 +23,7 @@ fit.mpt(
 	show.messages = TRUE,
 	model.type = c("easy", "eqn", "eqn2"),
 	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
-	control = list()
+	control = list(), args.fia = list()
 )
 }
 
@@ -78,6 +78,9 @@ Scalar. Only relevant if \code{multicore} is not \code{"none"} and \code{sfInit}
 }
   \item{control}{
 list containing control arguments passed on to \code{\link{nlminb}}. See there.
+}
+  \item{args.fia}{
+named list of further arguments passed to \code{\link{get.mpt.fia}}, such as \code{mConst} to avoid numerical problems in the FIA function.
 }
 }
 \details{

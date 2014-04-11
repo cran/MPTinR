@@ -9,7 +9,7 @@ R-port of the function to compute FIA for MPT models by Wu, Myung, and Batchelde
 }
 \usage{
 bmpt.fia(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, 
-        multicore = FALSE, split = NULL)
+        multicore = FALSE, split = NULL, mConst = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,7 +37,9 @@ logical. Should fitting be distributed across several cores? Requires \pkg{snowf
   \item{split}{
 \code{NULL} (the default) or integer specifying in how many separate calls to the C++ workhorse the integrant should be calculated. See below.
 }
-
+  \item{mConst}{
+A constant which is added in the Monte Carlo integration to avoid numerical underflows and is later subtracted (after appropriate transformation). Should be a power of 2 to avoid unnecessary numerical imprecision. 
+}
 }
 \details{
 The following is the original description by Wu, Myung, & Batchelder (2010a) for their Matlab function. All changes to the original document are in squared brackets []:
@@ -129,8 +131,13 @@ The R version of the code should now (after moving the code to RcppEigen) be con
 
 bmpt.fia(s = "ppppCpCCppCCCppCpCCppCCCppCCC", 
 	parameters = c(-0.5, -0.5, 3, 2, 5, 1, 5, 4, 2, 5, 1, 5, 1, 5), 
-	category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9), N = 1000, ineq0 = matrix(c(4,3),1,2))
+	category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9), 
+  N = 1000, ineq0 = matrix(c(4,3),1,2))
 
+bmpt.fia(s = "ppppCpCCppCCCppCpCCppCCCppCCC", 
+	parameters = c(-0.5, -0.5, 3, 2, 5, 1, 5, 4, 2, 5, 1, 5, 1, 5), 
+	category = c(1,1,2,1,2,3,5,4,5,4,5,6,7,8,9), 
+  N = 1000, ineq0 = matrix(c(4,3),1,2), mConst = 2L^8)
 }
   }
 

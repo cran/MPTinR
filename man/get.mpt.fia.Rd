@@ -10,7 +10,7 @@ Convenient function to get FIA for MPT
 \usage{
 get.mpt.fia(data, model.filename, restrictions.filename = NULL, Sample = 2e+05, 
 	model.type = c("easy", "eqn", "eqn2"), round.digit = 6, 
-	multicore = FALSE, split = NULL)
+	multicore = FALSE, split = NULL, mConst = NULL)
 }
 \arguments{
   \item{data}{
@@ -36,6 +36,9 @@ Same as in \code{\link{bmpt.fia}}
 }
   \item{split}{
 Same as in \code{\link{bmpt.fia}}
+}
+  \item{mConst}{
+A constant which is added in the Monte Carlo integration to avoid numerical underflows and is later subtracted (after appropriate transformation). Should be a power of 2 to avoid unnecessary numerical imprecision. 
 }
 }
 \details{
@@ -82,6 +85,9 @@ m.2htm <- system.file("extdata", "5points.2htm.model", package = "MPTinR")
 i.2htm <- system.file("extdata", "broeder.2htm.ineq", package = "MPTinR")
 
 get.mpt.fia(d.broeder, m.2htm, i.2htm)
+
+# should produce very similar results:
+get.mpt.fia(d.broeder, m.2htm, i.2htm, mConst = 2L^8)
 
 }
   }

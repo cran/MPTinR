@@ -1,13 +1,27 @@
 
-make.mpt.cf <- function(model.filename, model.type = c("easy", "eqn")){
-	
+make.mpt.cf <- function(model.filename, restrictions.filename = NULL, model.type = c("easy", "eqn"), treewise = FALSE){
+	  
 	bin.objects <- function(branch) {
 		objects <- strsplit(branch, "\\*")[[1]]
 		!(grepl("[()]", objects))
 	}
+	oneLineDeparse <- function(expr){
+	  paste(deparse(expr), collapse="")
+	}
 	model <- .get.mpt.model(model.filename, model.type)
 	
-	
+  if (!is.null(restrictions.filename)) {
+	  new.restrictions <- .check.restrictions(restrictions.filename, model)
+	  if (length(new.restrictions) > 0) use.restrictions <- TRUE
+    res.no.ineq <- new.restrictions
+    for (res in 1:length(new.restrictions)) if (new.restrictions[[res]][3] == "<") res.no.ineq[[1]] <- NULL
+    if (length(res.no.ineq) == 0) use.restrictions <- FALSE
+    else new.restrictions <- res.no.ineq
+	  if (use.restrictions) model <- .apply.MPT.restrictions(model, new.restrictions)
+	}
+
+	if (treewise) return(lapply(model, function(x) make.mpt.cf(textConnection(vapply(x, oneLineDeparse, "")))))
+  
 	model.df <- .make.model.df(model)
 	
 	#recover()
