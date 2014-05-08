@@ -3,3 +3,4 @@ useDynLib(MPTinR)
 
 importFrom("numDeriv", hessian)
 importFrom("Brobdingnag", as.brob)
+import(Rcpp)

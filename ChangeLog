@@ -1,3 +1,6 @@
+2014-05-08
+        * added determaint_c.cpp which was missing. A clear bug...
+
 2014-01-18
         * removed bug that fit.model stopped too often
           when check.model was TRUE.
