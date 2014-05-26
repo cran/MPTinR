@@ -26,7 +26,8 @@ fit.model(
 	model.type = c("easy", "eqn", "eqn2"),
 	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
 	control = list(),
-	use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE, args.fia = list()
+	use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE, 
+    args.fia = list(), numDeriv = TRUE
 )
 }
 
@@ -56,7 +57,7 @@ A \code{vector}, a \code{list}, or \code{NULL} (the default). If \code{NULL} sta
 If "full" \code{fit.mpt} will additionally return the return values of \code{\link{nlminb}} and the Hessian matrices. (If "fia", \code{fit.mpt} will additionally return the results from \code{\link{get.mpt.fia}} (if \code{fia} not equal \code{NULL}).)
 }
 \item{reparam.ineq}{
-  Logical. Indicates whether or not inequality restrictions (when present in the model file) should be enforced while fitting the model. If \code{TRUE} (the default) inequality restricted parameters will be reparamertized, if \code{FALSE} not. Probably irrelevant for none MPTs.
+  Logical. Indicates whether or not inequality restrictions (when present in the model file) should be enforced while fitting the model. If \code{TRUE} (the default) inequality restricted parameters will be reparameterized, if \code{FALSE} not. Probably irrelevant for none MPTs.
 }
 \item{fit.aggregated}{
 Logical. Only relevant for multiple datasets (i.e., \code{matrix} or \code{data.frame}). Should the aggregated dataset (i.e., data summed over rows) be fitted? Default (\code{TRUE}) fits the aggregated data. 
@@ -89,10 +90,10 @@ numeric scalar or vector. Can be used in \code{fit.model} to set the upper bound
 list containing control arguments passed on to \code{\link{nlminb}}. See there.
 }
   \item{use.gradient}{
-logical. Whether or not the symbomlically derived function returning the gradient should be used for fitting. Default is \code{TRUE} meaning gradient function is used.
+logical. Whether or not the symbolically derived function returning the gradient should be used for fitting. Default is \code{TRUE} meaning gradient function is used.
 }
   \item{use.hessian}{
-logical. Whether or not the symbomlically derived function returning the Hessian matrix should be used for fitting. Default is \code{FALSE} meaning hessian function is not used.
+logical. Whether or not the symbolically derived function returning the Hessian matrix should be used for fitting. Default is \code{FALSE} meaning hessian function is not used.
 }
   \item{check.model}{
 logical. Should model be checked with random values whether or not the expected values sum to one per tree? Default is \code{TRUE}. (This also controls whether other model checks during optimization are performed. If \code{FALSE} the most permissive fitting is performed.)
@@ -100,17 +101,20 @@ logical. Should model be checked with random values whether or not the expected 
   \item{args.fia}{
 named list of further arguments passed to \code{\link{get.mpt.fia}}, such as \code{mConst} to avoid numerical problems in the FIA function.
 }
+  \item{numDeriv}{
+logical. Should the Hessian matrix of the maximum likelihood estimates be estimated numerically using \code{numDeriv::hessian} in case it cannot be estimated analytically? This can be extremely time and memory consuming for larger models. Default is TRUE.
+  }
 }
 \details{
 This functions should be used when fitting a model that is not an MPT model or when fitting using \code{fit.mpt} fails. For fitting MPT models and information on fitting MPT models see \code{\link{fit.mpt}}.
 
 The model file for non-MPT models should be of the \code{easy} format. That is the ordinal number or rank of each line should correspond to this column/position in the data object. Model files can contain any visible function (i.e., including self-defined functions). However, note that the derivation that is needed for the gradient and Hessian function can only be done for those functions that \code{\link{D}} can handle. If derivation fails a warning will be given and fitting will be done without gradient and/or Hessian function.
 
-Equations that correspond to one item type/category must be not be separated by an empty line. Equations that do not correspond to the same item type/category must be separated by at least one empty line (lines with comments are not empty).
+Equations that correspond to one item type/category must be not be separated by an empty line. Equations that do not correspond to the same item type/category must be separated by at least one empty line.
 
 Note that names of parameters in the model file should NOT start with \code{hank}. Variables with these names can lead to unforeseen problems as variables starting with these letters are internally used.
 
-The restrictions file may contain (sequential) equality (i.e., =) and inequality (i.e., <) restrictions (see \code{\link{fit.mpt}} for more general info on the restrictions files). Note that inequality restrictions usually will lead to catatstrophical results when used for non-MPT models. Our recommendation: Do never use inequality restrictions for non-MPT models. Equality restrictions or fixing paramters should be no problem though.
+The restrictions file may contain (sequential) equality (i.e., =) and inequality (i.e., <) restrictions (see \code{\link{fit.mpt}} for more general info on the restrictions files). Note that inequality restrictions usually will lead to catastrophic results when used for non-MPT models. Our recommendation: Do never use inequality restrictions for non-MPT models. Equality restrictions or fixing parameters should be no problem though.
 
 For equality restrictions, the equality restricted parameters are simply exchanged with their restrictions (i.e., another parameter or a number) before the fitting.
 
@@ -118,7 +122,7 @@ Restrictions or model files can contain comments (i.e., everything to the right 
 
 Both models and restrictions can be specified as \code{\link{textConnection}}s instead of as external files (see examples). Note that textConnections get "consumed" so you may need to specify them each time you fit a model using a connection (see \code{Examples} for how to avoid this).
 
-Confidence intervals (CI) are based on the Hessian matrix produced by the symoblically derived function for the Hessian (i.e., the second derivative of the likelihood function). If it is based on a numerically estimated Hessian, a warning will be given. \cr
+Confidence intervals (CI) are based on the Hessian matrix produced by the symbolically derived function for the Hessian (i.e., the second derivative of the likelihood function). If it is based on a numerically estimated Hessian, a warning will be given. \cr
 
 To set the starting values for the fitting process (e.g., to avoid local minima) one can set \code{starting.values} to a vector of length 2 and \code{n.optim > 1}. Then, starting values are randomly drawn from a uniform distribution from \code{starting.values[1]} to \code{starting.values[2]}.
 
@@ -128,7 +132,7 @@ The least interesting option is to specify the starting values individually by s
 
 The \code{lower.bound} and \code{upper.bound} needs to be of length 1 or equal to the number of \code{free} parameters. If length > 1, parameters are mapped to the bounds in alphabetic order of the parameters. Use \code{\link{check.mpt}} to obtain the alphabetical order of parameters for your model.
 
-This function is basically a comfortable wrapper for \code{\link{fit.mptinr}} producing the appropriate objective function, gradient function, hessian function, and prediction function from the model file whilst allowing for custom lower or upper bounds on the parameters. You can specify whether or not gradient or hessian function should be used for fitting with \code{use.gradient} or \code{use.hessian}, respectively.
+This function is basically a comfortable wrapper for \code{\link{fit.mptinr}} producing the appropriate objective, gradient, hessian, and prediction function from the model equations (passed via \code{model.filename}) whilst allowing for custom lower or upper bounds on the parameters. You can specify whether or not gradient or hessian function should be used for fitting with \code{use.gradient} or \code{use.hessian}, respectively.
 
 Multicore fitting is achieved via the \code{snowfall} package and needs to be initialized via \code{sfInit}. As initialization needs some time, you can either initialize multicore facilities yourself using \code{sfInit()} and setting the \code{sfInit} argument to \code{FALSE} (the default) or let MPTinR initialize multicore facilities by setting the \code{sfInit} argument to \code{TRUE}. The former is recommended as initializing \code{snowfall} takes some time and only needs to be done once if you run \code{fit.mpt} multiple times. If there are any problems with multicore fitting, first try to initialize \code{snowfall} outside MPTinR (e.g., \code{sfInit( parallel=TRUE, cpus=2 )}). If this does not work, the problem is not related to MPTinR but to snowfall (for support and references visit: \url{http://www.imbi.uni-freiburg.de/parallel/}).\cr
 Note that you should \emph{close} snowfall via \code{sfStop()} after using MPTinR.

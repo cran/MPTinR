@@ -1,3 +1,10 @@
+2014-05-26
+        * numDeriv now correctly passed in case some VP are refitted, 
+          when fitting failed with analytical gradient.
+
+2014-05-14
+        * added numDeriv argument to fit functions.
+        
 2014-05-08
         * added determaint_c.cpp which was missing. A clear bug...
 

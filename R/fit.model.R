@@ -1,5 +1,5 @@
    
-fit.model <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2, control = list(), use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE, args.fia = list()){
+fit.model <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), reparam.ineq = TRUE, fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2, control = list(), use.gradient = TRUE, use.hessian = FALSE, check.model = TRUE, args.fia = list(), numDeriv = TRUE){
 	
 	llk.model <- function(Q, unlist.model, data, param.names, n.params, lower.bound, upper.bound, llk.gradient, llk.hessian, tmp.env, ...){
 		try({
@@ -181,7 +181,7 @@ fit.model <- function(data, model.filename, restrictions.filename = NULL, n.opti
 	}
 	
 	# call the workhorse:	
-	fit.mptinr(data = data, objective = llk.model, param.names = param.names, categories.per.type = categories.per.type, gradient = llk.gradient.funct, use.gradient = use.gradient, hessian = llk.hessian.funct, use.hessian = use.hessian, prediction = model.predictions, n.optim = n.optim, fia.df = if(!is.null(fia)) fia.df, ci = ci, starting.values = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, output = output, orig.params = orig.params, fit.aggregated = fit.aggregated, sort.param = sort.param, show.messages = show.messages, use.restrictions = use.restrictions, restrictions = restrictions, multicore = multicore, sfInit = sfInit, nCPU = nCPU, control = control, unlist.model = unlist(tree), llk.gradient = llk.gradient, llk.hessian = llk.hessian, check.model = check.model)
+	fit.mptinr(data = data, objective = llk.model, param.names = param.names, categories.per.type = categories.per.type, gradient = llk.gradient.funct, use.gradient = use.gradient, hessian = llk.hessian.funct, use.hessian = use.hessian, prediction = model.predictions, n.optim = n.optim, fia.df = if(!is.null(fia)) fia.df, ci = ci, starting.values = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, output = output, orig.params = orig.params, fit.aggregated = fit.aggregated, sort.param = sort.param, show.messages = show.messages, use.restrictions = use.restrictions, restrictions = restrictions, multicore = multicore, sfInit = sfInit, nCPU = nCPU, control = control, numDeriv = numDeriv, unlist.model = unlist(tree), llk.gradient = llk.gradient, llk.hessian = llk.hessian, check.model = check.model)
 	
 }
 

@@ -1,8 +1,8 @@
 Package: MPTinR
 Type: Package
 Title: Analyze Multinomial Processing Tree Models
-Version: 1.4.0
-Date: 2014-05-08
+Version: 1.5.1
+Date: 2014-05-26
 Authors@R: c(person("Henrik", "Singmann", role = c("aut", "cre"),
     email = "henrik.singmann@psychologie.uni-freiburg.de"),
     person("David", "Kellen", role =  "aut"),
@@ -26,8 +26,8 @@ Author: Henrik Singmann [aut, cre],
 Maintainer: Henrik Singmann <henrik.singmann@psychologie.uni-freiburg.de>
 Repository: CRAN
 Repository/R-Forge/Project: mptinr
-Repository/R-Forge/Revision: 130
-Repository/R-Forge/DateTimeStamp: 2014-05-08 13:03:58
-Date/Publication: 2014-05-10 15:17:51
-Packaged: 2014-05-08 14:16:08 UTC; rforge
+Repository/R-Forge/Revision: 133
+Repository/R-Forge/DateTimeStamp: 2014-08-04 21:48:20
+Date/Publication: 2014-08-08 01:19:36
+Packaged: 2014-08-04 22:15:35 UTC; rforge
 NeedsCompilation: yes

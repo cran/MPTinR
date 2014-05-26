@@ -23,7 +23,7 @@ fit.mpt(
 	show.messages = TRUE,
 	model.type = c("easy", "eqn", "eqn2"),
 	multicore = c("none", "individual", "n.optim", "fia"), sfInit = FALSE, nCPU = 2,
-	control = list(), args.fia = list()
+	control = list(), args.fia = list(), numDeriv = TRUE
 )
 }
 
@@ -82,6 +82,9 @@ list containing control arguments passed on to \code{\link{nlminb}}. See there.
   \item{args.fia}{
 named list of further arguments passed to \code{\link{get.mpt.fia}}, such as \code{mConst} to avoid numerical problems in the FIA function.
 }
+  \item{numDeriv}{
+logical. Should the Hessian matrix of the maximum likelihood estimates be estimated numerically using \code{numDeriv::hessian} in case it cannot be estimated analytically? This can be extremely time and memory consuming for larger models. Default is TRUE.
+  }
 }
 \details{
 The model file is either of the easy format (see \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr}) or the "classical" EQN format (see below).\cr
@@ -129,13 +132,13 @@ Once again: If one wants to compute the FIA, it is \emph{absolutely necessary}, 
 Confidence intervals (CI) are based on the observed Hessian matrix produced by the symbolically derived function for the Hessian (i.e., the second derivative of the likelihood function). If it is based on a numerically estimated Hessian, a warning will be given. \cr
 For inequality restricted parameters, the CIs are computed using the parameter estimates' variance bounds (see Baldi & Batchelder, 2003; especially Equation 19). Note that these bounds represent the "worst case scenario" variances, and can lead to CIs outside parameter boundaries if the set of inequalities is large and/or the variances for the reparameterized model are large (Note that CIs for nonrestricted parameters can be outside the parameter boundaries as well due to large variances).
 
-To avoid local minima it is useful to set \code{n.optim} > 1 with random starting values (see below). If \code{n.optim} > 1, the \code{\link{summary}} of the vector containing the Log-Likelihood values returned by each run of \code{nlminb} is added to the output (to check whether local minima were present). If the model is rather big, \code{n.optim} > 1 can be slow.
+To avoid local minima and instead find the maximum likelihood estimates it is useful to set \code{n.optim} > 1 with random starting values (see below). If \code{n.optim} > 1, the \code{\link{summary}} of the vector containing the Log-Likelihood values returned by each run of \code{nlminb} is added to the output (to check whether local minima were present). If the model is rather big, \code{n.optim} > 1 can be slow.
 
 
 Multicore fitting is achieved via the \code{snowfall} package and needs to be initialized via \code{sfInit}. As initialization needs some time, you can either initialize multicore facilities yourself using \code{sfInit()} and setting the \code{sfInit} argument to \code{FALSE} (the default) or let MPTinR initialize multicore facilities by setting the \code{sfInit} argument to \code{TRUE}. The former is recommended as initializing \code{snowfall} takes some time and only needs to be done once if you run \code{fit.mpt} multiple times. If there are any problems with multicore fitting, first try to initialize \code{snowfall} outside MPTinR (e.g., \code{sfInit( parallel=TRUE, cpus=2 )}). If this does not work, the problem is not related to MPTinR but to snowfall (for support and references visit: \url{http://www.imbi.uni-freiburg.de/parallel/}).\cr
 Note that you should  \emph{close} snowfall via \code{sfStop()} after using MPTinR.
 
-The fitting/optimization is achieved via \code{\link{nlminb}} (Fox, 1997) a Newton based algorithm using the analytically derived gradient. In some cases (usually caused by a high number of zero cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
+The fitting/optimization is achieved via \code{\link{nlminb}} (Fox, 1997) a Newton based algorithm using the analytically derived gradient. In some cases (usually caused by empty cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
 
 \code{fit.mpt} is just a comfortable wrapper around the workhorse \code{\link{fit.mptinr}}. \code{fit.mpt} produces the appropriate objective function, gradient function, hessian function, and prediction function that are handed over to \code{fit.mptinr} (functions are produced by symbolical derivation, see \code{\link{D}}). A function similar to \code{fit.mpt} is \code{\link{fit.model}} which has the additional arguments \code{lower.bound} and \code{upper.bound} allowing to fit other models than just MPTs and the possibility to indicate whether or not to use the analytically derived gradient or hessian for fitting (here this is automatically handled). Note that for MPTs (where upper and lower bounds of parameters are set to 0 and 1, respectively) \code{fit.mpt} is probably faster as the objective function is slightly faster (i.e., more optimized). However, for datasets with many empty cells trying \code{\link{fit.model}} with or without gradient or hessian can be worth a try.
 

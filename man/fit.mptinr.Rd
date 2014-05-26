@@ -31,6 +31,7 @@ fit.mptinr(
 	restrictions = NULL,	
 	multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2,
 	control = list(),
+    numDeriv = TRUE,
 	...
 )
 }
@@ -115,6 +116,9 @@ Scalar. Only relevant if \code{multicore} is not \code{"none"} and \code{sfInit}
   \item{control}{
 list containing control arguments passed on to \code{\link{nlminb}}. See there.
 }
+  \item{numDeriv}{
+logical. Should the Hessian matrix of the maximum likelihood estimates be estimated numerically using \code{numDeriv::hessian} in case it cannot be estimated analytically? This can be extremely time and memory consuming for larger models. Default is TRUE.
+  }
   \item{...}{
 arguments passed on to the objective function, the gradient function, the hessian function and the prediction function.
 }
@@ -172,12 +176,12 @@ If \code{n.optim} > 1, the \code{\link{summary}} of the vector (matrix for multi
 
 When \code{output == "full"} the list contains the additional items:\cr
 \item{optim.runs}{A list (or list of lists for multiple datasets) containing the outputs from all runs by \code{nlminb} (including those runs produced when fitting did not converge)}
-\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the succesful runs)}
+\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the successful runs)}
 \item{hessian}{A list  containing the Hessian matrix or matrices of the final parameter estimates.}
 
 }
 \note{
-Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge succesfully}).\cr
+Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge successfully}).\cr
 In these cases it is recommended to rerun the model to check if the results are stable.
 }
 \references{

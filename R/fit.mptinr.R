@@ -1,5 +1,5 @@
 
-fit.mptinr <- function(data, objective, param.names, categories.per.type, gradient = NULL, use.gradient = TRUE, hessian = NULL, use.hessian = FALSE, prediction = NULL, n.optim = 5, fia.df = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, use.restrictions = FALSE, orig.params = NULL, restrictions = NULL, multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list(), ...) {
+fit.mptinr <- function(data, objective, param.names, categories.per.type, gradient = NULL, use.gradient = TRUE, hessian = NULL, use.hessian = FALSE, prediction = NULL, n.optim = 5, fia.df = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, use.restrictions = FALSE, orig.params = NULL, restrictions = NULL, multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list(), numDeriv = TRUE, ...) {
 	
 	if (multicore[1] != "none" & sfInit) {
 		require(snowfall)
@@ -336,7 +336,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	
 	if (use.gradient & counter.fit.anew > 1) {
 		mapping.fit.anew <- mapping.fit.anew[seq_len(counter.fit.anew-1)]
-		new.fits <- suppressWarnings(fit.mptinr(data[mapping.fit.anew,,drop = FALSE], objective = objective, param.names = param.names, categories.per.type = categories.per.type, gradient = gradient, use.gradient = FALSE, hessian = hessian, use.hessian = FALSE, prediction = prediction, n.optim = n.optim, fia.df = NULL, ci = ci, starting.values = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, output = "full", sort.param = sort.param, show.messages = FALSE, use.restrictions = use.restrictions, orig.params = orig.params, restrictions = restrictions, multicore = multicore, sfInit = FALSE, nCPU = 2, control = control, ...))
+		new.fits <- suppressWarnings(fit.mptinr(data[mapping.fit.anew,,drop = FALSE], objective = objective, param.names = param.names, categories.per.type = categories.per.type, gradient = gradient, use.gradient = FALSE, hessian = hessian, use.hessian = FALSE, prediction = prediction, n.optim = n.optim, fia.df = NULL, ci = ci, starting.values = starting.values, lower.bound = lower.bound, upper.bound = upper.bound, output = "full", sort.param = sort.param, show.messages = FALSE, use.restrictions = use.restrictions, orig.params = orig.params, restrictions = restrictions, multicore = multicore, sfInit = FALSE, nCPU = 2, control = control, numDeriv = numDeriv, ...))
 		if (length(mapping.fit.anew) > 1) {
 			for (c.n in seq_along(mapping.fit.anew)) {
 				optim.runs[[mapping.fit.anew[c.n]]] <- c(optim.runs[[mapping.fit.anew[c.n]]], new.fits[["optim.runs"]][["individual"]][[c.n]])
@@ -398,11 +398,13 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
 		if (!is.null(hessian)) hessian.list[[c]] <- tryCatch(do.call(hessian, args  = list(minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... )), error = function(e) NA)
 		else {
-            message("Note: CIs are based on the numerically estimated Hessian matrix")
-            hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+            if (numDeriv) {
+                message("Note: CIs are based on the numerically estimated Hessian matrix")
+                hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+            } else hessian.list[[c]] <- NA
         }
 	}
-    if (all(vapply(hessian.list, function(x) all(is.na(x)), NA))) {
+    if (numDeriv && all(vapply(hessian.list, function(x) all(is.na(x)), NA))) {
         message("Note: CIs are based on the numerically estimated Hessian matrix")
         for (c in 1:n.data) {
             for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
@@ -436,8 +438,9 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			
 			for (d in seq_along(data.pooled)) assign(paste("hank.data.", d, sep = ""), data.pooled[d], envir = tmpllk.env)
 			if (!is.null(hessian)) hessian.pooled <- tryCatch(do.call(hessian, args  = list(res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... )), error = function(e) NA)
-			else hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
-			if (all(is.na(hessian.pooled))) hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+			else if (numDeriv) hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
+            else hessian.pooled <- NA
+			if (numDeriv && all(is.na(hessian.pooled))) hessian.pooled <- tryCatch(numDeriv::hessian(func = objective, x = res.optim.pooled[["minim"]][[1]][["par"]], upper.bound = upper.bound, lower.bound = lower.bound, data = data.pooled, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
 			inv.hessian <- tryCatch(solve(hessian.pooled), error = function(e) NA)
 			if (!is.null(fia)) fia.agg <- fia.agg.tmp
 			goodness.of.fit <- c(goodness.of.fit, aggregated = list(get.goodness.of.fit(res.optim.pooled[["minim"]], data.pooled, dgf, n.params, 1, categories.per.type = categories.per.type)))

@@ -1,8 +1,26 @@
 
                     **************************
+                    ** MPTinR VERSION 1.5.x **
+                    **************************
+                    Changes in MPTinR Version 1.5.x
+                    Released XXX 2014
+
+    Significant User Visible Changes and new Features
+    
+    o   added numDeriv argument to fit functions (fit.mpt, fit.model, &
+        fit.mptinr) which allows to deactivate numerical estimation of 
+        hessian (for calculation of CIs) as it may be extremely time 
+        consuming.
+    
+    Bugfixes
+    
+    o   
+    
+    
+                    **************************
                     ** MPTinR VERSION 1.4.x **
                     **************************
-                    Changes in MPTinR Version 1.3.x
+                    Changes in MPTinR Version 1.4.x
                     Released May 2014
 
     Significant User Visible Changes and new Features
