@@ -5,6 +5,8 @@ fit.mpt.old <- function(data, model.filename, restrictions.filename = NULL, n.op
 	if (multicore[1] != "none" & sfInit) {
 		require(snowfall)
 		sfInit( parallel=TRUE, cpus=nCPU )
+	} else if (multicore[1] != "none") {
+    if (!require(snowfall)) stop("multicore needs snowfall")
 	}
 	
 	llk.tree <- function(Q, unlist.tree, data, param.names, length.param.names){
@@ -40,7 +42,7 @@ fit.mpt.old <- function(data, model.filename, restrictions.filename = NULL, n.op
 			optim(start.params, llk.tree, unlist.tree = tree, data = data, param.names = param.names, length.param.names = n.params, method = method, lower = 0, upper = 1, hessian = TRUE)
 		}
 		if (multicore[1] == "n.optim") {
-			out <- sfLapply(1:n.optim, mpt.optim, start.params = start.params, llk.tree = llk.tree, tree = tree, data = data, param.names = param.names, n.params = n.params, method = method)
+			out <- snowfall::sfLapply(1:n.optim, mpt.optim, start.params = start.params, llk.tree = llk.tree, tree = tree, data = data, param.names = param.names, n.params = n.params, method = method)
 		} else out <- lapply(1:n.optim, mpt.optim, start.params = start.params, llk.tree = llk.tree, tree = tree, data = data, param.names = param.names, n.params = n.params, method = method)
 		return(out)
 	}
@@ -52,7 +54,7 @@ fit.mpt.old <- function(data, model.filename, restrictions.filename = NULL, n.op
 		llks <- array(NA, dim=c(n.data, n.optim))
 		
 		if (multicore[1] == "individual") {
-			 optim.runs <- sfLapply(data.new, optim.tree, tree = unlist(tree), llk.tree = llk.tree, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params)
+			 optim.runs <- snowfall::sfLapply(data.new, optim.tree, tree = unlist(tree), llk.tree = llk.tree, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params)
 		} else optim.runs <- lapply(data.new, optim.tree, tree = unlist(tree), llk.tree = llk.tree, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params)
 		
 		for (c.outer in 1:n.data) {
@@ -372,7 +374,7 @@ fit.mpt.old <- function(data, model.filename, restrictions.filename = NULL, n.op
 	if (output[1] == "fia" | (output[1] == "full" & !is.null(fia))) outlist <- c(outlist, FIA = list(fia.df))
 	if (output[1] == "full") outlist <- c(outlist, optim.runs = list(optim.runs))
 	
-	if (multicore[1] != "none" & sfInit) sfStop()
+	if (multicore[1] != "none" & sfInit) snowfall::sfStop()
 	return(outlist)
 }
 

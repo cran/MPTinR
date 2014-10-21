@@ -4,6 +4,8 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	if (multicore[1] != "none" & sfInit) {
 		require(snowfall)
 		sfInit( parallel=TRUE, cpus=nCPU )
+	} else if (multicore[1] != "none") {
+	  if (!require(snowfall)) stop("multicore needs snowfall")
 	}
 	
 	n.items.per.type <- function(categories.per.type, data) {
@@ -44,7 +46,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		}
 		for (d in seq_along(data)) assign(paste("hank.data.", d, sep = ""), data[d], envir = tmp.env)
 		if (multicore[1] == "n.optim") {
-			out <- sfClusterApplyLB(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
+			out <- snowfall::sfClusterApplyLB(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		} else out <- lapply(1:n.optim, wrapper.nlminb, data = data, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		return(out)
 	}
@@ -56,7 +58,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		llks <- array(NA, dim=c(n.data, n.optim))
 		
 		if (multicore[1] == "individual" & length(data.new) > 1) {
-			 optim.runs <- sfClusterApplyLB(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
+			 optim.runs <- snowfall::sfClusterApplyLB(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		} else optim.runs <- lapply(data.new, optim.tree, objective = objective, gradient = gradient, use.gradient = use.gradient, hessian = hessian, use.hessian = use.hessian, tmp.env = tmp.env, param.names = param.names, n.params = n.params, n.optim = n.optim, start.params = start.params, lower.bound = lower.bound, upper.bound = upper.bound, control = control, ...)
 		
 		for (c.outer in 1:n.data) {
@@ -487,7 +489,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	if (output[1] == "fia" | (output[1] == "full" & !is.null(fia))) outlist <- c(outlist, FIA = list(fia.df))
 	if (output[1] == "full") outlist <- c(outlist, optim.runs = list(optim.runs), best.fits = list(best.fits), hessian = list(hessian.list))
 	
-	if (multicore[1] != "none" & sfInit) sfStop()
+	if (multicore[1] != "none" & sfInit) snowfall::sfStop()
 	return(outlist)
 }
 

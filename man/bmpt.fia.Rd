@@ -91,7 +91,7 @@ N = 400;
 
 Since MPTinR version 1.1.3 the Monte Carlo integration is performed in C++ using \pkg{RcppEigen}. With the default arguments, one instance of the C++ workhorse is called. To call multiple instances of the C++ workhorse, you can use the \code{split} argument (which can be useful to replicate results obtained with \code{multicore = TRUE} as described below). Note, that each time before calling the C++ code, the seed is set (the set of random seeds are generated before calling the function for the first time).
 
-Multicore functionality is achieved via \pkg{snowfall} which needs to be loaded and a cluster initalized via \code{\link[snowfall]{sfInit}} when setting \code{multicore = TRUE}. When \code{split = NULL} (the default), the \code{Samples} will be evenly distributed on the different cores (using \code{\link[snowfall]{sfClusterSplit}}), so that only one instance of the underlying C++ workhorse is called on each core. Setting \code{split} to non-\code{NULL} will produce as many instances (distributed across cores). Note that in order to obtain comparable results (as snowfall uses load balancing), the random seed is set (at each core) before calling each instance of the C++ workhorse. This allows to replicate results obtained via multicore in a non-multicore environment when seting \code{split} appropriately (and \code{set.seed} beforehands).
+Multicore functionality is achieved via \pkg{snowfall} which needs to be loaded and a cluster initialized via \code{\link[snowfall]{sfInit}} when setting \code{multicore = TRUE}. When \code{split = NULL} (the default), the \code{Samples} will be evenly distributed on the different cores (using \code{\link[snowfall]{sfClusterSplit}}), so that only one instance of the underlying C++ workhorse is called on each core. Setting \code{split} to non-\code{NULL} will produce as many instances (distributed across cores). Note that in order to obtain comparable results (as snowfall uses load balancing), the random seed is set (at each core) before calling each instance of the C++ workhorse. This allows to replicate results obtained via multicore in a non-multicore environment when seting \code{split} appropriately (and \code{set.seed} beforehands).
 }
 \value{
 [A named vector:]
@@ -127,7 +127,7 @@ The R version of the code should now (after moving the code to RcppEigen) be con
 \dontrun{
 # The following example is the code for the first example in Wu, Myung & Batchelder (2010a, pp. 280)
 # The result should be something like: CFIA = 12.61... or 12.62..., CI = 12.61... - 12.62....
-# Executing this comand can take a while.
+# Executing this command can take a while.
 
 bmpt.fia(s = "ppppCpCCppCCCppCpCCppCCCppCCC", 
 	parameters = c(-0.5, -0.5, 3, 2, 5, 1, 5, 4, 2, 5, 1, 5, 1, 5), 

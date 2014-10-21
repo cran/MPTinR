@@ -3,4 +3,5 @@ useDynLib(MPTinR)
 
 importFrom("numDeriv", hessian)
 importFrom("Brobdingnag", as.brob)
+#importFrom("snowfall", sfClusterSplit, sfLibrary, sfClusterApplyLB, sfLapply, sfStop)
 import(Rcpp)

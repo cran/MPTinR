@@ -53,16 +53,16 @@ numeric vector indicating how many response categories each item type has.
 the gradient function used for fitting. Needs to return a vector of same length as \code{param.names}.
 }
   \item{use.gradient}{
-logical. indicating whether or not \code{gradient} ahouls be used for fitting. Default is \code{TRUE}
+logical. indicating whether or not \code{gradient} should be used for fitting. Default is \code{TRUE}
 }
   \item{hessian}{
 the Hessian function used for fitting. Needs to return a matrix with \code{dim = c(length(param.names), length(param.names)}.
 }
   \item{use.hessian}{
-logical. indicating whether or not \code{hessian} ahouls be used for fitting. Default is \code{FALSE}
+logical. indicating whether or not \code{hessian} should be used for fitting. Default is \code{FALSE}
 }
 \item{prediction}{
-the prediction function. Needs to return a vector of equal length as the response catgeories or data. Needs to return probabilities!
+the prediction function. Needs to return a vector of equal length as the response categories or data. Needs to return probabilities!
 }
   \item{n.optim}{
 Number of optimization runs. Can be parallelized via \code{multicore}. Default is 5. 
@@ -89,7 +89,7 @@ If "full" \code{fit.mpt} will additionally return the return values of \code{\li
 logical. Only relevant for multiple datasets (i.e., \code{matrix} or \code{data.frame}). Should the aggregated dataset (i.e., data summed over rows) be additionally fitted? Default (\code{TRUE}) fits the aggregated data. 
 }
 \item{sort.param}{
-Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the nonrestricted ones, followed by the restricted parameters. Default is TRUE.
+Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the non-restricted ones, followed by the restricted parameters. Default is TRUE.
 }
     \item{show.messages}{
 Logical. If TRUE the time the fitting algorithms takes is printed to the console.
@@ -131,12 +131,12 @@ The only mandatory arguments are: \code{data}, \code{objective}, \code{param.nam
 
 The \code{objective} (and \code{gradient} and \code{hessian}) function need to take as the first argument a numerical vector of \code{length(param.names)} representing the parameters. The other mandatory arguments for these functions are:\cr
 \code{data}: A vector containing the data for the dataset being fitted.\cr
-\code{param.names}: The character vector containing the paramater names is handed over to the objective.\cr
+\code{param.names}: The character vector containing the parameter names is handed over to the objective.\cr
 \code{n.params}: = \code{length(param.names)}. To speed up computation the number of parameters is also handed over to the objective on each iteration.\cr
-\code{tmp.env}: A \code{\link{environment}} (created with \code{new.env}). The objective function produced by \code{fit.mpt} assign the paramater values into this environment using the following statement:\cr
+\code{tmp.env}: A \code{\link{environment}} (created with \code{new.env}). The objective function produced by \code{fit.mpt} assign the parameter values into this environment using the following statement:\cr
 \code{for (i in seq_len(n.params))  assign(param.names[i],Q[i], envir = tmp.env)}\cr
-Furthermore, \code{fit.mptinr} assigns the data points before fitting each dataset into \code{tmp.env} with the variables names \code{hank.data.x} where \code{x} is the ordinal number of that datapoint (i.e., position or column). In other words, you can use \code{tmp.env} to \code{\link{eval}} you model within this environment and access both parameters and data in it. \cr
-\code{lower.bound} and \code{upper.bound}: both \code{lower.bound} and \code{upper.bound} will be passed on to the user-supplied functions as when nlminb fits without \code{gradient} it can try to use paramater values outside the bounds. This can be controlled with these arguments isnide the objective function.
+Furthermore, \code{fit.mptinr} assigns the data points before fitting each dataset into \code{tmp.env} with the variables names \code{hank.data.x} where \code{x} is the ordinal number of that data point (i.e., position or column). In other words, you can use \code{tmp.env} to \code{\link{eval}} you model within this environment and access both parameters and data in it. \cr
+\code{lower.bound} and \code{upper.bound}: both \code{lower.bound} and \code{upper.bound} will be passed on to the user-supplied functions as when nlminb fits without \code{gradient} it can try to use parameter values outside the bounds. This can be controlled with these arguments isnide the objective function.
 
 Furthermore, note that all arguments passed via \code{...} will be passed to \code{objective}, \code{gradient}, and \code{hessian}. And that these three functions need to take the same arguments. Furthermore \code{gradient} must return a vector as long as \code{param.names} and \code{hessian} must return a square matrix of order \code{length(param.names}). See \code{\link{nlminb}} for (slightly) more info.
 
@@ -160,7 +160,7 @@ Note that you need to \emph{close} snowfall via \code{sfStop()} after using MPTi
 For individual fits (i.e., \code{data} is a \code{vector}) a \code{list} containing one or more of the following components from the best fitting model:
 \item{goodness.of.fit}{A \code{data.frame} containing the goodness of fit values for the model. \code{Log.Likelihood} is the Log-Likelihood value. \code{G.Squared}, \code{df}, and \code{p.value} are the \eqn{G^2}{G^2} goodness of fit statistic.}
 \item{information.criteria}{A \code{data.frame} containing model information criteria based on the \eqn{G^2}{G^2} value. The FIA values(s) are presented if \code{fia} is not \code{NULL}.}
-\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the paramater estimates lies on the bound of the paramater space (i.e., 0 or 1).}
+\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the parameter estimates lies on the bound of the parameter space (i.e., 0 or 1).}
 \item{parameters}{A data.frame containing the parameter estimates and corresponding confidence intervals. If a restriction file was present, the restricted parameters are marked.}
 \item{data}{A \code{list} of two matrices; the first one (\code{observed}) contains the entered data, the second one (\code{predicted}) contains the predicted values.}
 

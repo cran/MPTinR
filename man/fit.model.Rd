@@ -63,7 +63,7 @@ If "full" \code{fit.mpt} will additionally return the return values of \code{\li
 Logical. Only relevant for multiple datasets (i.e., \code{matrix} or \code{data.frame}). Should the aggregated dataset (i.e., data summed over rows) be fitted? Default (\code{TRUE}) fits the aggregated data. 
 }
 \item{sort.param}{
-Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the nonrestricted ones, followed by the restricted parameters. Default is TRUE.
+Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the non-restricted ones, followed by the restricted parameters. Default is TRUE.
 }
   \item{show.messages}{
 Logical. If TRUE the time the fitting algorithms takes is printed to the console.
@@ -142,7 +142,7 @@ Note that you should \emph{close} snowfall via \code{sfStop()} after using MPTin
 For individual fits (i.e., \code{data} is a \code{vector}) a \code{list} containing one or more of the following components from the best fitting model:
 \item{goodness.of.fit}{A \code{data.frame} containing the goodness of fit values for the model. \code{Log.Likelihood} is the Log-Likelihood value. \code{G.Squared}, \code{df}, and \code{p.value} are the \eqn{G^2}{G^2} goodness of fit statistic.}
 \item{information.criteria}{A \code{data.frame} containing model information criteria based on the \eqn{G^2}{G^2} value. The FIA values(s) are presented if \code{fia} is not \code{NULL}.}
-\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the paramater estimates lies on the bound of the paramater space (i.e., 0 or 1).}
+\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the parameter estimates lies on the bound of the parameter space (i.e., 0 or 1).}
 \item{parameters}{A data.frame containing the parameter estimates and corresponding confidence intervals. If a restriction file was present, the restricted parameters are marked.}
 \item{data}{A \code{list} of two matrices; the first one (\code{observed}) contains the entered data, the second one (\code{predicted}) contains the predicted values.}
 
@@ -158,11 +158,11 @@ If \code{n.optim} > 1, the \code{\link{summary}} of the vector (matrix for multi
 
 When \code{output == "full"} the list contains the additional items:\cr
 \item{optim.runs}{A list (or list of lists for multiple datasets) containing the outputs from all runs by \code{nlminb} (including those runs produced when fitting did not converge)}
-\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the succesful runs)}
+\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the successful runs)}
 \item{hessian}{A list  containing the Hessian matrix or matrices of the final parameter estimates.}
 }
 \note{
-Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge succesfully}).\cr
+Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge successfully}).\cr
 In these cases it is recommended to rerun the model fitting to check if the results are stable.
 
 The likelihood returned does not include the factorial constants of the multinomial probability-mass functions.

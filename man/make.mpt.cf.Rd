@@ -2,10 +2,10 @@
 \alias{make.mpt.cf}
 \alias{lbmpt.to.mpt}
 \title{
-Functions to transfom MPT models.
+Functions to transform MPT models.
 }
 \description{
-(Helper) functions that takes an MPT model file and transforms it into a representation in the context-free language of MPT models L-BMPT (Purdy & Batchelder, 2009) or takes the represetation in LBMPT and returns the model equations.
+(Helper) functions that takes an MPT model file and transforms it into a representation in the context-free language of MPT models L-BMPT (Purdy & Batchelder, 2009) or takes the representation in LBMPT and returns the model equations.
 }
 
 \usage{
@@ -43,7 +43,7 @@ Purdy and Batchelder (2009) provide a new way of how binary multinomial processi
 
 There are three important things to know about this function:
 
-1. L-BMPT distinguishes between observable categories (C) and parameters (theta). As MPTinR allows parameters to have any name that is legal for a variable in R (with the only restriction that parameters should NOT start with \code{hank}) the L-BMPT representation of the model's parameters can also consist of any name that is a legal variable name in R. To distinguish parameters from categories, categories are represented as integers (i.e., numbers) (a number is not a legal variable name in R). Furthermore, as legal variable names may end with a number, concatenating parameters and categories into one string could lead to an ambigous representation of the model. Therefore, the returned representation in L-BMPT is a character vector with each element representing either a parameter (any legal variable name in R) or a category (an integer).\cr
+1. L-BMPT distinguishes between observable categories (C) and parameters (theta). As MPTinR allows parameters to have any name that is legal for a variable in R (with the only restriction that parameters should NOT start with \code{hank}) the L-BMPT representation of the model's parameters can also consist of any name that is a legal variable name in R. To distinguish parameters from categories, categories are represented as integers (i.e., numbers) (a number is not a legal variable name in R). Furthermore, as legal variable names may end with a number, concatenating parameters and categories into one string could lead to an ambiguous representation of the model. Therefore, the returned representation in L-BMPT is a character vector with each element representing either a parameter (any legal variable name in R) or a category (an integer).\cr
 Theta: Names that are legal variable names in R.\cr
 C: Integers.
 

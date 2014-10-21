@@ -1,9 +1,43 @@
 
                     **************************
+                    ** MPTinR VERSION 1.6.x **
+                    **************************
+                    Changes in MPTinR Version 1.6.x
+                    Released October 2014
+
+    Significant User Visible Changes and new Features
+    
+    o   numDeriv is now only imported and not attached.
+	
+	o	names for models passed to select.mpt are now automatically 
+		determined via match.call().
+		
+	o	changed the maintainer email address.
+    
+    Bugfixes
+    
+    o	C++ code now uses Rcpp attributes.
+
+	o	A bug prohibiting computation of FIA for models without 
+		inequality restrictions and with DEBUG flags enabled when 
+		compiling should now be resolved. The computation causing it is
+		skipped when no inequalities are present.
+	
+	o   calculating FIA via fit.model did not work for individual data  
+		sets.
+		
+	o	get.mpt.fia: added examples outside dontrun{} blocks running 
+		simple fia tests, with and without inequalities.
+		
+	o	all calls to snowfall prefaced with snowfall:: to avoid CRAN 
+		NOTEs.
+    
+
+                    **************************
                     ** MPTinR VERSION 1.5.x **
                     **************************
                     Changes in MPTinR Version 1.5.x
-                    Released XXX 2014
+                    Released August 2014
 
     Significant User Visible Changes and new Features
     

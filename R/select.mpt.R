@@ -42,8 +42,11 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 			}
 		} else stop("problem with data object of mpt.results")
 	}
-	if (!is.null(names(mpt.results))) m.names <- names(mpt.results)
-	else m.names <- 1:n.models
+	#browser()
+  mc <- match.call()
+  
+  if (!is.null(names(mpt.results))) m.names <- names(mpt.results)
+	else m.names <- all.vars(mc[[2]])
 	
 	if (n.data == 1) {
 		c.fia <- sapply(mpt.results, function(x) any(grepl("^FIA$", colnames(x[["information.criteria"]]))))

@@ -1,12 +1,12 @@
 
 .oneSample <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq) {
   set.seed(seed[index])
-  .Call("determinant", Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], PACKAGE = "MPTinR")
+  .determinant(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index])
 }
 
 .oneSample_c <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq, mConst) {
   set.seed(seed[index])
-  .Call("determinant_c", Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], mConst, PACKAGE = "MPTinR")
+  .determinant_c(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], mConst)
 }
 
 bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, multicore = FALSE, split = NULL, mConst = NULL) {
@@ -150,8 +150,8 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, m
     subsamples <- rep(ceiling(Sample/split), split)
     seeds <- runif(split) * 10e7
   } else {
-    if (multicore) {
-      subsamples <- vapply(sfClusterSplit(1:Sample), length, 0)
+    if (multicore & require(snowfall)) {
+      subsamples <- vapply(snowfall::sfClusterSplit(1:Sample), length, 0)
       seeds <- runif(length(subsamples)) * 10e7
     } else {
       subsamples <- Sample
@@ -159,12 +159,12 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, m
     }
   }
   #browser()
-  if (isTRUE(multicore)) {
-    sfLibrary("MPTinR", character.only = TRUE)
-    if (is.null(mConst)) tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples)  
+  if (multicore) {
+    snowfall::sfLibrary("MPTinR", character.only = TRUE)
+    if (is.null(mConst)) tmp.dat <- snowfall::sfClusterApplyLB(1:length(seeds),.oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples)  
     else {
       storage.mode(mConst) <- "integer"
-      tmp.dat <- sfClusterApplyLB(1:length(seeds),.oneSample_c, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples, mConst = mConst)
+      tmp.dat <- snowfall::sfClusterApplyLB(1:length(seeds),.oneSample_c, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples, mConst = mConst)
     }
   } else 
     if (is.null(mConst)) tmp.dat <- lapply(1:length(seeds), .oneSample, Sx = S, Mx = M, Ax = A, Bx = B, cx = c, pattern = pattern, Ineq = Ineq, seed = seeds, subsample = subsamples) 

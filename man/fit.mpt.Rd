@@ -59,7 +59,7 @@ If "fia", \code{fit.mpt} will additionally return the results from \code{\link{g
 Logical. Only relevant for multiple datasets (i.e., \code{matrix} or \code{data.frame}). Should the aggregated dataset (i.e., data summed over rows) be fitted? Default (\code{TRUE}) fits the aggregated data. 
 }
   \item{sort.param}{
-Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the nonrestricted ones, followed by the restricted parameters. Default is TRUE.
+Logical. If TRUE, parameters are alphabetically sorted in the parameter table. If FALSE, the first parameters in the parameter table are the non-restricted ones, followed by the restricted parameters. Default is TRUE.
 }
   \item{show.messages}{
 Logical. If TRUE the time the fitting algorithms takes is printed to the console.
@@ -130,7 +130,7 @@ Note that FIA can sometimes be non-consistent (i.e., larger FIA penalty values f
 Once again: If one wants to compute the FIA, it is \emph{absolutely necessary}, that the representation of the model via equations in the model file exactly maps on the structure of the binary MPT (see \code{\link{make.mpt.cf}} for more details).
 
 Confidence intervals (CI) are based on the observed Hessian matrix produced by the symbolically derived function for the Hessian (i.e., the second derivative of the likelihood function). If it is based on a numerically estimated Hessian, a warning will be given. \cr
-For inequality restricted parameters, the CIs are computed using the parameter estimates' variance bounds (see Baldi & Batchelder, 2003; especially Equation 19). Note that these bounds represent the "worst case scenario" variances, and can lead to CIs outside parameter boundaries if the set of inequalities is large and/or the variances for the reparameterized model are large (Note that CIs for nonrestricted parameters can be outside the parameter boundaries as well due to large variances).
+For inequality restricted parameters, the CIs are computed using the parameter estimates' variance bounds (see Baldi & Batchelder, 2003; especially Equation 19). Note that these bounds represent the "worst case scenario" variances, and can lead to CIs outside parameter boundaries if the set of inequalities is large and/or the variances for the reparameterized model are large (Note that CIs for non-restricted parameters can be outside the parameter boundaries as well due to large variances).
 
 To avoid local minima and instead find the maximum likelihood estimates it is useful to set \code{n.optim} > 1 with random starting values (see below). If \code{n.optim} > 1, the \code{\link{summary}} of the vector containing the Log-Likelihood values returned by each run of \code{nlminb} is added to the output (to check whether local minima were present). If the model is rather big, \code{n.optim} > 1 can be slow.
 
@@ -151,7 +151,7 @@ The old version of this function using \code{\link{optim}}'s L-BFGS-B algorithm 
 For individual fits (i.e., \code{data} is a \code{vector}) a \code{list} containing one or more of the following components from the best fitting model:
 \item{goodness.of.fit}{A \code{data.frame} containing the goodness of fit values for the model. \code{Log.Likelihood} is the Log-Likelihood value. \code{G.Squared}, \code{df}, and \code{p.value} are the \eqn{G^2}{G^2} goodness of fit statistic.}
 \item{information.criteria}{A \code{data.frame} containing model information criteria based on the \eqn{G^2}{G^2} value. The FIA values(s) are presented if \code{fia} is not \code{NULL}.}
-\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the paramater estimates lies on the bound of the paramater space (i.e., 0 or 1).}
+\item{model.info}{A \code{data.frame} containing other information about the model. If the rank of the Fisher matrix (\code{rank.fisher}) \emph{does not} correspond to the number of parameters in the model (\code{n.parameters}) this indicates a serious issue with the identifiability of the model. A common reason is that one of the parameter estimates lies on the bound of the parameter space (i.e., 0 or 1).}
 \item{parameters}{A data.frame containing the parameter estimates and corresponding confidence intervals. If a restriction file was present, the restricted parameters are marked.}
 \item{data}{A \code{list} of two matrices; the first one (\code{observed}) contains the entered data, the second one (\code{predicted}) contains the predicted values.}
 
@@ -167,11 +167,11 @@ If \code{n.optim} > 1, the \code{\link{summary}} of the vector (matrix for multi
 
 When \code{output == "full"} the list contains the additional items:\cr
 \item{optim.runs}{A list (or list of lists for multiple datasets) containing the outputs from all runs by \code{nlminb} (including those runs produced when fitting did not converge)}
-\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the succesful runs)}
+\item{best.fits}{A list (or list of lists for multiple datasets) containing the outputs from the runs by \code{nlminb} that had the lowest likelihood (i.e., the successful runs)}
 \item{hessian}{A list  containing the Hessian matrix or matrices of the final parameter estimates.}
 }
 \note{
-Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge succesfully}).\cr
+Warnings may relate to the optimization routine (e.g., \code{Optimization routine [...] did not converge successfully}).\cr
 In these cases it is recommended to rerun fit.mpt to check if the results are stable.
 }
 \references{
@@ -350,9 +350,9 @@ br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 200000)
 br.1htm.ineq.fia <- fit.mpt(d.broeder, m.2htm, ir.1htm, fia = 200000)
 
 # Model selection using the FIA
-(br.select <- select.mpt(list(orig.2htm = br.2htm.fia, orig.2htm.ineq = br.2htm.ineq.fia,
-    res.2htm = br.2htm.res.fia, res.2htm.ineq = br.2htm.res.ineq.fia, 
-    orig.1htm = br.1htm.fia, orig.1htm.ineq = br.1htm.ineq.fia)))
+(br.select <- select.mpt(list(br.2htm.fia, br.2htm.ineq.fia, br.2htm.res.fia, 
+                              br.2htm.res.ineq.fia, br.1htm.fia, br.1htm.ineq.fia)))
+                              
 # The same results, ordered by FIA
 br.select[order(br.select[,"delta.FIA.sum"]),]
 
@@ -362,9 +362,7 @@ br.select[order(br.select[,"delta.FIA.sum"]),]
 # Hence, one should use the aggregated data for this analysis (not shown here)! 
 
 # Compare this with the model selection not using FIA:
-select.mpt(list(orig.2htm = br.2htm, orig.2htm.ineq = br.2htm.ineq, 
-        res.2htm = br.2htm.res, res.2htm.ineq = br.2htm.res.ineq, 
-        orig.1htm = br.1htm, orig.1htm.ineq = br.1htm.ineq))
+select.mpt(list(br.2htm, br.2htm.ineq, br.2htm.res, br.2htm.res.ineq, br.1htm, br.1htm.ineq))
 
 # Only use the aggregated data:
 d.broeder.agg <- colSums(d.broeder)
@@ -372,8 +370,7 @@ br.2htm.agg <- fit.mpt(d.broeder.agg, m.2htm)
 br.2htm.res.agg <- fit.mpt(d.broeder.agg, m.2htm, r.2htm)
 br.1htm.agg <- fit.mpt(d.broeder.agg, m.2htm, r.1htm)
 
-select.mpt(list(orig.2htm = br.2htm.agg, res.2htm = br.2htm.res.agg, 
-    orig.1htm = br.1htm.agg), output = "full")
+select.mpt(list(br.2htm.agg, br.2htm.res.agg, br.1htm.agg), output = "full")
 
 
 # compare speed of no multicore versus multicore for multiple datasets:
