@@ -150,7 +150,7 @@ bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, m
     subsamples <- rep(ceiling(Sample/split), split)
     seeds <- runif(split) * 10e7
   } else {
-    if (multicore & require(snowfall)) {
+    if (multicore && eval(call("require", package = "snowfall", character.only = TRUE))) {
       subsamples <- vapply(snowfall::sfClusterSplit(1:Sample), length, 0)
       seeds <- runif(length(subsamples)) * 10e7
     } else {

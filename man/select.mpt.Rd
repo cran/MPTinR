@@ -55,6 +55,8 @@ Henrik Singmann
 }
 
 \note{
+As of March 2015 BIC and FIA are calculated anew if the results are displayed for multiple data sets as BIC and FIA cannot directly be summed across participants due to the \eqn{log(n)} terms in their formula (while AIC can be summed). Instead one first needs to sum the \eqn{G^2} values, \eqn{n}, and the number of parameters, and only then can BIC and FIA be calculated for those summed values.
+
 If any of the models is fitted with \code{fit.aggregated = FALSE} no aggregated results are presented.
 }
 
@@ -102,16 +104,19 @@ br.2htm.res.fia <- fit.mpt(d.broeder, m.2htm, r.2htm, fia = 50000, fit.aggregate
 br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 50000, fit.aggregated = FALSE)
 
 select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia))
-# This table shows, that the n is to small to correctly compute FIA for 
-# the 1htm model (as the penalty is bigger than for the 2htm)
+# This table shows that (in line with e.g., Klauer & Kellen, 2011) the restricted 2HTM has  
+# the smallest complexity followed by the 1HTM followed by the 2HTM.
 
 # using the new dataset argument
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
-	dataset = 4)
 
 select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
 	dataset = 1:10)
-
+    
+select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
+	dataset = 4)
+# Note that when only using one dataset FIA is no internally consistent. The 1HTM, which is
+# nested in the 2HTM, has a higher penalty than the 2HTM. This does not occur when looking
+# at the sum results though (see examples above). 
 }
 
 

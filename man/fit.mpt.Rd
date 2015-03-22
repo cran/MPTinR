@@ -138,7 +138,7 @@ To avoid local minima and instead find the maximum likelihood estimates it is us
 Multicore fitting is achieved via the \code{snowfall} package and needs to be initialized via \code{sfInit}. As initialization needs some time, you can either initialize multicore facilities yourself using \code{sfInit()} and setting the \code{sfInit} argument to \code{FALSE} (the default) or let MPTinR initialize multicore facilities by setting the \code{sfInit} argument to \code{TRUE}. The former is recommended as initializing \code{snowfall} takes some time and only needs to be done once if you run \code{fit.mpt} multiple times. If there are any problems with multicore fitting, first try to initialize \code{snowfall} outside MPTinR (e.g., \code{sfInit( parallel=TRUE, cpus=2 )}). If this does not work, the problem is not related to MPTinR but to snowfall (for support and references visit: \url{http://www.imbi.uni-freiburg.de/parallel/}).\cr
 Note that you should  \emph{close} snowfall via \code{sfStop()} after using MPTinR.
 
-The fitting/optimization is achieved via \code{\link{nlminb}} (Fox, 1997) a Newton based algorithm using the analytically derived gradient. In some cases (usually caused by empty cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
+The fitting/optimization is achieved via \code{\link{nlminb}} (Fox, Hall, & Schryer, 1978) a Newton based algorithm using the analytically derived gradient. In some cases (e.g., in case of empty cells) \code{nlminb} will not converge successfully in which \code{fit.mpt} will retry fitting using a numerically estimated gradient (with warning). 
 
 \code{fit.mpt} is just a comfortable wrapper around the workhorse \code{\link{fit.mptinr}}. \code{fit.mpt} produces the appropriate objective function, gradient function, hessian function, and prediction function that are handed over to \code{fit.mptinr} (functions are produced by symbolical derivation, see \code{\link{D}}). A function similar to \code{fit.mpt} is \code{\link{fit.model}} which has the additional arguments \code{lower.bound} and \code{upper.bound} allowing to fit other models than just MPTs and the possibility to indicate whether or not to use the analytically derived gradient or hessian for fitting (here this is automatically handled). Note that for MPTs (where upper and lower bounds of parameters are set to 0 and 1, respectively) \code{fit.mpt} is probably faster as the objective function is slightly faster (i.e., more optimized). However, for datasets with many empty cells trying \code{\link{fit.model}} with or without gradient or hessian can be worth a try.
 
@@ -181,7 +181,7 @@ Broeder, A., & Schuetz, J. (2009). Recognition ROCs are curvilinear-or are they?
 
 Byrd, R. H., Lu, P., Nocedal, J., & Zhu, C. (1995). A limited memory algorithm for bound constrained optimization. \emph{SIAM J. Scientific Computing}, 16, 1190-1208.
 
-Fox P (1997). \emph{The Port Mathematical Subroutine Library, Version 3}. AT&T Bell Laboratories, Murray Hill, NJ. URL \url{http://www.bell-labs.com/project/PORT/}.
+Fox, P. A., Hall, A. P., & Schryer, N. L. (1978). The PORT Mathematical Subroutine Library. \emph{CM Trans. Math. Softw.}, 4, 104-126. \url{http://doi.acm.org/10.1145/355780.355783}
 
 Knapp, B. R., & Batchelder, W. H. (2004). Representing parametric order constraints in multi-trial applications of multinomial processing tree models. \emph{Journal of Mathematical Psychology}, 48, 215-229.
 

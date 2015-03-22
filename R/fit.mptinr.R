@@ -2,10 +2,11 @@
 fit.mptinr <- function(data, objective, param.names, categories.per.type, gradient = NULL, use.gradient = TRUE, hessian = NULL, use.hessian = FALSE, prediction = NULL, n.optim = 5, fia.df = NULL, ci = 95, starting.values = NULL, lower.bound = 0, upper.bound = 1, output = c("standard", "fia", "full"), fit.aggregated = TRUE, sort.param = TRUE, show.messages = TRUE, use.restrictions = FALSE, orig.params = NULL, restrictions = NULL, multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2, control = list(), numDeriv = TRUE, ...) {
 	
 	if (multicore[1] != "none" & sfInit) {
-		require(snowfall)
+		eval(call("require", package = "snowfall", character.only = TRUE))
+        #require(snowfall)
 		sfInit( parallel=TRUE, cpus=nCPU )
 	} else if (multicore[1] != "none") {
-	  if (!require(snowfall)) stop("multicore needs snowfall")
+	  if (!eval(call("require", package = "snowfall", character.only = TRUE))) stop("multicore needs snowfall")
 	}
 	
 	n.items.per.type <- function(categories.per.type, data) {
@@ -261,7 +262,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 				multiFit <- TRUE
 			} else stop("data is neither vector, nor matrix, nor data.frame!")
 	
-	if (ci != 95) message(paste("Confidence intervals represent ", ci, "% intervals.", sep = ""))
+	if (ci != 95 && show.messages) message(paste("Confidence intervals represent ", ci, "% intervals.", sep = ""))
 	
 	n.params <- length(param.names)
 	length.param.names <- length(param.names)
@@ -370,14 +371,16 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 			warning(paste("Optimization routine for dataset(s) ", not.converged[not.converged != 0], " did not converge succesfully.
   Error code(s): ", sort(unique(vapply(minim, "[[", 0, i = "convergence")))[-1], ". Try use.gradient == TRUE or use output = 'full' for more information.", sep =""))
 		} else {
-			message(paste("Optimization routine for dataset(s) ", paste(not.converged[not.converged != 0], collapse = " "), "
+      if (show.messages) {
+  			message(paste("Optimization routine for dataset(s) ", paste(not.converged[not.converged != 0], collapse = " "), "
   did not converge succesfully. Tried again with use.gradient == FALSE.", sep =""))
-			if (sum(better.approx) != 0) message(paste("Optimization for dataset(s) ", paste(better.approx[better.approx != 0], collapse = " "), "
+	  		if (sum(better.approx) != 0) message(paste("Optimization for dataset(s) ", paste(better.approx[better.approx != 0], collapse = " "), "
   using numerically estimated gradients produced better results. Using those results.
   Old results saved in output == 'full' [['optim.runs']].", sep =""))
-			if (sum(better.analytic) != 0) message(paste("Optimization for dataset(s) ", paste(better.analytic[better.analytic != 0], collapse = " "), "
+		  	if (sum(better.analytic) != 0) message(paste("Optimization for dataset(s) ", paste(better.analytic[better.analytic != 0], collapse = " "), "
   using numerical estimated gradients did NOT produce better results.
   Keeping original results. Use output = 'full' for more details.", sep =""))
+      }
 			if (sum(error.codes) != 0) {
 				warning(paste("Error code(s) in final results: ", paste(sort(unique(error.codes)), collapse = " "),  ". The following dataset(s) did not converge succesfully in the best fitting optimization run:
 ", paste(which(error.codes != 0), collapse = " "), sep =""))
@@ -394,20 +397,20 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	
 	hessian.list <- vector("list", n.data)
 	
-	if (is.null(hessian)) message("No function for computing Hessian Matrix specified or it failed. Hessian Matrix is estimated numerically. Validity of CIs is questionable.")
+	if (is.null(hessian) & show.messages) message("No function for computing Hessian Matrix specified or it failed. Hessian Matrix is estimated numerically. Validity of CIs is questionable.")
 	
 	for (c in 1:n.data) {
 		for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
 		if (!is.null(hessian)) hessian.list[[c]] <- tryCatch(do.call(hessian, args  = list(minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... )), error = function(e) NA)
 		else {
             if (numDeriv) {
-                message("Note: CIs are based on the numerically estimated Hessian matrix")
+              if (show.messages) message("Note: CIs are based on the numerically estimated Hessian matrix")
                 hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
             } else hessian.list[[c]] <- NA
         }
 	}
     if (numDeriv && all(vapply(hessian.list, function(x) all(is.na(x)), NA))) {
-        message("Note: CIs are based on the numerically estimated Hessian matrix")
+      if (show.messages) message("Note: CIs are based on the numerically estimated Hessian matrix")
         for (c in 1:n.data) {
             for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
             hessian.list[[c]] <- tryCatch(numDeriv::hessian(func = objective, x = minim[[c]][["par"]], data = data[c,], upper.bound = upper.bound, lower.bound = lower.bound, param.names = param.names, n.params = length.param.names, tmp.env = tmpllk.env, ... ), error = function(e) NA)
@@ -430,8 +433,16 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 		summed.goodness.of.fit <- data.frame(t(apply(goodness.of.fit, 2, sum)))
 		summed.goodness.of.fit[1,4] <- pchisq(summed.goodness.of.fit[1,2], summed.goodness.of.fit[1,3], lower.tail = FALSE)
 		goodness.of.fit <- list(individual = goodness.of.fit, sum = summed.goodness.of.fit)
-		information.criteria <- list(individual = information.criteria, sum = data.frame(t(apply(information.criteria, 2, sum))))
 		parameters <- get.parameter.table.multi(minim, param.names, n.params, n.data, use.restrictions, inv.hess.list, ci, orig.params)
+    #browser()
+    # added correct calculations of BIC sum and FIA sum (March 2015)
+    BIC_sum <- summed.goodness.of.fit$G.Squared + (n.params*nrow(data))*log(sum(n_items))
+    AIC_sum <- sum(information.criteria$AIC)
+  	information.criteria <- list(individual = information.criteria, sum = data.frame(AIC = AIC_sum, BIC = BIC_sum))
+    if (!is.null(fia)) {
+      FIA_penalty_sum <- sum(fia.df.tmp[[1]]$lnInt) + sum(fia.df.tmp[[1]]$lnconst) + (n.params*nrow(data))/2*log(sum(n_items)/2/pi)
+      information.criteria$sum <- data.frame(FIA = summed.goodness.of.fit$G.Squared + FIA_penalty_sum, information.criteria$sum, FIA.penalty = FIA_penalty_sum)
+    }
 		model.info <- list(individual = model.info)
 		if (fit.aggregated) {
 			data.pooled <- apply(data,2,sum)

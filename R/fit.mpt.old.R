@@ -3,10 +3,10 @@
 fit.mpt.old <- function(data, model.filename, restrictions.filename = NULL, n.optim = 5, fia = NULL, ci = 95, starting.values = NULL, output = c("standard", "fia", "full"), reparam.ineq = TRUE, sort.param = TRUE, model.type = c("easy", "eqn", "eqn2"),  multicore = c("none", "individual", "n.optim"), sfInit = FALSE, nCPU = 2){
 	
 	if (multicore[1] != "none" & sfInit) {
-		require(snowfall)
+		eval(call("require", package = "snowfall", character.only = TRUE))
 		sfInit( parallel=TRUE, cpus=nCPU )
 	} else if (multicore[1] != "none") {
-    if (!require(snowfall)) stop("multicore needs snowfall")
+    if (!eval(call("require", package = "snowfall", character.only = TRUE))) stop("multicore needs snowfall")
 	}
 	
 	llk.tree <- function(Q, unlist.tree, data, param.names, length.param.names){

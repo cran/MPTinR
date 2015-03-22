@@ -1,5 +1,32 @@
 
                     **************************
+                    ** MPTinR VERSION 1.7.x **
+                    **************************
+                    Changes in MPTinR Version 1.7.x
+                    Released March 2015
+
+    Significant User Visible Changes and new Features
+    
+    o   less messages if show.messages == FALSE.
+    
+    Bugfixes
+    
+    o   summed BIC and FIA values were calculated incorrectly (i.e., 
+        the individual values were simply summed which is incorrect due
+        to the non-linear nature of the log(n) term). This is now
+        corrected for both the output of fit.mpt (et al.) and 
+        select.mpt (for which now summed BIC and FIA are always 
+        calculated anew for multiple data sets).
+    
+    o   removed note in documentation that gen.X functions are rather 
+        new. They are well tested by now.
+        
+    o   bmpt.fia should now work without snowfall without throwing a
+        warning.
+    
+
+
+                    **************************
                     ** MPTinR VERSION 1.6.x **
                     **************************
                     Changes in MPTinR Version 1.6.x
@@ -8,29 +35,29 @@
     Significant User Visible Changes and new Features
     
     o   numDeriv is now only imported and not attached.
-	
-	o	names for models passed to select.mpt are now automatically 
-		determined via match.call().
-		
-	o	changed the maintainer email address.
+    
+    o   names for models passed to select.mpt are now automatically 
+        determined via match.call().
+        
+    o   changed the maintainer email address.
     
     Bugfixes
     
-    o	C++ code now uses Rcpp attributes.
+    o   C++ code now uses Rcpp attributes.
 
-	o	A bug prohibiting computation of FIA for models without 
-		inequality restrictions and with DEBUG flags enabled when 
-		compiling should now be resolved. The computation causing it is
-		skipped when no inequalities are present.
-	
-	o   calculating FIA via fit.model did not work for individual data  
-		sets.
-		
-	o	get.mpt.fia: added examples outside dontrun{} blocks running 
-		simple fia tests, with and without inequalities.
-		
-	o	all calls to snowfall prefaced with snowfall:: to avoid CRAN 
-		NOTEs.
+    o   A bug prohibiting computation of FIA for models without 
+        inequality restrictions and with DEBUG flags enabled when 
+        compiling should now be resolved. The computation causing it is
+        skipped when no inequalities are present.
+    
+    o   calculating FIA via fit.model did not work for individual data  
+        sets.
+        
+    o   get.mpt.fia: added examples outside dontrun{} blocks running 
+        simple fia tests, with and without inequalities.
+        
+    o   all calls to snowfall prefaced with snowfall:: to avoid CRAN 
+        NOTEs.
     
 
                     **************************

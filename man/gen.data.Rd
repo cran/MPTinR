@@ -78,9 +78,6 @@ Either a vector or matrix containing the generated data (for \code{gen.data} and
 \author{
 Henrik Singmann and David Kellen
 }
-\note{
-As this functions are rather new, report all issues to Henrik Singmann
-}
 
 \seealso{
 \code{\link{fit.mpt}} or \code{\link{fit.model}} for functions that will fit the generated data. Note that it is probably a very good idea to set \code{fit.aggregated = FALSE} when fitting larger sets of generated data.
