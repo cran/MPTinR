@@ -1,6 +1,6 @@
-569cc004a0c79bb3c4e69aa908751995 *DESCRIPTION
+2c5ce2cf14c20bea09653d35b3d6af99 *DESCRIPTION
 5abc620bcee2a984a91198fde331dc1e *NAMESPACE
-cdf02251a5c1c0f9c43b759f435624c4 *NEWS
+a601a7f5d67af07adab933968cca5aa3 *NEWS
 dd89e880fdc87ee0dabaff1d1f92631b *R/DF.n.get.R
 c0c7f498c3e951a86ac3ff183c955e9c *R/RcppExports.R
 d0d7cf4a81138de6b1eda64f1a0b5768 *R/apply.MPT.restrictions.R
@@ -21,15 +21,15 @@ b45d8c9083b16a6ec0fc355428489db3 *R/fit.model.R
 a0002c158dc2e4e3ab06852641515a1d *R/make.mpt.cf.R
 c8c3081905f62e0560c749009340f40f *R/predict.model.R
 7cbeec31a0aae96d6b75ad0c20cc3eff *R/prediction.plot.R
-62d2076aa619037e4f1587ac4e39a7b3 *R/prepare.mpt.fia.R
+951a59814a46fdc435f82ff560c9530b *R/prepare.mpt.fia.R
 5387e5ebbc6366122c84d5ceb4591bce *R/read.EQN.model.2.R
 fcb502ede4f233c2b0322cf82fac8af2 *R/read.EQN.model.R
 d746271bd918032821d1a9a88be2eeef *R/read.MPT.model.R
 46886096c20b869917dc7b26c9393866 *R/read.MPT.restrictions.R
 0538cc4c503ada3a8d50ea1d7347b54f *R/select.mpt.R
-e1ac491b0bb1a43452654a289c610256 *data/d.broeder.rda
-5233195ebc95179d5d6b93da672a42dd *data/rb.fig1.data.rda
-19691c14281954483450a79a3119a30e *data/rb.fig2.data.rda
+d428811fb755158c4faa24be85b5be11 *data/d.broeder.rda
+adb4dd260c5959bc44feed94de3f14c0 *data/rb.fig1.data.rda
+71f91088eb69d7bd655350ad35035e19 *data/rb.fig2.data.rda
 fb5e43dc68160b2f6670d2375cc45ff3 *inst/CITATION
 f21b7d3a9ff9d8775ac15f0884327edf *inst/extdata/5points.2htm.model
 1b9d899d01683e740c2e2d3aa4ab73fa *inst/extdata/broeder.1htm.restr
@@ -45,7 +45,7 @@ c8f9b787fc3053c9a766ae24b139a7b4 *inst/extdata/broeder.2htm.restr.ineq
 d84855fe6e1247beaad1d83e2cdbf6a5 *inst/extdata/rb.fig2.r.equal
 3a2cecea011e97769eb05ac17c5262e6 *inst/extdata/wmb.ex1.model
 75e0f5dfcef985834097a6346f5d9bb3 *inst/extdata/wmb.ex1.restr
-e8a88d5564b7d399c9460d9550014e98 *man/MPTinR-package.Rd
+ae1873e6d07e3b1a8d2e88d2b9a5302e *man/MPTinR-package.Rd
 f0f5ffb205fd4bea2e85ba39100797ab *man/bmpt.fia.Rd
 cef345f5881a588e10e9a148a62bc0ac *man/check.mpt.Rd
 b084bed08ad2c2dacb41bd48a811bc84 *man/d.broeder.Rd
@@ -62,5 +62,5 @@ c561052584d3ac0c94e1afd3ba43ce77 *man/prepare.mpt.fia.Rd
 9edd825dc8ff72257d86f97e1145442e *man/rb.fig1.data.Rd
 733e70b8dcc0a57de4d2726198744c19 *man/select.mpt.Rd
 6aa96502b75588e72f51a0c92d3ec9cc *src/RcppExports.cpp
-6d756d5cbb2fd17ab82bdf9343120bd3 *src/determinant.cpp
-06b463dc36597c107861ad91b5a87b08 *src/determinant_c.cpp
+9c84f3a66988b05758e57dbd68ef75d0 *src/determinant.cpp
+d923105d9a14b246f8832c85bc68980e *src/determinant_c.cpp

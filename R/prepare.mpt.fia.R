@@ -13,10 +13,15 @@ prepare.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, 
 	if(!is.null(restrictions.filename)) {
 		restrictions <- .read.MPT.restrictions(restrictions.filename)
 	}
+  class.model <- class(model.filename)
+  if ("connection" %in% class.model) {
+    tmp.model <- readLines(model.filename)
+    model.filename <- textConnection(tmp.model)
+    model <- .get.mpt.model(model.filename, model.type)
+    model.filename <- textConnection(tmp.model)
+  } else model <- .get.mpt.model(model.filename, model.type)
 	
-	model <- .get.mpt.model(model.filename, model.type)
 	n.data <- dim(data)[1]
-	
 	
 	if (sum(sapply(model, length)) != length(data[1,])) stop(paste("Size of data does not correspond to size of model (i.e., model needs ", sum(sapply(model, length)), " datapoints, data gives ", length(data[1,]), " datapoints).", sep = ""))
 	
@@ -24,7 +29,7 @@ prepare.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, 
 	
 	n_items <- sapply(df.n, function (x) sum(x[[2]]))
 	
-	mpt.string <- make.mpt.cf(model.filename, model.type)
+	mpt.string <- make.mpt.cf(model.filename, model.type=model.type)
 	
 	is.category <- grepl("^[[:digit:]]+$", mpt.string)
 	

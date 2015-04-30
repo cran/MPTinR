@@ -1,15 +1,15 @@
 Package: MPTinR
 Type: Package
 Title: Analyze Multinomial Processing Tree Models
-Version: 1.7.5
-Date: 2015-03-22
+Version: 1.8.0
+Date: 2015-04-30
 Authors@R: c(person("Henrik", "Singmann", role = c("aut", "cre"),
     email = "singmann+mptinr@gmail.com"),
     person("David", "Kellen", role =  "aut"),
     person("Quentin", "Gronau", role =  "aut"),
     person("Christian", "Mueller", role =  "ctb"),
     person("Akhil S", "Bhel", role =  "ctb"))
-Description: Provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can be specified in external files or within an R script in an intuitive syntax or using the context-free language for MPTs. The 'classical' .EQN file format for model files is also supported. Besides MPTs, MPTinR can fit a wide variety of other cognitive models such as SDT models (see fit.model). MPTinR supports multicore fitting and FIA calculation using the snowfall package. MPTinR can generate data from a model for e.g., simulation or parametric bootstrap and plot predicted versus observed data.
+Description: Provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can be specified in external files or within an R script in an intuitive syntax or using the context-free language for MPTs. The 'classical' .EQN file format for model files is also supported. Besides MPTs, this package can fit a wide variety of other cognitive models such as SDT models (see fit.model). It also supports multicore fitting and FIA calculation (using the snowfall package), can generate or bootstrap data for simulations, and plot predicted versus observed data.
 URL: http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr
 License: GPL (>= 2)
 Depends: R (>= 2.15.1)
@@ -18,6 +18,8 @@ Suggests: snowfall (>= 1.84)
 LinkingTo: Rcpp, RcppEigen
 LazyLoad: yes
 ByteCompile: yes
+NeedsCompilation: yes
+Packaged: 2015-04-30 19:54:07 UTC; henrik
 Author: Henrik Singmann [aut, cre],
   David Kellen [aut],
   Quentin Gronau [aut],
@@ -25,9 +27,4 @@ Author: Henrik Singmann [aut, cre],
   Akhil S Bhel [ctb]
 Maintainer: Henrik Singmann <singmann+mptinr@gmail.com>
 Repository: CRAN
-Repository/R-Forge/Project: mptinr
-Repository/R-Forge/Revision: 150
-Repository/R-Forge/DateTimeStamp: 2015-03-22 14:04:58
-Date/Publication: 2015-03-22 22:51:53
-Packaged: 2015-03-22 14:25:14 UTC; rforge
-NeedsCompilation: yes
+Date/Publication: 2015-05-01 00:55:29

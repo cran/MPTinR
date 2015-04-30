@@ -41,7 +41,7 @@ for (int i = 0; i < s; i++) {
     theta = thetaTMP.transpose();
 	
 	// added check to avoid multiplication with Ineq if only of size (1,1) (i.e., no inequality restrictions)
-	if (Ineq.rows() == 1 && Ineq.rows() == 1 && Ineq(0,0) == 0)  {
+	if (Ineq.rows() == 1 && Ineq.cols() == 1 && Ineq(0,0) == 0)  {
 		IneqT.resize(1);
 		IneqT(0) = 0;
 	} else

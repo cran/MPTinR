@@ -1,5 +1,25 @@
 
                     **************************
+                    ** MPTinR VERSION 1.8.x **
+                    **************************
+                    Changes in MPTinR Version 1.8.x
+                    Released April 2015
+
+    Significant User Visible Changes and new Features
+    
+    o   
+    
+    Bugfixes
+    
+    o   bug that prevented inequalities to be correctly taken into 
+        account for calculation of FIA is corrected (Thanks to 
+        Christoph Klauer for noticing this). This bug was introduced in 
+        version 1.6.
+    
+    o   prepare.mpt.fia was not working, fixed.
+
+
+                    **************************
                     ** MPTinR VERSION 1.7.x **
                     **************************
                     Changes in MPTinR Version 1.7.x
