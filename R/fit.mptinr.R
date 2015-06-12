@@ -441,7 +441,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
   	information.criteria <- list(individual = information.criteria, sum = data.frame(AIC = AIC_sum, BIC = BIC_sum))
     if (!is.null(fia)) {
       FIA_penalty_sum <- sum(fia.df.tmp[[1]]$lnInt) + sum(fia.df.tmp[[1]]$lnconst) + (n.params*nrow(data))/2*log(sum(n_items)/2/pi)
-      information.criteria$sum <- data.frame(FIA = summed.goodness.of.fit$G.Squared + FIA_penalty_sum, information.criteria$sum, FIA.penalty = FIA_penalty_sum)
+      information.criteria$sum <- data.frame(FIA = summed.goodness.of.fit$G.Squared/2 + FIA_penalty_sum, information.criteria$sum, FIA.penalty = FIA_penalty_sum)
     }
 		model.info <- list(individual = model.info)
 		if (fit.aggregated) {

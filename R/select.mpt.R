@@ -97,7 +97,7 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 		    }
 		    else NA
 		  }, 0)
-      FIA.sum <- G.Squared.sum + FIA.penalty.sum
+      FIA.sum <- G.Squared.sum/2 + FIA.penalty.sum
 			delta.FIA.sum <- FIA.sum - min(FIA.sum, na.rm = TRUE)
 			if (c.aggregated) {
 				FIA.aggregated <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["aggregated"]])))) x[["information.criteria"]][["aggregated"]][["FIA"]] else NA}, 0)

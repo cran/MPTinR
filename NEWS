@@ -1,5 +1,26 @@
 
                     **************************
+                    ** MPTinR VERSION 1.9.x **
+                    **************************
+                    Changes in MPTinR Version 1.8.x
+                    Released June 2015
+
+    Significant User Visible Changes and new Features
+    
+    o   added updated version of the MPTinR paper as vignette.
+    
+    o   removed URL (site was not updated anymore).
+    
+    Bugfixes
+    
+    o   select.mpt was still giving wrong FIA values for multiple data 
+        sets (used G^2 instead of 0.5*G^2).
+    
+    o   the summed FIA value in the output from fit.mpt and the like was
+        also incorrect (also used G^2 instead of 0.5*G^2)
+    
+    
+                    **************************
                     ** MPTinR VERSION 1.8.x **
                     **************************
                     Changes in MPTinR Version 1.8.x

@@ -1,8 +1,8 @@
 Package: MPTinR
 Type: Package
 Title: Analyze Multinomial Processing Tree Models
-Version: 1.8.0
-Date: 2015-04-30
+Version: 1.9.2
+Date: 2015-06-12
 Authors@R: c(person("Henrik", "Singmann", role = c("aut", "cre"),
     email = "singmann+mptinr@gmail.com"),
     person("David", "Kellen", role =  "aut"),
@@ -10,16 +10,16 @@ Authors@R: c(person("Henrik", "Singmann", role = c("aut", "cre"),
     person("Christian", "Mueller", role =  "ctb"),
     person("Akhil S", "Bhel", role =  "ctb"))
 Description: Provides a user-friendly way for the analysis of multinomial processing tree (MPT) models (e.g.,  Riefer, D. M., and Batchelder, W. H. [1988]. Multinomial modeling and the measurement of cognitive processes. Psychological Review, 95, 318-339) for single and multiple datasets. The main functions perform model fitting and model selection. Model selection can be done using AIC, BIC, or the Fisher Information Approximation (FIA) a measure based on the Minimum Description Length (MDL) framework. The model and restrictions can be specified in external files or within an R script in an intuitive syntax or using the context-free language for MPTs. The 'classical' .EQN file format for model files is also supported. Besides MPTs, this package can fit a wide variety of other cognitive models such as SDT models (see fit.model). It also supports multicore fitting and FIA calculation (using the snowfall package), can generate or bootstrap data for simulations, and plot predicted versus observed data.
-URL: http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr
 License: GPL (>= 2)
 Depends: R (>= 2.15.1)
 Imports: numDeriv, Brobdingnag, Rcpp
-Suggests: snowfall (>= 1.84)
+Suggests: snowfall (>= 1.84), knitr
 LinkingTo: Rcpp, RcppEigen
 LazyLoad: yes
 ByteCompile: yes
+VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2015-04-30 19:54:07 UTC; henrik
+Packaged: 2015-06-13 20:34:32 UTC; henrik
 Author: Henrik Singmann [aut, cre],
   David Kellen [aut],
   Quentin Gronau [aut],
@@ -27,4 +27,4 @@ Author: Henrik Singmann [aut, cre],
   Akhil S Bhel [ctb]
 Maintainer: Henrik Singmann <singmann+mptinr@gmail.com>
 Repository: CRAN
-Date/Publication: 2015-05-01 00:55:29
+Date/Publication: 2015-06-14 01:24:27

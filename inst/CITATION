@@ -5,13 +5,16 @@ citEntry(entry = "Article",
   author = personList(as.person("Henrik Singmann"), 
                         as.person("David Kellen")),
   journal = "Behavior Research Methods",
-  year = "in press",
+  year = "2013",
+  volume       = "45",
+  number       = "2",
+  pages        = "560--575",
   doi = "10.3758/s13428-012-0259-0",
   url = "http://link.springer.com/article/10.3758/s13428-012-0259-0",
 
   textVersion =
-  paste("Henrik Singmann & David Kellen (in press).",
+  paste("Henrik Singmann & David Kellen (2013).",
         "MPTinR: Analysis of Multinomial Processing Tree models in R.",
-        "Behavior Research Methods.",
+        "Behavior Research Methods, 45(2), 560--575.",
         "doi:10.3758/s13428-012-0259-0")
 )
