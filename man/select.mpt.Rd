@@ -103,20 +103,17 @@ br.2htm.fia <- fit.mpt(d.broeder, m.2htm, fia = 50000, fit.aggregated = FALSE)
 br.2htm.res.fia <- fit.mpt(d.broeder, m.2htm, r.2htm, fia = 50000, fit.aggregated = FALSE)
 br.1htm.fia <- fit.mpt(d.broeder, m.2htm, r.1htm, fia = 50000, fit.aggregated = FALSE)
 
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia))
-# This table shows that (in line with e.g., Klauer & Kellen, 2011) the restricted 2HTM has  
-# the smallest complexity followed by the 1HTM followed by the 2HTM.
+select.mpt(list(br.2htm.fia, br.2htm.res.fia, br.1htm.fia))
+# This table shows that the n (number of trials) is too small to correctly compute 
+# FIA for the 1HT model (as the penalty for the 1HTM is larger than for the 2HTM, 
+# although the former is nested in the latter).
+# This problem with FIA can only be overcome by collecting more trials per participant,
+# but NOT by collecting more participants (as the penalties are simply summed).
 
-# using the new dataset argument
+# using the dataset argument we see the same
+select.mpt(list(br.2htm.fia, br.2htm.res.fia, br.1htm.fia), dataset = 4, output = "full")
 
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
-	dataset = 1:10)
-    
-select.mpt(list("2htm" = br.2htm.fia, "2htm.r" = br.2htm.res.fia, "1htm" = br.1htm.fia),
-	dataset = 4)
-# Note that when only using one dataset FIA is no internally consistent. The 1HTM, which is
-# nested in the 2HTM, has a higher penalty than the 2HTM. This does not occur when looking
-# at the sum results though (see examples above). 
+select.mpt(list(br.2htm.fia, br.2htm.res.fia, br.1htm.fia),	dataset = 1:10)
 }
 
 

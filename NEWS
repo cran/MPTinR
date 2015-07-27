@@ -1,4 +1,31 @@
 
+                    ***************************
+                    ** MPTinR VERSION 1.10.x **
+                    ***************************
+                    Changes in MPTinR Version 1.10.x
+                    Released July 2015
+
+    Significant User Visible Changes and new Features
+    
+    o   added 850 ROCs used in the meta-analysis of Klauer and Kellen (2015), 
+        see ?roc6.
+    
+    Bugfixes
+    
+    o   The changes made to the FIA calculation for summed data in version 1.7 
+        were incorrect. FIA for multiple data sets simply needs to be summed to
+        correspond to FIA when these data sets were fitted in a super-model 
+        (with separate parameters for each data set). Consequently, the old 
+        behavior of simply summing FIA was restored in both fit.mpt et al. and
+        select.mpt. Vignette was updated to show this.
+
+    o   all functions from default packages imported.
+
+    o   FIA for first data set was sometimes incorrectly treated
+        as different from get.mpt.fia (or fit.mpt).
+    
+    
+    
                     **************************
                     ** MPTinR VERSION 1.9.x **
                     **************************

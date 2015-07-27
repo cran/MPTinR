@@ -84,7 +84,7 @@ get.mpt.fia <- function(data, model.filename, restrictions.filename = NULL, Samp
 		i.data <- vector('list', n.data)
 		p.fia <- vector("numeric", n.data)
 		m.fit <- vector("numeric", n.data)
-		i.data[[1]] <- params.join.mat[indiv,]
+		i.data[[1]] <- params.join.mat[1,]
 		p.fia[1] <- 1
 		m.fit[1] <- 1
 		if (n.data > 1) {

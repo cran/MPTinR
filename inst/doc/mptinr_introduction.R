@@ -160,6 +160,17 @@ apply(br.2htmr$parameters$individual[,1,], 1, median)
 ## ------------------------------------------------------------------------
 br.2htm$parameters$mean
 
+## ----fit_br_3------------------------------------------------------------
+br.1htm <- fit.mpt(d.broeder, textConnection(mod_2htm_2), list("Dn = 0"), fia = 25000)
+
+## ----fit_br_3b-----------------------------------------------------------
+br.1htm.ineq <- fit.mpt(d.broeder, textConnection(mod_2htm_2), 
+                        list("g1 < g2 < g3 < g4 < g5", "Dn = 0"), fia = 25000)
+
+## ------------------------------------------------------------------------
+select.mpt(list(br.2htm, br.2htm.ineq, br.2htmr, br.2htmr.ineq, br.1htm, br.1htm.ineq), 
+           output = "full")[,1:16]
+
 ## ------------------------------------------------------------------------
 br.2htm.2 <- fit.mpt(colSums(d.broeder), textConnection(mod_2htm_2))
 

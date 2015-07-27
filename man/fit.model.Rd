@@ -166,6 +166,8 @@ Warnings may relate to the optimization routine (e.g., \code{Optimization routin
 In these cases it is recommended to rerun the model fitting to check if the results are stable.
 
 The likelihood returned does not include the factorial constants of the multinomial probability-mass functions.
+
+All (model or restriction) files should end with an empty line, otherwise a warning will be shown.
 }
 \references{
 Broeder, A., & Schuetz, J. (2009). Recognition ROCs are curvilinear-or are they? On premature arguments against the two-high-threshold model of recognition. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 35(3), 587. doi:10.1037/a0015279
@@ -174,9 +176,6 @@ Wickens, T. D. (2002). \emph{Elementary Signal Detection Theory}. Oxford; New Yo
 }
 \author{
 Henrik Singmann and David Kellen.
-}
-\note{
-All (model or restriction) files should end with an empty line, otherwise a warning will be shown.
 }
 
 \examples{
@@ -273,6 +272,7 @@ select.mpt(list(uvsdt = br.uvsdt, evsdt = br.evsdt, two.htm = br.2htm,
 ###################################
 ## Fit confidence rating ROC SDT ##
 ###################################
+#(see ?roc6 for more examples)
 
 # We fit example data from Wickens (2002, Chapter 5)
 # The example data is from Table 5.1, p. 84
@@ -323,6 +323,8 @@ cumsum(cr_sdt$parameters[paste0("cr",1:5), 1, drop = FALSE])
 \code{\link{fit.mptinr}} for a function that can fit arbitrary objective functions.
 
 \code{\link{fit.mpt}} for the function to fit MPTs (it should be slightly faster for MPTs).
+
+\link{roc6} for more examples fitting different SDT models.
 }
   
 \keyword{models}

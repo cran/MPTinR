@@ -90,14 +90,8 @@ select.mpt <- function(mpt.results, output = c("standard", "full"), round.digit 
 		p.sum <- vapply(mpt.results, function(x) x[["goodness.of.fit"]][["sum"]][1,"p.value"], 0)
 		p.smaller.05 <- vapply(mpt.results, function(x) sum(x[["goodness.of.fit"]][["individual"]][,"p.value"] < .05), 0)
 		if (any(c.fia)) {
-		  FIA.penalty.sum <- vapply(mpt.results, function(x) {
-		    if (any(grepl("^FIA.penalty$", colnames(x[["information.criteria"]][["individual"]])))) {
-          summed_lnInt <- x[["information.criteria"]][["individual"]][["FIA.penalty"]] - x$model.info$individual$n.parameters/2 * log(rowSums(observed.data[[1]]$individual)/2/pi)
-          sum(summed_lnInt) + sum(x$model.info$individual$n.parameters)/2 * log(sum(rowSums(observed.data[[1]]$individual))/2/pi)          
-		    }
-		    else NA
-		  }, 0)
-      FIA.sum <- G.Squared.sum/2 + FIA.penalty.sum
+			FIA.sum <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["sum"]])))) x[["information.criteria"]][["sum"]][["FIA"]] else NA}, 0)
+			FIA.penalty.sum <- vapply(mpt.results, function(x) {if (any(grepl("^FIA.penalty$", colnames(x[["information.criteria"]][["sum"]])))) x[["information.criteria"]][["sum"]][["FIA.penalty"]] else NA}, 0)
 			delta.FIA.sum <- FIA.sum - min(FIA.sum, na.rm = TRUE)
 			if (c.aggregated) {
 				FIA.aggregated <- vapply(mpt.results, function(x) {if (any(grepl("^FIA$", colnames(x[["information.criteria"]][["aggregated"]])))) x[["information.criteria"]][["aggregated"]][["FIA"]] else NA}, 0)

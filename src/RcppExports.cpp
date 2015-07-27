@@ -6,24 +6,6 @@
 
 using namespace Rcpp;
 
-// determinant
-NumericVector determinant(int S, int M, Eigen::Map<Eigen::MatrixXi> A, Eigen::Map<Eigen::MatrixXi> B, Eigen::Map<Eigen::VectorXd> c, Eigen::Map<Eigen::MatrixXd> pattern, Eigen::Map<Eigen::MatrixXd> Ineq, int s);
-RcppExport SEXP MPTinR_determinant(SEXP SSEXP, SEXP MSEXP, SEXP ASEXP, SEXP BSEXP, SEXP cSEXP, SEXP patternSEXP, SEXP IneqSEXP, SEXP sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type S(SSEXP);
-    Rcpp::traits::input_parameter< int >::type M(MSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXi> >::type A(ASEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXi> >::type B(BSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd> >::type c(cSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type pattern(patternSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type Ineq(IneqSEXP);
-    Rcpp::traits::input_parameter< int >::type s(sSEXP);
-    __result = Rcpp::wrap(determinant(S, M, A, B, c, pattern, Ineq, s));
-    return __result;
-END_RCPP
-}
 // determinant_c
 NumericVector determinant_c(int S, int M, Eigen::Map<Eigen::MatrixXi> A, Eigen::Map<Eigen::MatrixXi> B, Eigen::Map<Eigen::VectorXd> c, Eigen::Map<Eigen::MatrixXd> pattern, Eigen::Map<Eigen::MatrixXd> Ineq, int s, int cc);
 RcppExport SEXP MPTinR_determinant_c(SEXP SSEXP, SEXP MSEXP, SEXP ASEXP, SEXP BSEXP, SEXP cSEXP, SEXP patternSEXP, SEXP IneqSEXP, SEXP sSEXP, SEXP ccSEXP) {
@@ -40,6 +22,24 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type s(sSEXP);
     Rcpp::traits::input_parameter< int >::type cc(ccSEXP);
     __result = Rcpp::wrap(determinant_c(S, M, A, B, c, pattern, Ineq, s, cc));
+    return __result;
+END_RCPP
+}
+// determinant
+NumericVector determinant(int S, int M, Eigen::Map<Eigen::MatrixXi> A, Eigen::Map<Eigen::MatrixXi> B, Eigen::Map<Eigen::VectorXd> c, Eigen::Map<Eigen::MatrixXd> pattern, Eigen::Map<Eigen::MatrixXd> Ineq, int s);
+RcppExport SEXP MPTinR_determinant(SEXP SSEXP, SEXP MSEXP, SEXP ASEXP, SEXP BSEXP, SEXP cSEXP, SEXP patternSEXP, SEXP IneqSEXP, SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type S(SSEXP);
+    Rcpp::traits::input_parameter< int >::type M(MSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXi> >::type A(ASEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXi> >::type B(BSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd> >::type c(cSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type pattern(patternSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type Ineq(IneqSEXP);
+    Rcpp::traits::input_parameter< int >::type s(sSEXP);
+    __result = Rcpp::wrap(determinant(S, M, A, B, c, pattern, Ineq, s));
     return __result;
 END_RCPP
 }

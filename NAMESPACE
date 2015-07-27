@@ -5,3 +5,6 @@ importFrom("numDeriv", hessian)
 importFrom("Brobdingnag", as.brob)
 #importFrom("snowfall", sfClusterSplit, sfLibrary, sfClusterApplyLB, sfLapply, sfStop)
 import(Rcpp)
+importFrom("stats", pchisq, runif, D, qnorm, optim, nlminb, rmultinom)
+importFrom("utils", read.table, write.table, flush.console)
+
