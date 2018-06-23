@@ -1,8 +1,8 @@
-25262d8e27ba63b0a562b7992ed5d5d8 *DESCRIPTION
+a6d4e3a04d93b40f6ffa3bfd5dd1ba6d *DESCRIPTION
 1ca4d69daff26152f2139b332ef02643 *NAMESPACE
 58cda9e9dba2a36af19ff5d590ff1ca2 *NEWS
 dd89e880fdc87ee0dabaff1d1f92631b *R/DF.n.get.R
-c0c7f498c3e951a86ac3ff183c955e9c *R/RcppExports.R
+b159851daf7c16c9319e9e150c740b32 *R/RcppExports.R
 d0d7cf4a81138de6b1eda64f1a0b5768 *R/apply.MPT.restrictions.R
 482aa7ac0a325d36aa7f1cd67054c450 *R/bmpt.fia.R
 2ff593f2f747e63726c4c5a8b766c250 *R/check.MPT.probabilities.R
@@ -27,7 +27,8 @@ fcb502ede4f233c2b0322cf82fac8af2 *R/read.EQN.model.R
 d746271bd918032821d1a9a88be2eeef *R/read.MPT.model.R
 46886096c20b869917dc7b26c9393866 *R/read.MPT.restrictions.R
 12202304e2370ab1ca1d6c46a33e0703 *R/select.mpt.R
-575c4cb095b2a62e7b2c271853eaa47b *build/vignette.rds
+5cd557a9aa2c9aefc696e785186e55fa *build/partial.rdb
+940674efbd82fe285e2df12ddbd12fdd *build/vignette.rds
 d428811fb755158c4faa24be85b5be11 *data/d.broeder.rda
 adb4dd260c5959bc44feed94de3f14c0 *data/rb.fig1.data.rda
 71f91088eb69d7bd655350ad35035e19 *data/rb.fig2.data.rda
@@ -36,7 +37,7 @@ b8cdf7c8342ebf387dce632b2da10720 *data/roc8.rda
 f1e14fc3cc76e35c9aa61256f7f32d7e *inst/CITATION
 4b4cc15dcaa5b425c7f6e887577fd2bf *inst/doc/mptinr_introduction.R
 a78c6236641d3f7b90548ed4027cf831 *inst/doc/mptinr_introduction.Rnw
-1d7002f213da90fcfb7c089db27c9082 *inst/doc/mptinr_introduction.pdf
+9ab72660ea73bee6298fe4144cc0b7bd *inst/doc/mptinr_introduction.pdf
 f21b7d3a9ff9d8775ac15f0884327edf *inst/extdata/5points.2htm.model
 1b9d899d01683e740c2e2d3aa4ab73fa *inst/extdata/broeder.1htm.restr
 55ba18caebe220e6826bd7ca15da22a4 *inst/extdata/broeder.1htm.restr.ineq
@@ -51,7 +52,7 @@ c8f9b787fc3053c9a766ae24b139a7b4 *inst/extdata/broeder.2htm.restr.ineq
 d84855fe6e1247beaad1d83e2cdbf6a5 *inst/extdata/rb.fig2.r.equal
 3a2cecea011e97769eb05ac17c5262e6 *inst/extdata/wmb.ex1.model
 75e0f5dfcef985834097a6346f5d9bb3 *inst/extdata/wmb.ex1.restr
-ae1873e6d07e3b1a8d2e88d2b9a5302e *man/MPTinR-package.Rd
+f4629762e0d648a2344a6d04fd29bbd5 *man/MPTinR-package.Rd
 f0f5ffb205fd4bea2e85ba39100797ab *man/bmpt.fia.Rd
 cef345f5881a588e10e9a148a62bc0ac *man/check.mpt.Rd
 b084bed08ad2c2dacb41bd48a811bc84 *man/d.broeder.Rd
@@ -63,12 +64,12 @@ e38812d52fe606f14da851c94b8e01a6 *man/fit.mptinr.Rd
 e6221d748ccca40abde7d7b3a4b1bf5d *man/get.mpt.fia.Rd
 6b5d8244d57e148f9175a22a8ed0f19b *man/make.eqn.Rd
 3c5b92346be059b9e5b31537635af5ae *man/make.mpt.cf.Rd
-a6c3187cd553ea6889681c9cad46ca33 *man/prediction.plot.Rd
+5ffc06da9453e93c37d6cab7dfc6b824 *man/prediction.plot.Rd
 c561052584d3ac0c94e1afd3ba43ce77 *man/prepare.mpt.fia.Rd
 9edd825dc8ff72257d86f97e1145442e *man/rb.fig1.data.Rd
 b23d15e9f74e8a63fc4fc300c424fb8e *man/rocs.Rd
 bdeab8a9b1db90fffa165e3e51cdee94 *man/select.mpt.Rd
-a8382451f0cc55dc39d8679b94e1f9df *src/RcppExports.cpp
+f1439ec2817b4b3433fe311b57107d36 *src/RcppExports.cpp
 9c84f3a66988b05758e57dbd68ef75d0 *src/determinant.cpp
 d923105d9a14b246f8832c85bc68980e *src/determinant_c.cpp
 de0e6e5a8ab684e7ef195334c036626c *vignettes/Figure1.pdf

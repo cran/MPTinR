@@ -107,6 +107,7 @@ Please report all problems.
 \code{\link{fit.mpt}}
 }
 \examples{
+\dontrun{
 #### using the model and data from Broeder & Schuetz:
 data(d.broeder, package = "MPTinR")
 m.2htm <- system.file("extdata", "5points.2htm.model", package = "MPTinR")
@@ -133,7 +134,6 @@ dev.off()
 prediction.plot(br.2htm, m.2htm, "aggregated", axis.labels = unlist(lapply(c(10, 25, 50, 75, 90),
 	paste, c("o.o", "o.n"), sep = "")))
 
-\dontrun{
 # fit the SDT
 br.sdt <- fit.model(d.broeder, m.sdt, lower.bound = c(rep(-Inf, 5), 0, 1), upper.bound = Inf)
 
