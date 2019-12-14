@@ -1,12 +1,12 @@
 
 .oneSample <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq) {
   set.seed(seed[index])
-  .determinant(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index])
+  determinant(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index])
 }
 
 .oneSample_c <- function(index, subsample, seed, Sx, Mx, Ax, Bx, cx, pattern, Ineq, mConst) {
   set.seed(seed[index])
-  .determinant_c(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], mConst)
+  determinant_c(Sx, Mx, Ax, Bx, cx, pattern, Ineq, subsample[index], mConst)
 }
 
 bmpt.fia <- function(s, parameters, category, N, ineq0 = NULL, Sample = 2e+05, multicore = FALSE, split = NULL, mConst = NULL) {

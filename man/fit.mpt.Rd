@@ -87,7 +87,7 @@ logical. Should the Hessian matrix of the maximum likelihood estimates be estima
   }
 }
 \details{
-The model file is either of the easy format (see \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr}) or the "classical" EQN format (see below).\cr
+The model file is either of the easy format or the "classical" EQN format (see below).\cr
 In the easy format (the default) the model file contains all trees of the model. Trees are separated by at least one empty line. Everything to the right of a hash (#) is ignored (this behavior is new since version 0.9.2). Lines starting with a # are treated as empty. Each line in each tree corresponds to all branches of this tree (concatenated by a +) that correspond to one of the possible response categories. The position of each line must correspond to the position of this response category in the data object (for multi-individual fit to the respective column).
 
 The difference between both types of EQN format (\code{"eqn"} or\code{"eqn2"}) is the way the first line of the model file is treated. If \code{model.file} is set to \code{"eqn"}, \code{MPTinR} will ignore the first line of the model file and will read the rest of the file (as does multiTree; Moshagen, 2010). If \code{model.file} is set to \code{"eqn2"} MPTinR will only read as many lines as indicated in the first line of the EQN model file (as does e.g., HMMTree; Stahl & Klauer, 2007). As default \code{fit.mpt} expects the easy format, but if the filename ends with .eqn or .EQN and \code{model.type} is \code{"easy"}, \code{model.type} is set to \code{"eqn"}\cr
@@ -398,8 +398,6 @@ sfStop()
 \code{\link{fit.model}} for a similar wrapper for which you can specify upper and lower bounds of parameters (and whether or not \code{nlminb} uses the symbolically derived gradient and hessian)
 
 \code{\link{fit.mptinr}} is the workhorse with which you can also fit your own objective functions.
-
-\url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr} for additional information on model files and restriction files
 }
   
 \keyword{models}

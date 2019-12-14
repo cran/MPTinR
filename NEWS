@@ -1,4 +1,26 @@
+                    ***************************
+                    ** MPTinR VERSION 1.12.x **
+                    ***************************
+                    Changes in MPTinR Version 1.12.x
+                    Released December 2019
 
+    Significant User Visible Changes
+    
+    o   This is a maintenance update to address CRAN issues, which does not add
+        any new features.
+    
+    o   Removed all links to my now defunct homepage at the University of 
+        Freiburg.
+    
+    Bugfixes
+    
+    o   MPTinR now uses a proper NAMESPACE file (i.e., all exported functions 
+        are listed individually)
+        
+    o   select.mpt() should work even if the entered objects have a class 
+        attribute of length two.
+    
+    
                     ***************************
                     ** MPTinR VERSION 1.10.x **
                     ***************************

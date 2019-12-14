@@ -28,8 +28,6 @@ A character vector specifying the location and name of the target .eqn file.
 \details{
 eqn and mdt files are the usual files used for programs to fit MPTs. You can use these functions to compare the results of MPTinR with other prgrams such as HMMTree or multiTree.
 
-For more info on the different formats see: \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr/modelfile}
-
 Note that these function do not add the endings .eqn or .mdt to the filename.
 
 Since the MPTinR 0.9.4 \code{make.mdt} writes a single mdt file from a matrix or data.frame separating the participants via \code{===}.

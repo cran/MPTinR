@@ -39,7 +39,6 @@ If restrictions are present, the \code{n.params} and \code{parameters} are displ
 
 }
 \seealso{
-see \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr/modelfile} for more information on MPTinR model files.\cr
 \code{\link{fit.mpt}}
 }
 \examples{

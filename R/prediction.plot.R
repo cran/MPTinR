@@ -9,7 +9,7 @@ args.numbers = list(), args.abline = list(), abline) {
 	#browser()
 	n.trees <- length(categories.per.type)
 	# get y-values
-	if (class(results[["data"]][["observed"]]) != "list") {
+	if (class(results[["data"]][["observed"]])[[1]] != "list") {
 		data <- results[["data"]][["observed"]] 
 		exp <- results[["data"]][["predicted"]]
 	} else {

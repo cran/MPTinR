@@ -39,7 +39,7 @@ Character vector specifying whether the model file is formatted in the \code{eas
 }
 }
 \details{
-Purdy and Batchelder (2009) provide a new way of how binary multinomial processing tree (MPT) models can be represented, a context free language called L-BMPT. This function takes a model file that consists of the equations defining a model (e.g., \url{http://www.psychologie.uni-freiburg.de/Members/singmann/R/mptinr/modelfile}) and returns a character vector representing this model in L-BMPT.
+Purdy and Batchelder (2009) provide a new way of how binary multinomial processing tree (MPT) models can be represented, a context free language called L-BMPT. This function takes a model file that consists of the equations defining a model and returns a character vector representing this model in L-BMPT.
 
 There are three important things to know about this function:
 
