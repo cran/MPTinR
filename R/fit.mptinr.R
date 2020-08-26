@@ -234,7 +234,7 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	get.predicted.values <- function (minim, prediction, data, n_items.per.type, param.names, n.params, n.data, tmp.env, ...) {
 		predictions <- array(0, dim = dim(data))
 		for (c in 1:n.data){
-			for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmpllk.env)
+			for (d in seq_along(data[c,])) assign(paste("hank.data.", d, sep = ""), data[c,d], envir = tmp.env)
 			tree.eval <- do.call(prediction, args  = list(minim[[c]][["par"]], param.names = param.names, n.params = n.params, tmp.env = tmp.env, ... ))
 			frequencies <- n_items.per.type[c,]
 			predictions[c,] <- tree.eval * frequencies
@@ -303,6 +303,13 @@ fit.mptinr <- function(data, objective, param.names, categories.per.type, gradie
 	# check if there is a gradient or hessian function:
 	if (is.null(gradient)) use.gradient <- FALSE
 	if (is.null(hessian)) use.hessian <- FALSE
+	
+	if ((n.params > dgf) & (use.hessian)) {
+	  warning("Estimating over-parameterised models (i.e., more parameters than ind. obs.) with \n", 
+	  "use.hessian = TRUE can produce wrong estimates and predictions.\n", 
+	  "fit.model(...) or specifying use.hessian = FALSE avoid this problem.", 
+	  call. = FALSE)
+	}
 	
 	tmpllk.env <- new.env()
 	#attach(tmpllk.env)

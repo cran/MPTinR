@@ -1,4 +1,20 @@
                     ***************************
+                    ** MPTinR VERSION 1.13.x **
+                    ***************************
+                    Changes in MPTinR Version 1.13.x
+                    Released August 2020
+
+    Significant User Visible Changes
+    
+    o   
+    
+    Bugfixes
+    
+    o   MPTinR now warns in case of over-parameterised models estimated using
+        the hessian and suggests deactivating it.
+    
+    
+                    ***************************
                     ** MPTinR VERSION 1.12.x **
                     ***************************
                     Changes in MPTinR Version 1.12.x

@@ -17,19 +17,19 @@ The 6-point ROCs contains data from the following sources:
 
 \itemize{
 \item \code{Dube_2012-P} and \code{Dube_2012-W}:\cr
-Dube, C., & Rotello, C. M. (2012). Binary ROCs in perception and recognition memory are curved. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 38(1), 130-151. \url{http://doi.org/10.1037/a0024957}
+Dube, C., & Rotello, C. M. (2012). Binary ROCs in perception and recognition memory are curved. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 38(1), 130-151. \url{https://doi.org/10.1037/a0024957}
 \item \code{heathcote_2006_e1} and \code{heathcote_2006_e2}:\cr
-Heathcote, A., Ditton, E., & Mitchell, K. (2006). Word frequency and word likeness mirror effects in episodic recognition memory. \code{Memory & Cognition}, 34(4), 826-838. \url{http://doi.org/10.3758/BF03193430}
+Heathcote, A., Ditton, E., & Mitchell, K. (2006). Word frequency and word likeness mirror effects in episodic recognition memory. \code{Memory & Cognition}, 34(4), 826-838. \url{https://doi.org/10.3758/BF03193430}
 \item \code{Jaeger_2013}:\cr
-Jaeger, A., Cox, J. C., & Dobbins, I. G. (2012). Recognition confidence under violated and confirmed memory expectations. Journal of Experimental Psychology: General, 141(2), 282-301. \url{http://doi.org/10.1037/a0025687}
+Jaeger, A., Cox, J. C., & Dobbins, I. G. (2012). Recognition confidence under violated and confirmed memory expectations. Journal of Experimental Psychology: General, 141(2), 282-301. \url{https://doi.org/10.1037/a0025687}
 \item \code{Koen_2010_pure}:\cr
-Koen, J. D., & Yonelinas, A. P. (2010). Memory variability is due to the contribution of recollection and familiarity, not to encoding variability. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 36(6), 1536-1542. \url{http://doi.org/10.1037/a0020448}
+Koen, J. D., & Yonelinas, A. P. (2010). Memory variability is due to the contribution of recollection and familiarity, not to encoding variability. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 36(6), 1536-1542. \url{https://doi.org/10.1037/a0020448}
 \item \code{Koen_2011}:\cr
-Koen, J. D., & Yonelinas, A. P. (2011). From humans to rats and back again: Bridging the divide between human and animal studies of recognition memory with receiver operating characteristics. \emph{Learning & Memory}, 18(8), 519-522. \url{http://doi.org/10.1101/lm.2214511}
+Koen, J. D., & Yonelinas, A. P. (2011). From humans to rats and back again: Bridging the divide between human and animal studies of recognition memory with receiver operating characteristics. \emph{Learning & Memory}, 18(8), 519-522. \url{https://doi.org/10.1101/lm.2214511}
 \item \code{Koen-2013_full} and \code{Koen-2013_immediate}:\cr
-Koen, J. D., Aly, M., Wang, W.-C., & Yonelinas, A. P. (2013). Examining the causes of memory strength variability: Recollection, attention failure, or encoding variability? \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 39(6), 1726-1741. \url{http://doi.org/10.1037/a0033671}
+Koen, J. D., Aly, M., Wang, W.-C., & Yonelinas, A. P. (2013). Examining the causes of memory strength variability: Recollection, attention failure, or encoding variability? \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 39(6), 1726-1741. \url{https://doi.org/10.1037/a0033671}
 \item \code{Pratte_2010}:\cr
-Pratte, M. S., Rouder, J. N., & Morey, R. D. (2010). Separating mnemonic process from participant and item effects in the assessment of ROC asymmetries. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 36(1), 224-232. \url{http://doi.org/10.1037/a0017682}
+Pratte, M. S., Rouder, J. N., & Morey, R. D. (2010). Separating mnemonic process from participant and item effects in the assessment of ROC asymmetries. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 36(1), 224-232. \url{https://doi.org/10.1037/a0017682}
 \item \code{Smith_2004}:\cr
 Smith, D. G., & Duncan, M. J. J. (2004). Testing Theories of Recognition Memory by Predicting Performance Across Paradigms. \emph{Journal of Experimental Psychology. Learning, Memory & Cognition}, 30(3), 615-625.
 }
@@ -37,14 +37,14 @@ Smith, D. G., & Duncan, M. J. J. (2004). Testing Theories of Recognition Memory 
 The 8-point ROCs contains data from the following sources:
 \itemize{
 \item \code{Benjamin_2013}:\cr
-Benjamin, A. S., Tullis, J. G., & Lee, J. H. (2013). Criterion Noise in Ratings-Based Recognition: Evidence From the Effects of Response Scale Length on Recognition Accuracy. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 39, 1601-1608. \url{http://doi.org/10.1037/a0031849}
+Benjamin, A. S., Tullis, J. G., & Lee, J. H. (2013). Criterion Noise in Ratings-Based Recognition: Evidence From the Effects of Response Scale Length on Recognition Accuracy. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 39, 1601-1608. \url{https://doi.org/10.1037/a0031849}
 \item \code{Onyper_2010-Pics} and \code{Onyper_2010-Words}:\cr
-Onyper, S. V., Zhang, Y. X., & Howard, M. W. (2010). Some-or-none recollection: Evidence from item and source memory. \emph{Journal of Experimental Psychology: General}, 139(2), 341-364. \url{http://doi.org/10.1037/a0018926}
+Onyper, S. V., Zhang, Y. X., & Howard, M. W. (2010). Some-or-none recollection: Evidence from item and source memory. \emph{Journal of Experimental Psychology: General}, 139(2), 341-364. \url{https://doi.org/10.1037/a0018926}
 }
 
 }
 \references{
-Klauer, K. C., & Kellen, D. (2015). The flexibility of models of recognition memory: The case of confidence ratings. \emph{Journal of Mathematical Psychology}, 67, 8-25. http://doi.org/10.1016/j.jmp.2015.05.002
+Klauer, K. C., & Kellen, D. (2015). The flexibility of models of recognition memory: The case of confidence ratings. \emph{Journal of Mathematical Psychology}, 67, 8-25. https://doi.org/10.1016/j.jmp.2015.05.002
 
 }
 \usage{

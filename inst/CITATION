@@ -10,7 +10,7 @@ citEntry(entry = "Article",
   number       = "2",
   pages        = "560--575",
   doi = "10.3758/s13428-012-0259-0",
-  url = "http://link.springer.com/article/10.3758/s13428-012-0259-0",
+  url = "https://doi.org/10.3758/s13428-012-0259-0",
 
   textVersion =
   paste("Henrik Singmann & David Kellen (2013).",

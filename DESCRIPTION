@@ -1,7 +1,7 @@
 Package: MPTinR
 Type: Package
 Title: Analyze Multinomial Processing Tree Models
-Version: 1.12.0
+Version: 1.13.0
 Authors@R: c(person("Henrik", "Singmann", role = c("aut", "cre"),
     email = "singmann@gmail.com"),
     person("David", "Kellen", role =  "aut"),
@@ -18,7 +18,7 @@ LazyLoad: yes
 ByteCompile: yes
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2019-12-13 14:47:25 UTC; henrik
+Packaged: 2020-08-26 09:06:42 UTC; singm
 Author: Henrik Singmann [aut, cre],
   David Kellen [aut],
   Quentin Gronau [aut],
@@ -26,4 +26,4 @@ Author: Henrik Singmann [aut, cre],
   Akhil S Bhel [ctb]
 Maintainer: Henrik Singmann <singmann@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-12-14 17:40:34 UTC
+Date/Publication: 2020-08-26 22:50:43 UTC
