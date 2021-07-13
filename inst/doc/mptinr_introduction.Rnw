@@ -27,7 +27,7 @@
 	\title{\pkg{MPTinR}: Analysis of Multinomial Processing Tree Models in R\thanks{This is an extended and updated version of our manuscript on MPTinR. The code given in this document can be executed as is and the output given here is produced from a real R session (using \pkg{knitr} and \texttt{sweave}). The original paper was published as: \newline Singmann, H., \& Kellen, D. (2013). MPTinR: Analysis of multinomial processing tree models in R. \emph{Behavior Research Methods}, 45(2), 560-575. \url{http://doi.org/10.3758/s13428-012-0259-0} \newline }}
 	
 	
-	\author{Henrik Singmann\thanks{Henrik Singmann is now at the University of Warwick (UK).}\\ Albert-Ludwigs-Universit\"at Freiburg \and David Kellen\thanks{David Kellen is now at Syracuse University (USA).} \\ Albert-Ludwigs-Universit\"at Freiburg }
+	\author{Henrik Singmann\thanks{Henrik Singmann is now at University College London (UK).}\\ Albert-Ludwigs-Universit\"at Freiburg \and David Kellen\thanks{David Kellen is now at Syracuse University (USA).} \\ Albert-Ludwigs-Universit\"at Freiburg }
 	
 	
 	\maketitle

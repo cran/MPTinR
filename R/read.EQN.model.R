@@ -20,3 +20,12 @@
 	names(model) <- NULL
 	model
 }
+
+.get.EQN.model.order <- function(model.filename) {
+	tmp.in <- read.table(model.filename, skip = 1, stringsAsFactors = FALSE)
+	order_trees <- sort(unique(tmp.in$V1))
+	tmp.ordered <- tmp.in[order(tmp.in$V1),]
+	tmp.spl <- split(tmp.ordered, factor(tmp.ordered$V1))
+	tmp.spl <- unlist(unname(lapply(tmp.spl, function(d.f) sort(unique(d.f[,2])))))
+	list(order.trees = order_trees, order.categories = tmp.spl)
+}

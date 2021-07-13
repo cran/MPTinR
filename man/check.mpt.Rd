@@ -25,6 +25,9 @@ Character vector specifying whether the model file is formatted in the \emph{eas
 As default, \code{check.mpt} expects a model file in the easy format, but if the filename ends with .eqn or .EQN \code{check.mpt} will expect the EQN format.\cr
 
 In case of inequality restrictions, the original parameters which are inequality restricted are replaced  with dummy parameters starting with \code{hankX}. When using \code{\link{fit.mpt}} you will not notice this, as the output only shows the original parameters. In contrast, \code{check.mpt} removes the original parameters and shows the dummy parameters called \code{hankX}. Note that this does not change the number of parameters in the model.
+
+For EQN model files, the output also contains two slots giving the ordering of trees (\code{eqn.order.trees}) as well as categories (\code{eqn.order.categories}).
+
 }
 \value{
 A list with 
@@ -34,6 +37,8 @@ A list with
 \item{n.independent.categories}{Number of independent response categories (i.e., independent data points) the model provides (i.e., \code{n.model.categories - n.trees}). The number of parameters can not be higher than this value for a model to be identifiable.}
 \item{n.params}{Number of parameters in the model.}
 \item{parameters}{Names of parameters in the model.}
+\item{eqn.order.trees}{Order of trees in EQN model files (omitted if model is not an EQN file).}
+\item{eqn.order.categories}{Order of trees in EQN model files (omitted if model is not an EQN file).}
 
 If restrictions are present, the \code{n.params} and \code{parameters} are displayed for the unrestricted model (\code{orig.model}) as well as for the restricted model (\code{restr.model}).
 

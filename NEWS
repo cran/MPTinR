@@ -1,4 +1,21 @@
                     ***************************
+                    ** MPTinR VERSION 1.14.x **
+                    ***************************
+                    Changes in MPTinR Version 1.14.x
+                    Released July 2021
+
+    Significant User Visible Changes
+    
+    o   check.mpt() now returns the order of both trees and categories required 
+        for fitting for EQN model files. This can be used to determine the 
+        required ordering of the data.  
+    
+    Bugfixes
+    
+    o   
+        
+
+                    ***************************
                     ** MPTinR VERSION 1.13.x **
                     ***************************
                     Changes in MPTinR Version 1.13.x

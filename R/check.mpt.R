@@ -3,7 +3,11 @@ check.mpt <- function(model.filename, restrictions.filename = NULL, model.type =
 	if (grepl("\\.eqn$", model.filename) || grepl("\\.EQN$", model.filename)) model.type <- "eqn"
 	if (model.type[1] == "eqn") {
 		model <- .read.EQN.model(model.filename)
-	} else model <- .read.MPT.model(model.filename)
+		eqn_extra <- .get.EQN.model.order(model.filename)
+	} else {
+	  model <- .read.MPT.model(model.filename)
+	  eqn_extra <- NULL
+	}
 	prob.tree.check <- .check.MPT.probabilities(model)
 	if(isTRUE(all(prob.tree.check==1))) {
 		prob.corr <- TRUE
@@ -27,6 +31,6 @@ check.mpt <- function(model.filename, restrictions.filename = NULL, model.type =
 		parameters <- list(orig.model = orig.model, restr.model = restr.model)
 		message("Inequality restricted parameters are (temporarily) exchanged with dummy parameters called hankX.")
 	}
-	c(probabilities.eq.1 = prob.corr, n.trees = n.trees.orig, n.model.categories = n.model.categories, n.independent.categories = n.model.df, parameters)
+	c(probabilities.eq.1 = prob.corr, n.trees = n.trees.orig, n.model.categories = n.model.categories, n.independent.categories = n.model.df, parameters, eqn = eqn_extra)
 	
 }
